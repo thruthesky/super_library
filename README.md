@@ -1,5 +1,7 @@
-# Super library
+# Super Library
 
+A new Flutter project.
 
-Highly scalable, high performance, and easy to use library for all your needs.
+## Getting Started
 
+FlutterFlow projects are built to run on the Flutter _stable_ release.

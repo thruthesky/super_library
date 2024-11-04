@@ -8,6 +8,7 @@ import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'home_screen_model.dart';
 export 'home_screen_model.dart';
 
@@ -30,7 +31,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.loginUserUidActionOutput = await actions.loginUserUid();
+      _model.loginUserUidActionOutput = await actions.getLoginUserUid();
       _model.loginUserUidState = _model.loginUserUidActionOutput;
       safeSetState(() {});
     });
@@ -47,6 +48,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -112,9 +115,40 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                         child: FFButtonWidget(
                           onPressed: () async {
                             await launchURL(
-                                'https://thruthesky.github.io/flutterflow_libraries/');
+                                'https://thruthesky.github.io/super_library/');
                           },
                           text: 'Read detail document',
+                          options: FFButtonOptions(
+                            height: 40.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 16.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: Colors.transparent,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  letterSpacing: 0.0,
+                                ),
+                            elevation: 0.0,
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              width: 1.6,
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            await launchURL(
+                                'https://thruthesky.github.io/super_library/');
+                          },
+                          text: 'Goto ChatroomListViewCopy',
                           options: FFButtonOptions(
                             height: 40.0,
                             padding: const EdgeInsetsDirectional.fromSTEB(
@@ -168,24 +202,47 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        wrapWithModel(
-                          model: _model.userAvatarComponentModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: UserAvatarComponentWidget(
-                            uid: _model.loginUserUidState!,
-                            size: 60.0,
-                            radius: 33.0,
+                        if (_model.loginUserUidState != null &&
+                            _model.loginUserUidState != '')
+                          wrapWithModel(
+                            model: _model.userAvatarComponentModel1,
+                            updateCallback: () => safeSetState(() {}),
+                            child: UserAvatarComponentWidget(
+                              uid: _model.loginUserUidState!,
+                              size: 60.0,
+                              radius: 33.0,
+                            ),
+                          ),
+                        if (_model.loginUserUidState != null &&
+                            _model.loginUserUidState != '')
+                          Expanded(
+                            child: wrapWithModel(
+                              model: _model.userDisplayNameComponentModel,
+                              updateCallback: () => safeSetState(() {}),
+                              child: UserDisplayNameComponentWidget(
+                                uid: _model.loginUserUidState!,
+                                fontSize: 18.0,
+                                fontColor:
+                                    FlutterFlowTheme.of(context).tertiary,
+                              ),
+                            ),
+                          ),
+                        const SizedBox(
+                          width: 40.0,
+                          height: 40.0,
+                          child: custom_widgets.UserAvatar(
+                            width: 40.0,
+                            height: 40.0,
+                            uid: 'abcdefgh',
                           ),
                         ),
-                        Expanded(
-                          child: wrapWithModel(
-                            model: _model.userDisplayNameComponentModel,
-                            updateCallback: () => safeSetState(() {}),
-                            child: UserDisplayNameComponentWidget(
-                              uid: _model.loginUserUidState!,
-                              fontSize: 18.0,
-                              fontColor: FlutterFlowTheme.of(context).tertiary,
-                            ),
+                        wrapWithModel(
+                          model: _model.userAvatarComponentModel2,
+                          updateCallback: () => safeSetState(() {}),
+                          child: const UserAvatarComponentWidget(
+                            uid: 'abcdefh',
+                            size: 48.0,
+                            radius: 30.0,
                           ),
                         ),
                       ],
@@ -203,20 +260,19 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                       reverse: true,
                       builder: (dynamic data) => UserListTileComponentWidget(
                         data: data,
-                        onTap: (data) async {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '...',
-                                style: TextStyle(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                ),
+                        onTap: (uid) async {
+                          context.pushNamed(
+                            'PublicProfileScreen',
+                            queryParameters: {
+                              'uid': serializeParam(
+                                getJsonField(
+                                  FFAppState()
+                                      .userListTileComponentActionParameter,
+                                  r'''$.uid''',
+                                ).toString(),
+                                ParamType.String,
                               ),
-                              duration: const Duration(milliseconds: 4000),
-                              backgroundColor:
-                                  FlutterFlowTheme.of(context).secondary,
-                            ),
+                            }.withoutNulls,
                           );
                         },
                       ),

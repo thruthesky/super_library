@@ -1,25 +1,27 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
-import 'chat_screen_model.dart';
-export 'chat_screen_model.dart';
+import 'chat_room_list_screen_model.dart';
+export 'chat_room_list_screen_model.dart';
 
-class ChatScreenWidget extends StatefulWidget {
-  const ChatScreenWidget({super.key});
+class ChatRoomListScreenWidget extends StatefulWidget {
+  const ChatRoomListScreenWidget({super.key});
 
   @override
-  State<ChatScreenWidget> createState() => _ChatScreenWidgetState();
+  State<ChatRoomListScreenWidget> createState() =>
+      _ChatRoomListScreenWidgetState();
 }
 
-class _ChatScreenWidgetState extends State<ChatScreenWidget> {
-  late ChatScreenModel _model;
+class _ChatRoomListScreenWidgetState extends State<ChatRoomListScreenWidget> {
+  late ChatRoomListScreenModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ChatScreenModel());
+    _model = createModel(context, () => ChatRoomListScreenModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -54,11 +56,26 @@ class _ChatScreenWidgetState extends State<ChatScreenWidget> {
           centerTitle: false,
           elevation: 2.0,
         ),
-        body: const SafeArea(
+        body: SafeArea(
           top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [],
+          child: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: custom_widgets.ChatRoomListView(
+              width: double.infinity,
+              height: double.infinity,
+              onTap: (roomId) async {
+                context.pushNamed(
+                  'ChatRoomScreen',
+                  queryParameters: {
+                    'uidOrRoomId': serializeParam(
+                      roomId,
+                      ParamType.String,
+                    ),
+                  }.withoutNulls,
+                );
+              },
+            ),
           ),
         ),
       ),

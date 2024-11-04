@@ -1,8 +1,9 @@
+import '/components/user/user_avatar_component/user_avatar_component_widget.dart';
+import '/components/user/user_display_name_component/user_display_name_component_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'comment_update_component_model.dart';
 export 'comment_update_component_model.dart';
@@ -10,10 +11,10 @@ export 'comment_update_component_model.dart';
 class CommentUpdateComponentWidget extends StatefulWidget {
   const CommentUpdateComponentWidget({
     super.key,
-    required this.data,
+    required this.comment,
   });
 
-  final dynamic data;
+  final dynamic comment;
 
   @override
   State<CommentUpdateComponentWidget> createState() =>
@@ -35,7 +36,11 @@ class _CommentUpdateComponentWidgetState
     super.initState();
     _model = createModel(context, () => CommentUpdateComponentModel());
 
-    _model.contentTextController ??= TextEditingController();
+    _model.contentTextController ??= TextEditingController(
+        text: getJsonField(
+      widget.comment,
+      r'''$.content''',
+    ).toString().toString());
     _model.contentFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -63,16 +68,15 @@ class _CommentUpdateComponentWidgetState
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(
-                  width: 60.0,
-                  height: 60.0,
-                  child: custom_widgets.UserAvatar(
-                    width: 60.0,
-                    height: 60.0,
+                wrapWithModel(
+                  model: _model.userAvatarComponentModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: UserAvatarComponentWidget(
                     uid: getJsonField(
-                      widget.data,
+                      widget.comment,
                       r'''$.uid''',
                     ).toString(),
+                    size: 60.0,
                   ),
                 ),
                 Padding(
@@ -81,41 +85,15 @@ class _CommentUpdateComponentWidgetState
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 200.0,
-                        height: 26.0,
-                        child: custom_widgets.UserDisplayName(
-                          width: 200.0,
-                          height: 26.0,
+                      wrapWithModel(
+                        model: _model.userDisplayNameComponentModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: UserDisplayNameComponentWidget(
                           uid: getJsonField(
-                            widget.data,
+                            widget.comment,
                             r'''$.uid''',
                           ).toString(),
-                          nameIfEmpty: '...',
-                          nameIfBlockedUser: 'Use blocked',
                         ),
-                      ),
-                      Text(
-                        getJsonField(
-                                  widget.data,
-                                  r'''$.title''',
-                                ) !=
-                                null
-                            ? getJsonField(
-                                widget.data,
-                                r'''$.title''',
-                              ).toString()
-                            : getJsonField(
-                                widget.data,
-                                r'''$.content''',
-                              ).toString().maybeHandleOverflow(
-                                  maxChars: 48,
-                                  replacement: '…',
-                                ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Inter',
-                              letterSpacing: 0.0,
-                            ),
                       ),
                     ],
                   ),
@@ -195,8 +173,8 @@ class _CommentUpdateComponentWidgetState
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      Navigator.pop(context);
                     },
                     text: 'Cancel',
                     options: FFButtonOptions(
@@ -223,7 +201,48 @@ class _CommentUpdateComponentWidgetState
                     padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        await actions.updateComment();
+                        await actions.updateComment(
+                          context,
+                          getJsonField(
+                            widget.comment,
+                            r'''$.key''',
+                          ).toString(),
+                          _model.contentTextController.text,
+                          _model.urls.toList(),
+                          () async {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Comment update success',
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          },
+                          (error) async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  error,
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          },
+                        );
                       },
                       text: 'Update',
                       options: FFButtonOptions(

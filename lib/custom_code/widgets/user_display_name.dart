@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -53,7 +54,7 @@ class _UserDisplayNameState extends State<UserDisplayName> {
             return text(widget.nameIfBlockedUser ?? 'Blocked user');
           }
 
-          dog('initialData: ${Memory.get<UserData>(widget.uid)?.toJson()}');
+          // dog('initialData: ${Memory.get<UserData>(widget.uid)?.toJson()}');
 
           // Prepare: Get the user's display name
           // Memory Cache Key
@@ -75,6 +76,7 @@ class _UserDisplayNameState extends State<UserDisplayName> {
                 .databaseUserRef(widget.uid)
                 .child(UserData.field.displayName),
             initialData: displayName,
+            onLoading: text(widget.nameIfEmpty ?? ''),
             sync: true,
             builder: (v, r) {
               String name;

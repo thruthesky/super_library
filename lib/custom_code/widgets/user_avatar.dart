@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -56,7 +57,7 @@ class _UserAvatarState extends State<UserAvatar> {
             return tempAvatar(icon: Icons.person_off);
           }
 
-          dog('initialData: ${Memory.get<UserData>(avatarUid)?.toJson()}');
+          // dog('initialData: ${Memory.get<UserData>(avatarUid)?.toJson()}');
 
           /// Prepare: Get the user's photo URL
           // Memory Cache Key

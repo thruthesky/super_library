@@ -27,7 +27,7 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.loginUserUidActionOutput = await actions.loginUserUid();
+      _model.loginUserUidActionOutput = await actions.getLoginUserUid();
       _model.loginUserUidState = _model.loginUserUidActionOutput!;
       safeSetState(() {});
     });

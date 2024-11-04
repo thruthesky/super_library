@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -48,7 +49,7 @@ class _DataListViewState extends State<DataListView> {
             final DataSnapshot doc = snapshot.docs[index];
             final Data data = Data.fromSnapshot(doc);
 
-            return widget.builder(data.data);
+            return widget.builder(data.toJson());
 
             // return widget.builder(data.data);
           },

@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -20,17 +21,21 @@ Future createComment(
 ) async {
   // Add your function code here!
 
+  // Prepare
+  dynamic parent = data;
+  bool isParentData = data['rootKey'] == null;
+
+  // bool isParentComment = !isParentData;
+
   /// Get the root key. If the rootKey is empty then, the data is the root data.
   String rootKey = data['rootKey'] ?? data['key'];
 
-  /// Get the rootKey is empty, then current data is data. and it's the first level comment. So, parent will be null.
-  /// If there is rootKey and the current data is a comment.
-  /// If there is rootKey and the parentKey is empty then, the current data is the first leve comment. And it will create the 2nd level comment.
+  ///
   String? parentKey;
-  if (data['rootKey'] == null) {
+  if (isParentData) {
     parentKey = null;
   } else {
-    parentKey = data['parentKey'] ?? data['key'];
+    parentKey = parent['key'];
   }
 
   dog('--> createComment rootKey: $rootKey, parentKey: $parentKey, content: $content, urls: $urls');

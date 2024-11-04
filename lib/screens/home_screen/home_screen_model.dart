@@ -11,24 +11,29 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - loginUserUid] action in HomeScreen widget.
+  // Stores action output result for [Custom Action - getLoginUserUid] action in HomeScreen widget.
   String? loginUserUidActionOutput;
   // Model for UserAvatarComponent component.
-  late UserAvatarComponentModel userAvatarComponentModel;
+  late UserAvatarComponentModel userAvatarComponentModel1;
   // Model for UserDisplayNameComponent component.
   late UserDisplayNameComponentModel userDisplayNameComponentModel;
+  // Model for UserAvatarComponent component.
+  late UserAvatarComponentModel userAvatarComponentModel2;
 
   @override
   void initState(BuildContext context) {
-    userAvatarComponentModel =
+    userAvatarComponentModel1 =
         createModel(context, () => UserAvatarComponentModel());
     userDisplayNameComponentModel =
         createModel(context, () => UserDisplayNameComponentModel());
+    userAvatarComponentModel2 =
+        createModel(context, () => UserAvatarComponentModel());
   }
 
   @override
   void dispose() {
-    userAvatarComponentModel.dispose();
+    userAvatarComponentModel1.dispose();
     userDisplayNameComponentModel.dispose();
+    userAvatarComponentModel2.dispose();
   }
 }

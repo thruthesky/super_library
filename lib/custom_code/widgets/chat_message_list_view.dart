@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import '/custom_code/actions/super_library.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Chat room message list view.
 ///
@@ -54,10 +57,15 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   @override
   void initState() {
     super.initState();
-    init();
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user != null) {
+        init();
+      }
+    });
   }
 
   init() async {
+    dog('ChatMessageListView.init()');
     await ChatService.instance.join(roomId);
     await ChatService.instance.enter(roomId);
 
@@ -74,163 +82,196 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListView(
-      reverseQuery: true,
-      query: ChatService.instance.messagesRef(roomId),
-      builder: (snapshot, fetchMore) {
-        /// Clear the unread count when the user sees the messages.
-        ChatService.instance.clearNewMessageCount(roomId);
+    return MyDoc(builder: (data) {
+      if (data == null) {
+        return const Center(
+          child: Text('Please sign in to view chat rooms'),
+        );
+      }
 
-        /// This is the list of chat messages.
-        return ListView.separated(
-          itemCount: snapshot.docs.length,
-          reverse: true,
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-          // the padding is needed to add space at the last messages.
-          // instead of adding padding outside that may look cut when scrolled
-          padding: const EdgeInsets.only(top: 16, bottom: 16),
-          itemBuilder: (context, index) {
-            fetchMore(index);
-            final DataSnapshot doc = snapshot.docs[index];
+      return ValueListView(
+        reverseQuery: true,
+        query: ChatService.instance.messagesRef(roomId),
+        builder: (snapshot, fetchMore) {
+          /// Clear the unread count when the user sees the messages.
+          ChatService.instance.clearNewMessageCount(roomId);
 
-            final message = ChatMessage.fromSnapshot(doc);
+          /// This is the list of chat messages.
+          return ListView.separated(
+            itemCount: snapshot.docs.length,
+            reverse: true,
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            // the padding is needed to add space at the last messages.
+            // instead of adding padding outside that may look cut when scrolled
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
+            itemBuilder: (context, index) {
+              fetchMore(index);
+              final DataSnapshot doc = snapshot.docs[index];
 
-            bool isMine = message.senderUid == myUid;
-            bool isNotMine = !isMine;
+              final message = ChatMessage.fromSnapshot(doc);
 
-            final listTile = Row(
-              // This row aligns the Photo and Name at top
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isNotMine)
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () async {
-                      if (widget.onTapProfilePhoto != null) {
-                        await widget.onTapProfilePhoto!(
-                          message.senderUid,
-                          message.displayName ?? '',
-                          message.photoUrl ?? '',
-                        );
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        UserAvatar(
-                          uid: message.senderUid,
-                          width: iconSize,
-                          height: iconSize,
-                        ),
-                        SizedBox(width: iconPadding),
-                      ],
+              bool isMine = message.senderUid == myUid;
+              bool isNotMine = !isMine;
+
+              final listTile = Row(
+                // This row aligns the Photo and Name at top
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (isNotMine)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () async {
+                        if (widget.onTapProfilePhoto != null) {
+                          await widget.onTapProfilePhoto!(
+                            message.senderUid,
+                            message.displayName ?? '',
+                            message.photoUrl ?? '',
+                          );
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          UserAvatar(
+                            uid: message.senderUid,
+                            width: iconSize,
+                            height: iconSize,
+                          ),
+                          SizedBox(width: iconPadding),
+                        ],
+                      ),
                     ),
-                  ),
-                Flexible(
-                  child: Row(
-                    // This row aligns the bubble and the time at their bottom.
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: isMine
-                              ? CrossAxisAlignment.end
-                              : CrossAxisAlignment.start,
-                          children: [
-                            // TODO: Make the size and color optional
-                            UserDisplayName(
-                              uid: message.senderUid,
-                              fontSize: 12,
-                              fontColor:
-                                  Theme.of(context).colorScheme.secondary,
-                            ),
-                            Row(
-                              mainAxisAlignment: isMine
-                                  ? MainAxisAlignment.end
-                                  : MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                if (isMine) ...[
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        // This gives space (to not overlap with other users' icon and message)
-                                        left: leftRightBubblePadding,
-                                        bottom: 6.0,
-                                      ),
-                                      child: Text(
-                                        message.createdAt.toDateTime.short,
-                                        style: FlutterFlowTheme.of(context)
-                                            .labelSmall,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: iconPadding),
-                                ],
-
-                                /// Chat message text
-                                if (message.text != null)
-                                  Flexible(
-                                    child: Container(
-                                      padding: EdgeInsets.all(textPadding),
-                                      decoration: BoxDecoration(
-                                        color: isMine
-                                            ? FlutterFlowTheme.of(context)
-                                                .accent3
-                                            : FlutterFlowTheme.of(context)
-                                                .alternate,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: isMine
-                                              ? const Radius.circular(16)
-                                              : Radius.zero,
-                                          topRight: isNotMine
-                                              ? const Radius.circular(16)
-                                              : Radius.zero,
-                                          bottomLeft: const Radius.circular(16),
-                                          bottomRight:
-                                              const Radius.circular(16),
+                  Flexible(
+                    child: Row(
+                      // This row aligns the bubble and the time at their bottom.
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: isMine
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
+                            children: [
+                              // TODO: Make the size and color optional
+                              UserDisplayName(
+                                uid: message.senderUid,
+                                fontSize: 12,
+                                fontColor:
+                                    Theme.of(context).colorScheme.secondary,
+                              ),
+                              Row(
+                                mainAxisAlignment: isMine
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  if (isMine) ...[
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          // This gives space (to not overlap with other users' icon and message)
+                                          left: leftRightBubblePadding,
+                                          bottom: 6.0,
+                                        ),
+                                        child: Text(
+                                          message.createdAt.toDateTime.short,
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelSmall,
                                         ),
                                       ),
-                                      child: BlockedUser(
-                                          uid: message.senderUid,
-                                          builder: (re) {
-                                            /// TODO: Make the blocked user message customizable
-                                            return Text(
-                                              re
-                                                  ? 'Blocked user message'
-                                                  : message.text!,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
-                                            );
-                                          }),
                                     ),
-                                  ),
+                                    SizedBox(width: iconPadding),
+                                  ],
 
-                                /// Chat message Date & Time
-                                if (isNotMine) ...[
-                                  SizedBox(width: iconPadding),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: 6.0,
-                                        right: leftRightBubblePadding,
-                                      ),
-                                      child: Text(
-                                        message.createdAt.toDateTime.short,
-                                        style: FlutterFlowTheme.of(context)
-                                            .labelSmall,
+                                  /// Chat message text
+                                  if (message.text != null)
+                                    Flexible(
+                                      child: Container(
+                                        padding: EdgeInsets.all(textPadding),
+                                        decoration: BoxDecoration(
+                                          color: isMine
+                                              ? FlutterFlowTheme.of(context)
+                                                  .accent3
+                                              : FlutterFlowTheme.of(context)
+                                                  .alternate,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: isMine
+                                                ? const Radius.circular(16)
+                                                : Radius.zero,
+                                            topRight: isNotMine
+                                                ? const Radius.circular(16)
+                                                : Radius.zero,
+                                            bottomLeft:
+                                                const Radius.circular(16),
+                                            bottomRight:
+                                                const Radius.circular(16),
+                                          ),
+                                        ),
+                                        child: BlockedUser(
+                                            uid: message.senderUid,
+                                            builder: (re) {
+                                              /// TODO: Make the blocked user message customizable
+                                              return Text(
+                                                re
+                                                    ? 'Blocked user message'
+                                                    : message.text!,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              );
+                                            }),
                                       ),
                                     ),
-                                  ),
+
+                                  /// Chat message Date & Time
+                                  if (isNotMine) ...[
+                                    SizedBox(width: iconPadding),
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 6.0,
+                                          right: leftRightBubblePadding,
+                                        ),
+                                        child: Text(
+                                          message.createdAt.toDateTime.short,
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ],
+                              ),
+                              if (message.url != null &&
+                                  message.url!.isNotEmpty) ...[
+                                SizedBox(height: iconPadding),
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.8),
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: isMine
+                                          ? const Radius.circular(16)
+                                          : Radius.zero,
+                                      topRight: isNotMine
+                                          ? const Radius.circular(16)
+                                          : Radius.zero,
+                                      bottomLeft: const Radius.circular(16),
+                                      bottomRight: const Radius.circular(16),
+                                    ),
+                                  ),
+                                  child: CachedNetworkImage(
+                                      imageUrl: message.url!),
+                                ),
                               ],
-                            ),
 
-                            /// Preview of the URL
-                            if (message.previewUrl != null)
-                              BlockedUser(
+                              /// Preview of the URL
+                              if (message.previewUrl != null)
+                                BlockedUser(
                                   uid: message.senderUid,
                                   builder: (re) {
                                     if (re) {
@@ -249,23 +290,30 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                                         ),
                                       ),
                                     );
-                                  }),
-                          ],
+                                  },
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-            return Container(
-              // The key is to prevent image blinking when there is a new message.
-              key: ValueKey(message.id),
-              child: listTile,
-            );
-          },
-        );
-      },
-    );
+                ],
+              );
+              return Container(
+                // The key is to prevent image blinking when there is a new message.
+                key: ValueKey(message.id),
+                child: listTile,
+              );
+            },
+          );
+        },
+        emptyBuilder: () {
+          return const Center(
+            child: Text('No messages yet'),
+          );
+        },
+      );
+    });
   }
 }

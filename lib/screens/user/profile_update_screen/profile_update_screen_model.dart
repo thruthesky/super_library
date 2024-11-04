@@ -6,10 +6,10 @@ class ProfileUpdateScreenModel
     extends FlutterFlowModel<ProfileUpdateScreenWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for email widget.
-  FocusNode? emailFocusNode;
-  TextEditingController? emailTextController;
-  String? Function(BuildContext, String?)? emailTextControllerValidator;
+  // State field(s) for displayName widget.
+  FocusNode? displayNameFocusNode;
+  TextEditingController? displayNameTextController;
+  String? Function(BuildContext, String?)? displayNameTextControllerValidator;
   // State field(s) for photoUrl widget.
   FocusNode? photoUrlFocusNode;
   TextEditingController? photoUrlTextController;
@@ -20,8 +20,8 @@ class ProfileUpdateScreenModel
 
   @override
   void dispose() {
-    emailFocusNode?.dispose();
-    emailTextController?.dispose();
+    displayNameFocusNode?.dispose();
+    displayNameTextController?.dispose();
 
     photoUrlFocusNode?.dispose();
     photoUrlTextController?.dispose();

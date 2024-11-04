@@ -8,10 +8,10 @@ export 'short_date_time_component_model.dart';
 class ShortDateTimeComponentWidget extends StatefulWidget {
   const ShortDateTimeComponentWidget({
     super.key,
-    required this.stamp,
+    required this.timestamp,
   });
 
-  final int? stamp;
+  final int? timestamp;
 
   @override
   State<ShortDateTimeComponentWidget> createState() =>
@@ -46,7 +46,7 @@ class _ShortDateTimeComponentWidgetState
   @override
   Widget build(BuildContext context) {
     return Text(
-      functions.shortDateTimeOf(widget.stamp!),
+      functions.shortDateTimeOf(functions.dateTimeOf(widget.timestamp)),
       style: FlutterFlowTheme.of(context).labelMedium.override(
             fontFamily: 'Inter',
             letterSpacing: 0.0,

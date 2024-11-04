@@ -1,6 +1,7 @@
+import '/components/user/user_avatar_component/user_avatar_component_widget.dart';
+import '/components/user/user_display_name_component/user_display_name_component_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'data_list_tile_component_model.dart';
@@ -10,9 +11,11 @@ class DataListTileComponentWidget extends StatefulWidget {
   const DataListTileComponentWidget({
     super.key,
     required this.data,
+    required this.onTap,
   });
 
   final dynamic data;
+  final Future Function()? onTap;
 
   @override
   State<DataListTileComponentWidget> createState() =>
@@ -52,15 +55,8 @@ class _DataListTileComponentWidgetState
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () async {
-        context.pushNamed(
-          'PostDetailsScreen',
-          queryParameters: {
-            'data': serializeParam(
-              widget.data,
-              ParamType.JSON,
-            ),
-          }.withoutNulls,
-        );
+        FFAppState().dataListTileComponentActionParameter = widget.data!;
+        await widget.onTap?.call();
       },
       child: Container(
         width: double.infinity,
@@ -72,17 +68,16 @@ class _DataListTileComponentWidgetState
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: 60.0,
-                height: 60.0,
-                child: custom_widgets.UserAvatar(
-                  width: 60.0,
-                  height: 60.0,
+              wrapWithModel(
+                model: _model.userAvatarComponentModel,
+                updateCallback: () => safeSetState(() {}),
+                child: UserAvatarComponentWidget(
                   uid: getJsonField(
                     widget.data,
                     r'''$.uid''',
                   ).toString(),
-                  radius: 22.0,
+                  size: 60.0,
+                  radius: 28.0,
                 ),
               ),
               Expanded(
@@ -90,6 +85,7 @@ class _DataListTileComponentWidgetState
                   padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -103,22 +99,23 @@ class _DataListTileComponentWidgetState
                                   letterSpacing: 0.0,
                                 ),
                       ),
-                      custom_widgets.UserDisplayName(
-                        width: 200.0,
-                        height: 32.0,
-                        uid: getJsonField(
-                          widget.data,
-                          r'''$.uid''',
-                        ).toString(),
-                        nameIfEmpty: '...',
-                        nameIfBlockedUser: 'Blocked User',
-                        fontSize: 14.0,
+                      wrapWithModel(
+                        model: _model.userDisplayNameComponentModel,
+                        updateCallback: () => safeSetState(() {}),
+                        child: UserDisplayNameComponentWidget(
+                          uid: getJsonField(
+                            widget.data,
+                            r'''$.uid''',
+                          ).toString(),
+                        ),
                       ),
                       Text(
-                        functions.shortDateTimeOf(getJsonField(
-                          widget.data,
-                          r'''$.createdAt''',
-                        )),
+                        functions
+                            .dateTimeOf(getJsonField(
+                              widget.data,
+                              r'''$.createdAt''',
+                            ))
+                            .toString(),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Inter',
                               letterSpacing: 0.0,

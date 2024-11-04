@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -13,10 +14,13 @@ import 'package:firebase_database/firebase_database.dart';
 Future sendChatMessage(
   String uidOrRoomId,
   String? text,
+  String? url,
 ) async {
   // Add your function code here!
+  dog('sendChatMessage: $uidOrRoomId, $text, $url');
   await ChatService.instance.sendMessage(
     roomId: uidOrRoomId,
     text: text,
+    url: url,
   );
 }

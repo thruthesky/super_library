@@ -25,8 +25,8 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
     super.initState();
     _model = createModel(context, () => ProfileUpdateScreenModel());
 
-    _model.emailTextController ??= TextEditingController();
-    _model.emailFocusNode ??= FocusNode();
+    _model.displayNameTextController ??= TextEditingController();
+    _model.displayNameFocusNode ??= FocusNode();
 
     _model.photoUrlTextController ??= TextEditingController();
     _model.photoUrlFocusNode ??= FocusNode();
@@ -89,8 +89,8 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                   child: SizedBox(
                     width: double.infinity,
                     child: TextFormField(
-                      controller: _model.emailTextController,
-                      focusNode: _model.emailFocusNode,
+                      controller: _model.displayNameTextController,
+                      focusNode: _model.displayNameFocusNode,
                       autofocus: false,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -144,7 +144,7 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                             letterSpacing: 0.0,
                           ),
                       cursorColor: FlutterFlowTheme.of(context).primaryText,
-                      validator: _model.emailTextControllerValidator
+                      validator: _model.displayNameTextControllerValidator
                           .asValidator(context),
                     ),
                   ),
@@ -217,7 +217,7 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                 FFButtonWidget(
                   onPressed: () async {
                     await actions.updateProfile(
-                      _model.emailTextController.text,
+                      _model.displayNameTextController.text,
                       _model.photoUrlTextController.text,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(

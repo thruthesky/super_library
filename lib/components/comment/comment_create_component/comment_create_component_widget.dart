@@ -1,8 +1,9 @@
+import '/components/user/user_avatar_component/user_avatar_component_widget.dart';
+import '/components/user/user_display_name_component/user_display_name_component_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'comment_create_component_model.dart';
 export 'comment_create_component_model.dart';
@@ -10,10 +11,12 @@ export 'comment_create_component_model.dart';
 class CommentCreateComponentWidget extends StatefulWidget {
   const CommentCreateComponentWidget({
     super.key,
-    required this.data,
+    required this.dataOrComment,
+    required this.onCancel,
   });
 
-  final dynamic data;
+  final dynamic dataOrComment;
+  final Future Function()? onCancel;
 
   @override
   State<CommentCreateComponentWidget> createState() =>
@@ -51,7 +54,6 @@ class _CommentCreateComponentWidgetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
       ),
@@ -63,61 +65,60 @@ class _CommentCreateComponentWidgetState
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(
-                  width: 60.0,
-                  height: 60.0,
-                  child: custom_widgets.UserAvatar(
-                    width: 60.0,
-                    height: 60.0,
+                wrapWithModel(
+                  model: _model.userAvatarComponentModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: UserAvatarComponentWidget(
                     uid: getJsonField(
-                      widget.data,
+                      widget.dataOrComment,
                       r'''$.uid''',
                     ).toString(),
+                    size: 60.0,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 200.0,
-                        height: 26.0,
-                        child: custom_widgets.UserDisplayName(
-                          width: 200.0,
-                          height: 26.0,
-                          uid: getJsonField(
-                            widget.data,
-                            r'''$.uid''',
-                          ).toString(),
-                          nameIfEmpty: '...',
-                          nameIfBlockedUser: 'Use blocked',
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        wrapWithModel(
+                          model: _model.userDisplayNameComponentModel,
+                          updateCallback: () => safeSetState(() {}),
+                          child: UserDisplayNameComponentWidget(
+                            uid: getJsonField(
+                              widget.dataOrComment,
+                              r'''$.uid''',
+                            ).toString(),
+                          ),
                         ),
-                      ),
-                      Text(
-                        getJsonField(
-                                  widget.data,
+                        Text(
+                          getJsonField(
+                                    widget.dataOrComment,
+                                    r'''$.title''',
+                                  ) !=
+                                  null
+                              ? getJsonField(
+                                  widget.dataOrComment,
                                   r'''$.title''',
-                                ) !=
-                                null
-                            ? getJsonField(
-                                widget.data,
-                                r'''$.title''',
-                              ).toString()
-                            : getJsonField(
-                                widget.data,
-                                r'''$.content''',
-                              ).toString().maybeHandleOverflow(
-                                  maxChars: 48,
-                                  replacement: '…',
-                                ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Inter',
-                              letterSpacing: 0.0,
-                            ),
-                      ),
-                    ],
+                                ).toString()
+                              : getJsonField(
+                                  widget.dataOrComment,
+                                  r'''$.content''',
+                                ).toString().maybeHandleOverflow(
+                                    maxChars: 24,
+                                    replacement: '…',
+                                  ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Inter',
+                                    letterSpacing: 0.0,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -146,15 +147,15 @@ class _CommentCreateComponentWidgetState
                               letterSpacing: 0.0,
                             ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
+                      borderSide: BorderSide(
+                        color: FlutterFlowTheme.of(context).secondaryText,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
+                      borderSide: BorderSide(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -195,8 +196,8 @@ class _CommentCreateComponentWidgetState
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      Navigator.pop(context);
                     },
                     text: 'Cancel',
                     options: FFButtonOptions(
@@ -225,7 +226,7 @@ class _CommentCreateComponentWidgetState
                       onPressed: () async {
                         await actions.createComment(
                           context,
-                          widget.data!,
+                          widget.dataOrComment!,
                           _model.contentTextController.text,
                           _model.urls.toList(),
                           <String, dynamic>{},

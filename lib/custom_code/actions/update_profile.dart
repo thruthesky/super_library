@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -15,11 +16,8 @@ Future updateProfile(
   String photoUrl,
 ) async {
   // Add your function code here!
-  await FirebaseFirestore.instance.collection('users').doc(currentUserUid).set(
-    {
-      'display_name': displayName,
-      'photo_url': photoUrl,
-    },
-    SetOptions(merge: true),
+  await UserService.instance.updateProfile(
+    displayName: displayName,
+    photoUrl: photoUrl,
   );
 }

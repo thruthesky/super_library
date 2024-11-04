@@ -1,9 +1,10 @@
-import '/components/data/data_list_tile_component/data_list_tile_component_widget.dart';
+import '/components/data/data_list_view_component/data_list_view_component_widget.dart';
+import '/components/data_list_tile_component/data_list_tile_component_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'post_list_screen_model.dart';
 export 'post_list_screen_model.dart';
 
@@ -41,6 +42,8 @@ class _PostListScreenWidgetState extends State<PostListScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -96,15 +99,24 @@ class _PostListScreenWidgetState extends State<PostListScreenWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: custom_widgets.DataListView(
-              width: double.infinity,
-              height: double.infinity,
+          child: wrapWithModel(
+            model: _model.dataListViewComponentModel,
+            updateCallback: () => safeSetState(() {}),
+            child: DataListViewComponentWidget(
               category: widget.category!,
               builder: (dynamic data) => DataListTileComponentWidget(
                 data: data,
+                onTap: () async {
+                  context.pushNamed(
+                    'PostDetailsScreen',
+                    queryParameters: {
+                      'data': serializeParam(
+                        FFAppState().dataListTileComponentActionParameter,
+                        ParamType.JSON,
+                      ),
+                    }.withoutNulls,
+                  );
+                },
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -62,11 +63,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const ProfileUpdateScreenWidget(),
         ),
         FFRoute(
-          name: 'ChatScreen',
-          path: '/chatScreen',
-          builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'ChatScreen')
-              : const ChatScreenWidget(),
+          name: 'ChatRoomScreen',
+          path: '/chatRoomScreen',
+          builder: (context, params) => ChatRoomScreenWidget(
+            uidOrRoomId: params.getParam(
+              'uidOrRoomId',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: 'Follow',
@@ -119,6 +123,23 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             data: params.getParam(
               'data',
               ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'ChatRoomListScreen',
+          path: '/chatRoomListScreen',
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'ChatRoomListScreen')
+              : const ChatRoomListScreenWidget(),
+        ),
+        FFRoute(
+          name: 'PublicProfileScreen',
+          path: '/publicProfileScreen',
+          builder: (context, params) => PublicProfileScreenWidget(
+            uid: params.getParam(
+              'uid',
+              ParamType.String,
             ),
           ),
         )

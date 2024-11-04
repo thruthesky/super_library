@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -16,6 +17,8 @@ Future report(
   String reporteeUid,
   String reason,
   String summary,
+  Future Function()? onReport,
+  Future Function(String error)? onFailure,
 ) async {
   final data = {
     'reporter': myUid,
@@ -30,5 +33,12 @@ Future report(
   final reportId = '$myUid-$type-$id';
 
   /// Set to firestore
-  await Report.col.doc(reportId).set(data);
+
+  try {
+    await Report.col.doc(reportId).set(data);
+    await onReport?.call();
+  } catch (e) {
+    dog('Error on report: $e');
+    await onFailure?.call(e.toString());
+  }
 }

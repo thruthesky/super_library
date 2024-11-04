@@ -9,7 +9,7 @@ class MenuScreenModel extends FlutterFlowModel<MenuScreenWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - loginUserUid] action in MenuScreen widget.
+  // Stores action output result for [Custom Action - getLoginUserUid] action in MenuScreen widget.
   String? loginUserUidActionOutput;
 
   @override

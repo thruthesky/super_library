@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -7,6 +8,8 @@ import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import '/custom_code/actions/super_library.dart';
@@ -52,6 +55,18 @@ class _OpenChatRoomListViewState extends State<OpenChatRoomListView> {
 
             return InkWell(
               onTap: () async {
+                if (notSignedIn) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text(
+                        'Sign in to join a chat room',
+                      ),
+                      backgroundColor: FlutterFlowTheme.of(context).error,
+                    ),
+                  );
+                  return;
+                }
+
                 if (room.users[myUid] == false) {
                   final re = await confirm(
                     context: context,
@@ -84,13 +99,31 @@ class _OpenChatRoomListViewState extends State<OpenChatRoomListView> {
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
+                      if (room.group && room.iconUrl != null)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(19.8),
+                          child: CachedNetworkImage(
+                            imageUrl: room.iconUrl!,
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(room.name),
+                            Text(
+                              room.name,
+                              style: FlutterFlowTheme.of(context).titleSmall,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              room.description,
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                            ),
                           ],
                         ),
                       ),

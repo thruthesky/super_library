@@ -1,5 +1,5 @@
 import '/custom_code/actions/index.dart' as actions;
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,7 +17,13 @@ void main() async {
   await actions.initializeFirebase();
   // End initial custom actions code
 
-  runApp(const MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -95,7 +101,7 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'HomeScreen': const HomeScreenWidget(),
-      'ChatScreen': const ChatScreenWidget(),
+      'ChatRoomListScreen': const ChatRoomListScreenWidget(),
       'Follow': const FollowWidget(),
       'ForumScreen': const ForumScreenWidget(),
       'MenuScreen': const MenuScreenWidget(),
@@ -127,7 +133,7 @@ class _NavBarPageState extends State<NavBarPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.wechat_rounded,
+              Icons.chat,
               size: 24.0,
             ),
             label: 'Chat',

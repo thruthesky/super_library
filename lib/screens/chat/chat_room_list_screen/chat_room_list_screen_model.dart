@@ -1,8 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'chat_screen_widget.dart' show ChatScreenWidget;
+import 'chat_room_list_screen_widget.dart' show ChatRoomListScreenWidget;
 import 'package:flutter/material.dart';
 
-class ChatScreenModel extends FlutterFlowModel<ChatScreenWidget> {
+class ChatRoomListScreenModel
+    extends FlutterFlowModel<ChatRoomListScreenWidget> {
   @override
   void initState(BuildContext context) {}
 

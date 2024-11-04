@@ -63,16 +63,17 @@ class _UserAvatarComponentWidgetState extends State<UserAvatarComponentWidget> {
           )),
         ),
         child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+          width: widget.size,
+          height: widget.size,
           child: Stack(
             children: [
-              SizedBox(
-                width: double.infinity,
-                height: double.infinity,
+              Container(
+                width: widget.size,
+                height: widget.size,
+                decoration: const BoxDecoration(),
                 child: custom_widgets.UserAvatar(
-                  width: double.infinity,
-                  height: double.infinity,
+                  width: 50.0,
+                  height: 50.0,
                   uid: widget.uid!,
                   radius: widget.radius,
                 ),

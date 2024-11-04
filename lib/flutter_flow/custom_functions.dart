@@ -8,6 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
+import '/backend/schema/enums/enums.dart';
 
 String endRange(String str) {
   return '$str\uf8ff';
@@ -24,9 +25,8 @@ DateTime dateTimeOf(int? timestamp) {
   return DateTime.fromMillisecondsSinceEpoch(timestamp);
 }
 
-String shortDateTimeOf(int stamp) {
+String shortDateTimeOf(DateTime date) {
   //
-  final date = dateTimeOf(stamp);
   final nowDate = DateTime.now();
   final isToday = date.year == nowDate.year &&
       date.month == nowDate.month &&
@@ -37,4 +37,12 @@ String shortDateTimeOf(int stamp) {
   } else {
     return DateFormat('MMM d, y').format(date);
   }
+}
+
+double depth(int n) {
+  return n * 24.0;
+}
+
+List<int> generateEmptyList(int length) {
+  return List.generate(length, (index) => index);
 }

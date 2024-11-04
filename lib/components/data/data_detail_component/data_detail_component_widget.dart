@@ -1,11 +1,17 @@
+import '/backend/schema/enums/enums.dart';
 import '/components/data/field/data_detail_content_component/data_detail_content_component_widget.dart';
 import '/components/data/field/data_detail_title_component/data_detail_title_component_widget.dart';
+import '/components/report_bottom_sheet_component/report_bottom_sheet_component_widget.dart';
+import '/components/user/user_avatar_component/user_avatar_component_widget.dart';
+import '/components/user/user_display_name_component/user_display_name_component_widget.dart';
 import '/components/utility/short_date_time_component/short_date_time_component_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'data_detail_component_model.dart';
 export 'data_detail_component_model.dart';
 
@@ -16,12 +22,14 @@ class DataDetailComponentWidget extends StatefulWidget {
     required this.onUpdate,
     required this.onDelete,
     required this.onReply,
+    required this.onReport,
   });
 
   final dynamic data;
-  final Future Function()? onUpdate;
+  final Future Function(dynamic data)? onUpdate;
   final Future Function()? onDelete;
-  final Future Function()? onReply;
+  final Future Function(dynamic data)? onReply;
+  final Future Function(dynamic data)? onReport;
 
   @override
   State<DataDetailComponentWidget> createState() =>
@@ -41,6 +49,21 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => DataDetailComponentModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.data = widget.data;
+      await actions.likeExist(
+        getJsonField(
+          widget.data,
+          r'''$.path''',
+        ).toString().toString(),
+        (value) async {
+          _model.likeData = value;
+          safeSetState(() {});
+        },
+      );
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -66,16 +89,15 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: 60.0,
-                height: 60.0,
-                child: custom_widgets.UserAvatar(
-                  width: 60.0,
-                  height: 60.0,
+              wrapWithModel(
+                model: _model.userAvatarComponentModel,
+                updateCallback: () => safeSetState(() {}),
+                child: UserAvatarComponentWidget(
                   uid: getJsonField(
                     widget.data,
                     r'''$.uid''',
                   ).toString(),
+                  size: 60.0,
                 ),
               ),
               Padding(
@@ -84,23 +106,22 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    custom_widgets.UserDisplayName(
-                      width: 100.0,
-                      height: 24.0,
-                      uid: getJsonField(
-                        widget.data,
-                        r'''$.uid''',
-                      ).toString(),
-                      nameIfEmpty: '...',
-                      nameIfBlockedUser: 'Blocked User',
-                      fontSize: 14.0,
-                      fontColor: FlutterFlowTheme.of(context).secondaryText,
+                    wrapWithModel(
+                      model: _model.userDisplayNameComponentModel,
+                      updateCallback: () => safeSetState(() {}),
+                      child: UserDisplayNameComponentWidget(
+                        uid: getJsonField(
+                          widget.data,
+                          r'''$.uid''',
+                        ).toString(),
+                        fontSize: 14.0,
+                      ),
                     ),
                     wrapWithModel(
                       model: _model.shortDateTimeComponentModel,
                       updateCallback: () => safeSetState(() {}),
                       child: ShortDateTimeComponentWidget(
-                        stamp: getJsonField(
+                        timestamp: getJsonField(
                           widget.data,
                           r'''$.createdAt''',
                         ),
@@ -113,24 +134,14 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
           ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 26.0,
-              child: custom_widgets.DataChange(
-                width: double.infinity,
-                height: 26.0,
-                dataKey: getJsonField(
-                  widget.data,
-                  r'''$.key''',
-                ).toString(),
-                field: 'title',
-                initialData: getJsonField(
-                  widget.data,
+            child: wrapWithModel(
+              model: _model.dataDetailTitleComponentModel,
+              updateCallback: () => safeSetState(() {}),
+              child: DataDetailTitleComponentWidget(
+                title: getJsonField(
+                  _model.data,
                   r'''$.title''',
-                ),
-                builder: (dynamic data) => DataDetailTitleComponentWidget(
-                  title: data.toString(),
-                ),
+                ).toString(),
               ),
             ),
           ),
@@ -144,24 +155,14 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 26.0,
-                  child: custom_widgets.DataChange(
-                    width: double.infinity,
-                    height: 26.0,
-                    dataKey: getJsonField(
-                      widget.data,
-                      r'''$.key''',
-                    ).toString(),
-                    field: 'content',
-                    initialData: getJsonField(
-                      widget.data,
+                child: wrapWithModel(
+                  model: _model.dataDetailContentComponentModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: DataDetailContentComponentWidget(
+                    content: getJsonField(
+                      _model.data,
                       r'''$.content''',
-                    ),
-                    builder: (dynamic data) => DataDetailContentComponentWidget(
-                      content: data.toString(),
-                    ),
+                    ).toString(),
                   ),
                 ),
               ),
@@ -179,57 +180,81 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
               verticalDirection: VerticalDirection.down,
               clipBehavior: Clip.none,
               children: [
-                FFButtonWidget(
-                  onPressed: () async {
-                    await widget.onUpdate?.call();
-                  },
-                  text: 'Edit',
-                  options: FFButtonOptions(
-                    height: 34.0,
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Colors.transparent,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          letterSpacing: 0.0,
-                        ),
-                    elevation: 0.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      width: 1.6,
+                if ((_model.data != null) &&
+                    getJsonField(
+                      _model.data,
+                      r'''$.isMine''',
+                    ) &&
+                    !getJsonField(
+                      _model.data,
+                      r'''$.deleted''',
+                    ))
+                  FFButtonWidget(
+                    onPressed: () async {
+                      await widget.onUpdate?.call(
+                        _model.data!,
+                      );
+                    },
+                    text: 'Edit',
+                    options: FFButtonOptions(
+                      height: 34.0,
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                      iconPadding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: Colors.transparent,
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Inter',
+                                letterSpacing: 0.0,
+                              ),
+                      elevation: 0.0,
+                      borderSide: BorderSide(
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        width: 1.6,
+                      ),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
-                    borderRadius: BorderRadius.circular(24.0),
                   ),
-                ),
-                FFButtonWidget(
-                  onPressed: () async {
-                    await widget.onDelete?.call();
-                  },
-                  text: 'Delete',
-                  options: FFButtonOptions(
-                    height: 34.0,
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Colors.transparent,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          letterSpacing: 0.0,
-                        ),
-                    elevation: 0.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      width: 1.6,
+                if ((_model.data != null) &&
+                    getJsonField(
+                      _model.data,
+                      r'''$.isMine''',
+                    ) &&
+                    !getJsonField(
+                      _model.data,
+                      r'''$.deleted''',
+                    ))
+                  FFButtonWidget(
+                    onPressed: () async {
+                      await widget.onDelete?.call();
+                    },
+                    text: 'Delete',
+                    options: FFButtonOptions(
+                      height: 34.0,
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                      iconPadding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: Colors.transparent,
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Inter',
+                                letterSpacing: 0.0,
+                              ),
+                      elevation: 0.0,
+                      borderSide: BorderSide(
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        width: 1.6,
+                      ),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
-                    borderRadius: BorderRadius.circular(24.0),
                   ),
-                ),
                 FFButtonWidget(
                   onPressed: () async {
-                    await widget.onReply?.call();
+                    await widget.onReply?.call(
+                      _model.data!,
+                    );
                   },
                   text: 'Reply',
                   options: FFButtonOptions(
@@ -252,14 +277,48 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                   ),
                 ),
                 FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
+                  onPressed: () async {
+                    await actions.like(
+                      getJsonField(
+                        widget.data,
+                        r'''$.path''',
+                      ).toString(),
+                      (value) async {
+                        _model.likeData = value;
+                        safeSetState(() {});
+                        _model.likeCountOutput = await actions.readDataField(
+                          context,
+                          getJsonField(
+                            widget.data,
+                            r'''$.key''',
+                          ).toString(),
+                          'likeCount',
+                        );
+                      },
+                      (error) async {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              error,
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                            ),
+                            duration: const Duration(milliseconds: 4000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).secondary,
+                          ),
+                        );
+                      },
+                    );
+
+                    safeSetState(() {});
                   },
-                  text: 'Like',
+                  text: _model.likeData ? 'Liked' : 'Like',
                   options: FFButtonOptions(
                     height: 34.0,
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                     iconPadding:
                         const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: Colors.transparent,
@@ -275,9 +334,29 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
+                if ((getJsonField(
+                          _model.data,
+                          r'''$.likeCount''',
+                        ) !=
+                        null) &&
+                    (getJsonField(
+                          _model.data,
+                          r'''$.likeCount''',
+                        ).toString() !=
+                        '0'))
+                  Text(
+                    getJsonField(
+                      _model.data,
+                      r'''$.likeCount''',
+                    ).toString(),
+                    style: FlutterFlowTheme.of(context).labelSmall.override(
+                          fontFamily: 'Inter',
+                          letterSpacing: 0.0,
+                        ),
+                  ),
                 FFButtonWidget(
                   onPressed: () {
-                    print('Button pressed ...');
+                    print('FollowButton pressed ...');
                   },
                   text: 'Follow',
                   options: FFButtonOptions(
@@ -301,7 +380,7 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                 ),
                 FFButtonWidget(
                   onPressed: () {
-                    print('Button pressed ...');
+                    print('BlockButton pressed ...');
                   },
                   text: 'Block',
                   options: FFButtonOptions(
@@ -324,8 +403,65 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                   ),
                 ),
                 FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
+                  onPressed: () async {
+                    _model.isReportExist = await actions.reportExists(
+                      ReportType.post.name,
+                      getJsonField(
+                        widget.data,
+                        r'''$.key''',
+                      ).toString(),
+                    );
+                    if (_model.isReportExist!) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Report already exist',
+                            style: TextStyle(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                          ),
+                          duration: const Duration(milliseconds: 4000),
+                          backgroundColor:
+                              FlutterFlowTheme.of(context).secondary,
+                        ),
+                      );
+                    } else {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        enableDrag: false,
+                        context: context,
+                        builder: (context) {
+                          return Padding(
+                            padding: MediaQuery.viewInsetsOf(context),
+                            child: ReportBottomSheetComponentWidget(
+                              type: ReportType.post.name,
+                              id: getJsonField(
+                                widget.data,
+                                r'''$.key''',
+                              ).toString(),
+                              reporteeUid: getJsonField(
+                                widget.data,
+                                r'''$.uid''',
+                              ).toString(),
+                              summary: (String title, String content) {
+                                return "$title ${content.length > 128 ? content.substring(0, 128) : content}";
+                              }(
+                                  getJsonField(
+                                    _model.data,
+                                    r'''$.title''',
+                                  ).toString(),
+                                  getJsonField(
+                                    _model.data,
+                                    r'''$.content''',
+                                  ).toString()),
+                            ),
+                          );
+                        },
+                      ).then((value) => safeSetState(() {}));
+                    }
+
+                    safeSetState(() {});
                   },
                   text: 'Report',
                   options: FFButtonOptions(
@@ -349,6 +485,18 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                 ),
               ],
             ),
+          ),
+          custom_widgets.DataChangeListener(
+            width: 0.0,
+            height: 0.0,
+            path: getJsonField(
+              widget.data,
+              r'''$.path''',
+            ).toString(),
+            onChange: (data) async {
+              _model.data = data;
+              safeSetState(() {});
+            },
           ),
         ],
       ),

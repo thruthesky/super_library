@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -55,6 +56,21 @@ class _CommentListViewState extends State<CommentListView> {
             final Comment comment = Comment.fromSnapshot(commentSnapshot);
 
             return widget.builder(comment.toJson());
+/*
+            return widget.builder(createCommentStruct(
+              key: comment.key,
+              rootKey: comment.rootKey,
+              parentKey: comment.parentKey,
+              uid: comment.uid,
+              content: comment.content,
+              createdAt: comment.createdAt,
+              updatedAt: comment.updatedAt,
+              depth: comment.depth,
+              order: comment.order,
+              deleted: comment.deleted,
+              isMine: comment.isMine,
+            ));
+            */
           },
         );
       },

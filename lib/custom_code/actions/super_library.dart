@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -48,6 +49,10 @@ String get myUid {
   }
   return fa.FirebaseAuth.instance.currentUser!.uid;
 }
+
+/// [signedIn] returns true if the user is signed in with FirebaseAuth. Otherwise, it returns false.
+bool get signedIn => fa.FirebaseAuth.instance.currentUser != null;
+bool get notSignedIn => !signedIn;
 
 /// Database reference for the current user
 DatabaseReference get myRef => userRef(myUid);
@@ -111,7 +116,8 @@ class BlockedUser extends StatelessWidget {
     return MyDoc(
       builder: (userData) {
         if (userData == null) {
-          return const SizedBox.shrink();
+          // Fix by @thruthesky at Nov 3, 2024. It should call false if the user data is not found.
+          return builder(false);
         }
 
         final List<String> blockedUsers =
@@ -541,7 +547,7 @@ class ChatRoom {
   }
 
   /// Return the chat room object from the json.
-  factory ChatRoom.fromJson(Map<String, dynamic> json, String id) {
+  factory ChatRoom.fromJson(Map<dynamic, dynamic> json, String id) {
     return ChatRoom(
       id: id,
       name: json[field.name] ?? '',
@@ -759,9 +765,11 @@ class ChatService {
   Future sendMessage({
     required String roomId,
     String? text,
-    String? photoUrl,
+    String? url,
   }) async {
     // Add your function code here!
+
+    // dog('sendMessage() -> roomId: $roomId, text: $text, url: $url');
 
     // Check if the user is blocked by login user
     if (UserService.instance.hasBlocked(otherUidOrRoomId(roomId))) {
@@ -780,6 +788,7 @@ class ChatService {
       senderUid: myUid,
       displayName: my?.displayName,
       photoUrl: my?.photoUrl,
+      url: url,
       createdAt: ServerValue.timestamp,
       text: text,
     );
@@ -799,14 +808,14 @@ class ChatService {
     // in realtime by [ChatMessageListView] widget.
     final room = await ChatRoom.get(roomId);
     if (room == null) {
-      dog('sendMessage() -> Chat room not found. roomId: $roomId');
+      // dog('sendMessage() -> Chat room not found. roomId: $roomId');
       throw SuperLibraryException('send-message', 'Chat room not found');
     }
 
     final Map<String, Object?> updates = {};
     const f = ChatJoin.field;
     for (String uid in room.userUids) {
-      dog('sendMessage() user uid: $uid');
+      // dog('sendMessage() user uid: $uid');
       if (uid == myUid) {
         // If it's my join data
         // The order must not have -11 infront since I have already read that
@@ -859,7 +868,7 @@ class ChatService {
       // information without referring to the chat room.
       updates['chat/joins/$uid/${room.id}/${f.lastMessageUid}'] = myUid;
       updates['chat/joins/$uid/${room.id}/${f.lastText}'] = text;
-      updates['chat/joins/$uid/${room.id}/${f.lastUrl}'] = photoUrl;
+      updates['chat/joins/$uid/${room.id}/${f.lastUrl}'] = url;
       // TODO: Protocol support
       // updates['chat/joins/$uid/${room.id}/${f.lastProtocol}'] = protocol;
       updates['chat/joins/$uid/${room.id}/${f.lastMessageDeleted}'] = null;
@@ -935,7 +944,7 @@ class ChatService {
     });
   }
 
-  String joinSeparator = '---';
+  String singleChatRoomJoinSeparator = '---';
 
   ///
   String makeSingleChatRoomId(String? loginUid, String? otherUid) {
@@ -947,7 +956,7 @@ class ChatService {
     }
     final arr = [loginUid, otherUid];
     arr.sort();
-    return arr.join(joinSeparator);
+    return arr.join(singleChatRoomJoinSeparator);
   }
 
   /// Returns the single-chat room-id if the input string is a user uid. If the
@@ -989,13 +998,13 @@ class ChatService {
 
   /// [isSingleChatRoom] returns true if the room id is single chat room.
   bool isSingleChatRoom(String roomId) {
-    return roomId.contains(joinSeparator);
+    return roomId.contains(singleChatRoomJoinSeparator);
   }
 
   /// [getOtherUid] returns the other user's uid from the single chat room id.
   String getOtherUid(String singleChatRoomId) {
     // dog('getOtherUid: $singleChatRoomId');
-    final uids = singleChatRoomId.split(joinSeparator);
+    final uids = singleChatRoomId.split(singleChatRoomJoinSeparator);
     if (uids.length != 2) {
       throw SuperLibraryException(
         'getOtherUid',
@@ -1233,12 +1242,13 @@ class Comment {
   final String? parentKey;
   final String content;
   final String uid;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int createdAt;
+  final int updatedAt;
   final List<String> urls;
   final int depth;
   final String order;
   final bool deleted;
+  final int likeCount;
 
   ///
   bool hasChild = false;
@@ -1260,7 +1270,26 @@ class Comment {
     required this.depth,
     required this.order,
     required this.deleted,
+    required this.likeCount,
   });
+
+  static const field = (
+    key: 'key',
+    rootKey: 'rootKey',
+    parentKey: 'parentKey',
+    content: 'content',
+    uid: 'uid',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    urls: 'urls',
+    depth: 'depth',
+    order: 'order',
+    deleted: 'deleted',
+    commentCount: 'commentCount',
+    likeCount: 'likeCount',
+    isMine: 'isMine',
+    path: 'path',
+  );
 
   factory Comment.fromSnapshot(DataSnapshot snapshot) {
     if (snapshot.exists == false) {
@@ -1274,36 +1303,36 @@ class Comment {
   factory Comment.fromJson(Map<dynamic, dynamic> json, String key) {
     return Comment(
       key: key,
-      rootKey: json['rootKey'],
-      parentKey: json['parentKey'],
-      content: json['content'] ?? '',
-      uid: json['uid'],
-      createdAt: json['createdAt'] is int
-          ? DateTime.fromMillisecondsSinceEpoch(json['createdAt'])
-          : DateTime.now(),
-      updatedAt: json['updateAt'] is int
-          ? DateTime.fromMillisecondsSinceEpoch(json['createdAt'])
-          : DateTime.now(),
-      urls: List<String>.from(json['urls'] ?? []),
-      depth: json['depth'] ?? 0,
-      order: json['order'],
-      deleted: json['deleted'] ?? false,
+      rootKey: json[field.rootKey],
+      parentKey: json[field.parentKey],
+      content: json[field.content] ?? '',
+      uid: json[field.uid],
+      createdAt: json[field.createdAt] ?? DateTime.now().millisecondsSinceEpoch,
+      updatedAt: json[field.updatedAt] ?? DateTime.now().millisecondsSinceEpoch,
+      urls: List<String>.from(json[field.urls] ?? []),
+      depth: json[field.depth] ?? 0,
+      order: json[field.order],
+      deleted: json[field.deleted] ?? false,
+      likeCount: json[field.likeCount] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'key': key,
-      'rootKey': rootKey,
-      'parentKey': parentKey,
-      'DatabaseReference': DatabaseReference,
-      'content': content,
-      'uid': uid,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'urls': urls,
-      'depth': depth,
-      'order': order,
+      field.key: key,
+      field.rootKey: rootKey,
+      field.parentKey: parentKey,
+      field.content: content,
+      field.uid: uid,
+      field.createdAt: createdAt,
+      field.updatedAt: updatedAt,
+      field.urls: urls,
+      field.depth: depth,
+      field.order: order,
+      field.deleted: deleted,
+      field.isMine: isMine,
+      field.path: ref.path,
+      field.likeCount: likeCount,
     };
   }
 
@@ -1350,18 +1379,14 @@ class Comment {
     final ref = CommentService.instance.commentsRef.push();
 
     final comment = {
-      'rootKey': rootKey,
-      // TODO review:
-      // Isn't parentKey supposedly the key of the
-      // content that is being commented on
-      // 'parentKey': ref.key,
-      'parentKey': parentKey,
-      'content': content,
-      'urls': urls,
-      'createdAt': ServerValue.timestamp,
-      'uid': myUid,
-      'order': '$rootKey:$order',
-      'depth': (depth + 1),
+      field.rootKey: rootKey,
+      field.parentKey: parentKey,
+      field.content: content,
+      field.urls: urls,
+      field.createdAt: ServerValue.timestamp,
+      field.uid: myUid,
+      field.order: '$rootKey:$order',
+      field.depth: (depth + 1),
     };
 
     print('comment path: ${ref.path}');
@@ -1373,7 +1398,7 @@ class Comment {
 
     /// Increment the comment count of the root.
     await dataRef(rootKey).update({
-      'commentCount': ServerValue.increment(1),
+      field.commentCount: ServerValue.increment(1),
     });
 
     return ref;
@@ -1393,23 +1418,47 @@ class Comment {
   /// To delete [content], pass an empty string.
   /// To delete [urls], pass an empty list.
   Future update({
+    String? content,
+    List<String>? urls,
+  }) async {
+    // TODO: check if the comment blongs to the current user
+    // TODO: check if the comment is deleted
+    await CommentService.instance.commentsRef.child(key).update({
+      if (content != null) field.content: content,
+      if (urls != null) field.urls: urls,
+      field.updatedAt: ServerValue.timestamp,
+    });
+  }
+
+  static Future updateByKey({
     required String commentKey,
     String? content,
     List<String>? urls,
   }) async {
-    await commentsRef.child(commentKey).update({
-      if (content != null) 'content': content,
-      if (urls != null) 'urls': urls,
-      'updatedAt': ServerValue.timestamp,
-    });
+    final comment = await read(commentKey);
+    // TODO: check if the comment exists or null
+    await comment?.update(
+      content: content,
+      urls: urls,
+    );
   }
 
   /// [delete] deletes the comment of the comment key
   Future delete() async {
+    // TODO: check if the comment blongs to the current user
+    // TODO: check if the comment is deleted
+
     for (String url in urls) {
       await StorageService.instance.delete(url);
     }
-    await ref.remove();
+
+    // await ref.remove();
+    await ref.update({
+      field.content: 'Deleted',
+      field.urls: [],
+      field.deleted: true,
+      field.updatedAt: ServerValue.timestamp,
+    });
   }
 
   /// [deleteByKey] is a method to delete the data from the database by the key.
@@ -1718,6 +1767,7 @@ class Data {
   String title;
   String content;
   List<String> urls;
+  int likeCount;
 
   /// [data] holds the JSON data of the data node. This hold the data itself.
   Map<dynamic, dynamic> data;
@@ -1733,9 +1783,12 @@ class Data {
     required this.content,
     required this.urls,
     required this.data,
+    required this.likeCount,
   });
 
   DatabaseReference get ref => Ref.data.child(key);
+
+  bool get isMine => uid == currentUserUid;
 
   /// Field names used for the Firestore document
   static const field = (
@@ -1748,6 +1801,9 @@ class Data {
     title: 'title',
     content: 'content',
     urls: 'urls',
+    likeCount: 'likeCount',
+    isMine: 'isMine',
+    path: 'path',
   );
 
   /// [value] is a method to get the value from the data.
@@ -1768,7 +1824,14 @@ class Data {
     return data[key] as T;
   }
 
-  toJson() => data;
+  toJson() => {
+        ...data,
+        field.isMine:
+            currentUserUid != null && data[field.uid] == currentUserUid,
+        field.path: ref.path,
+        field.likeCount: likeCount,
+        field.deleted: deleted,
+      };
 
   @override
   String toString() => "Data(key: $key, $data)";
@@ -1782,14 +1845,19 @@ class Data {
     return Data(
       key: key,
       uid: data[field.uid] as String,
-      createdAt: data[field.createdAt] ?? 0,
-      updatedAt: data[field.updatedAt] ?? 0,
+      createdAt: data[field.createdAt] ?? DateTime.now().millisecondsSinceEpoch,
+      updatedAt: data[field.updatedAt] ?? DateTime.now().millisecondsSinceEpoch,
       deleted: data[field.deleted] ?? false,
       category: data[field.category] as String,
       title: data[field.title] ?? '',
       content: data[field.content] ?? '',
       urls: List<String>.from(data[field.urls] ?? []),
-      data: {...data, field.key: key},
+      data: {
+        ...data,
+        field.key: key,
+        field.path: Ref.data.child(key).path,
+      },
+      likeCount: data[field.likeCount] ?? 0,
     );
   }
 
@@ -1876,6 +1944,15 @@ class Data {
     return Data.fromSnapshot(snapshot);
   }
 
+  /// [readField] is a method to read the specific field of data from the database.
+  static Future<dynamic> readField(String key, String field) async {
+    final snapshot = await Ref.data.child(key).child(field).get();
+    if (snapshot.exists == false) {
+      return null;
+    }
+    return snapshot.value;
+  }
+
   /// [delete] is a method to delete the data from the database.
   ///
   /// It does not actually delete the data. It just sets the [deleted] field to
@@ -1907,6 +1984,69 @@ class Data {
 /// modeling and basic CRUD.
 class DataService {
   //
+}
+
+class FFUser {
+  static const String displayName = 'display_name';
+  static const String photoURL = 'photo_url';
+  static const String createdTime = 'created_time';
+}
+
+/// Returns true if the text has a valid uid format.
+isUid(String text) {
+  if (text.length != 28) return false;
+  if (text.startsWith('-')) return false;
+
+  return true;
+}
+
+/// Like
+///
+/// - If a user liked an object(user, post, comment or anything) or not.
+///   uid-path: uid-stamp, null.
+/// - How many likes the object has.
+class Like {
+  final String path;
+  DatabaseReference get objectRef => database.ref(path);
+
+  Like({
+    required this.path,
+  });
+
+  static const field = (likeCount: 'likeCount');
+
+  static Future<bool> like(String path) async {
+    if (currentUserUid == null) {
+      throw SuperLibraryException(
+          'like/sign-in-required', 'User is not signed in');
+    }
+
+    DatabaseReference objectRef = database.ref(path);
+    DatabaseReference likeRef = LikeService.instance.likeRef(path);
+    final snapshot = await likeRef.get();
+
+    final hasLiked = snapshot.exists;
+
+    final String likeValue =
+        myUid + DateTime.now().millisecondsSinceEpoch.toString();
+    await database.ref().update({
+      likeRef.path: hasLiked ? null : likeValue,
+      '${objectRef.path}/${field.likeCount}':
+          hasLiked ? ServerValue.increment(-1) : ServerValue.increment(1),
+    });
+    final like = await likeRef.get();
+    return like.exists;
+  }
+}
+
+class LikeService {
+  static LikeService? _instance;
+  static LikeService get instance => _instance ??= LikeService._();
+  LikeService._();
+
+  DatabaseReference get likesRef => database.ref('likes');
+  DatabaseReference likeRef(String path) =>
+      likesRef.child('$myUid-${path.replaceAll('/', '-')}');
 }
 
 /// Memory
@@ -1953,13 +2093,17 @@ class Memory {
 /// To reduce the flickering, it uses the initialData from the
 /// [UserService.instance.firestoreUserData].
 ///
+///
+/// Use this widget to display widgets that depends on user's login status.
+/// For example, if the user is logged in, it shows the user's profile. If the
+/// user is not logged in, it shows the login button.
 class MyDoc extends StatelessWidget {
   const MyDoc({super.key, required this.builder});
   final Widget Function(Map<String, dynamic>?) builder;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Map<String, dynamic>>(
+    return StreamBuilder<Map<String, dynamic>?>(
       initialData: UserService.instance.firestoreUserData,
       stream: UserService.instance.changes,
       builder: (_, snapshot) {
@@ -1968,7 +2112,9 @@ class MyDoc extends StatelessWidget {
             snapshot.hasData == false) {
           return const SizedBox.shrink();
         }
-        return builder(snapshot.data);
+        // dog('MyDoc() snapshot.data: ${snapshot.data}, ${snapshot.data?.length}, $currentUserUid');
+        return builder(
+            (snapshot.data ?? {}).isEmpty == true ? null : snapshot.data);
       },
     );
   }
@@ -2327,10 +2473,13 @@ extension SuperLibraryStringExtension on String {
   }
 }
 
-/// Realtime database user modeling class
+/// User Data
 ///
-/// This model does not represent the user data in the Firestore. It represents
-/// the user data in the Realtime database.
+/// This is a user data modeling class for Realtime Database. This model does
+/// not represent the user data in the Firestore.
+///
+/// All the member variables and methods in this class are only related to the
+/// Realtime Database.
 class UserData {
   ///
   /// Field names used for the Firestore document
@@ -2431,8 +2580,7 @@ DatabaseReference userPhotoUrlRef(String uid) =>
     databaseUserRef(uid).child(UserData.field.photoUrl);
 
 /// Database reference for the user of the uid
-@Deprecated('Use [Ref.user] instead')
-DatabaseReference userRef(String uid) => databaseUserRef(uid);
+DatabaseReference userRef(String uid) => Ref.user(uid);
 
 class UserService {
   static UserService? _instance;
@@ -2458,6 +2606,7 @@ class UserService {
   ///
   /// Use this method to get the login user data from the Firestore document cached in memeory.
   T getValueFromFirestoreMemoryUserData<T>(String k, T defaultValue) {
+    // dog('firestoreUserData: $firestoreUserData');
     if (firestoreUserData.containsKey(k)) {
       return firestoreUserData[k] as T;
     } else {
@@ -2493,7 +2642,10 @@ class UserService {
     return ref;
   }
 
-  /// Firestore document reference for the user with [uid]
+  /// User document reference
+  ///
+  /// It's the Firestore document reference for the user with [uid].
+  /// * It's not the Realtime Database reference.
   fs.DocumentReference doc(String uid) {
     final ref = firestore.collection(collectionName).doc(uid);
 
@@ -2604,6 +2756,41 @@ class UserService {
         databaseUserRef(user.uid).update(update);
       });
     });
+  }
+
+  /// Update the user's profile data into the Firestore
+  ///
+  /// The fields are optional.
+  /// If the field is null, it will not be updated.
+  /// You cannot delete a field using this method.
+  ///
+  /// It updates the 'updatedAt' field in the Firestore.
+  updateProfile({
+    String? displayName,
+    String? photoUrl,
+  }) async {
+    await myDoc.set(
+      {
+        if (displayName != null) 'display_name': displayName,
+        if (photoUrl != null) 'photo_url': photoUrl,
+        'updatedAt': fs.FieldValue.serverTimestamp(),
+      },
+      fs.SetOptions(merge: true),
+    );
+  }
+
+  /// This is a simple log method. But it makes sure that the user's document
+  /// exists in the Firestore.
+  ///
+  /// So, if you are unsure if the user's document exists in the Firestore, you
+  /// can use this method after a user logs in.
+  login() async {
+    await myDoc.set(
+      {
+        'loginAt': fs.FieldValue.serverTimestamp(),
+      },
+      fs.SetOptions(merge: true),
+    );
   }
 }
 

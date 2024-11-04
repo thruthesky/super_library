@@ -51,42 +51,36 @@ class _UserDisplayNameComponentWidgetState
   Widget build(BuildContext context) {
     return ClipRRect(
       child: Container(
-        width: double.infinity,
         decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Stack(
-            children: [
-              custom_widgets.UserDisplayName(
-                width: 200.0,
-                height: 20.0,
-                uid: widget.uid!,
-                nameIfEmpty: '...',
-                nameIfBlockedUser: 'Blocked User',
-                fontSize: widget.fontSize,
-                fontColor: widget.fontColor,
-              ),
-              if (false)
-                Container(
-                  width: 200.0,
-                  height: 20.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                  ),
-                  child: Text(
-                    '[Display Name]',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          color: widget.fontColor,
-                          fontSize: widget.fontSize,
-                          letterSpacing: 0.0,
-                        ),
-                  ),
+        child: Stack(
+          children: [
+            custom_widgets.UserDisplayName(
+              width: 1.0,
+              height: 1.0,
+              uid: widget.uid!,
+              nameIfEmpty: '...',
+              nameIfBlockedUser: 'Blocked User',
+              fontSize: widget.fontSize,
+              fontColor: widget.fontColor,
+            ),
+            if (false)
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
                 ),
-            ],
-          ),
+                child: Text(
+                  '[Display Name]',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Inter',
+                        color: widget.fontColor,
+                        fontSize: widget.fontSize,
+                        letterSpacing: 0.0,
+                      ),
+                ),
+              ),
+          ],
         ),
       ),
     );

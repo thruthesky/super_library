@@ -5,6 +5,16 @@
 - Refer the [quick start](./quick_start.md) document to install super library.
 
 
+## To display user avatar
+
+Use `UserAvatarComponent`
+
+## To display user display name
+
+Use `UserDisplayNameComponent`
+
+
+
 ## How to display users
 
 ## How to display buttons

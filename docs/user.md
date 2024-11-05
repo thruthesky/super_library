@@ -197,25 +197,21 @@ See the custom actions page
 ### Database structure for Blocking
 
 - We use Firestore to manage blocked users by storing user UIDs in the `blockedUsers` field within the user document.
-  - This approach is beneficial because:
-    - It allows easy determination of whether a user is blocked from the user's own document.
-    - The `blockedUsers` field is part of the user's document, so it is automatically loaded and updated in memory, eliminating the need for repeated document reads.
+    - This approach is beneficial because:
+        - It allows easy determination of whether a user is blocked from the user's own document.
+        - The `blockedUsers` field is part of the user's document, so it is automatically loaded and updated in memory, eliminating the need for repeated document reads.
 
 
 - To use the user blocking feature in FlutterFlow, create a String array field named `blockedUsers` in the Users schema in Firestore.
 
 - Use the `blockUser` and `unblockUser` custom actions to manage blocked users:
-  - `blockUser` adds the other user's UID to `blockedUsers` and mirrors the block list in the Realtime Database.
-  - `unblockUser` removes the other user's UID from `blockedUsers` and mirrors the block list in the Realtime Database.
+    - `blockUser` adds the other user's UID to `blockedUsers` and mirrors the block list in the Realtime Database.
+    - `unblockUser` removes the other user's UID from `blockedUsers` and mirrors the block list in the Realtime Database.
 
 
 - The uid of other user will be saved in the login user's Firestore document like `/users/<uid> { blockedUsers: [ ... ] }`.
-  - When the user A blocks the B, B's uid is saved in `/users/A/{ blockedUsers: [ B ] }`.
-  - It's the string of uid. Not the reference of the user document.
-
-
-
-
+    - When the user A blocks the B, B's uid is saved in `/users/A/{ blockedUsers: [ B ] }`.
+    - It's the string of uid. Not the reference of the user document.
 
 
 ### blocking a user
@@ -224,19 +220,18 @@ See the custom actions page
 - When user-A blocks user-B,
     - The `blockUser` custom action will add B's uid into `blockedUsers` array field in A's fireestore user document.
         - And, mirror the the B's uid at `/blocked-users/A/{ B }` in the Reatime Database.
-        - And, leave the chat room with B if there is.
+        - And, if the user A has a single chat room with user-B, it will leave the chat room.
 
 
 ### Un-blocking a User
 
-
 - The `unblockUser` custom action does the unblocking a user.
-  - And it mirror the other user's uid from the Realtime Database.
+    - And it mirror the other user's uid from the Realtime Database.
 
 - To know if a user is blocked or not, simply do the way how the FlutterFlow goes
-  - The `blockedUsers` is in the login user's document. Meaning, it will be automatically synced with the `Authenticated User` variable in FlutterFlow.
-  - To display if the user is blocked or not, check if the user's uid is in the `blockedUsers` of `Authenticated User`.
-    - And if the uid exists, then the user is blocked by the login user and the login user can unblock the user.
+    - The `blockedUsers` is in the login user's document. Meaning, it will be automatically synced with the `Authenticated User` variable in FlutterFlow.
+    - To display if the user is blocked or not, check if the user's uid is in the `blockedUsers` of `Authenticated User`.
+        - And if the uid exists, then the user is blocked by the login user and the login user can unblock the user.
 
 
 ### Listing the blocked users

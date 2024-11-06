@@ -70,3 +70,15 @@ createData(
   (e) async => print(e),
 );
 ```
+
+
+
+## snackbar
+
+- FlutterFlow has `showSnackbar` method and you can use it.
+- Super library has `snackbar` method which is similiar to `showSnackbar`.
+  - `snackbar` supports maximum of two lines while `showSnackbar` supports onlye one line.
+  - `snackbar` displays the elipsis while `showSnackbar` displays overflow.
+  - `snackbar` has `error` option to display the snackbar with error background.
+
+

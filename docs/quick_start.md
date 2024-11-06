@@ -3,6 +3,11 @@
 
 To use the Super Library, you need to add initialization code.
 
+## Setup
+
+See the [setup](./setup.md) documnet.
+
+
 ## Why Firebase Databsae URL is Needed
 
 

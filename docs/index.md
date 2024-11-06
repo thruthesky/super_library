@@ -1,6 +1,9 @@
 # Super Library
 
+## Setup
 
+- See the [setup](./setup.md) document.
+- See the [quick start](./quick_start.md) document
 
 ## Why We Built the Super Library
 

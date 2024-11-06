@@ -10,6 +10,7 @@
   - [Chat Message Database Structure](#chat-message-database-structure)
   - [How Chat Room Works](#how-chat-room-works)
   - [Sending a chat message](#sending-a-chat-message)
+- [Settings](#settings)
 - [Chat Room](#chat-room)
   - [How to Create a Chat Room](#how-to-create-a-chat-room)
   - [How to Update a Chat Room](#how-to-update-a-chat-room)
@@ -94,6 +95,22 @@ This process ensures that users have control over who can send them messages and
 ## Sending a chat message
 
 - Whenever a chat message is sent, it contains the sender's uid, displayName, photoUrl if the user has.
+
+
+
+
+# Settings
+
+
+- Call `chatVerifiedUserOnly` custom action to set the option that only verified members can send chat messages
+    - This is because;
+        - There are many abusers; You may think no abusers would use your app. But trust me, there are whole lot of abusers;
+        - If anyone can be able to send message, abusers will send bad words, photos, links and they can do more.
+        - By calling the `chatVerifiedUserOnly` custom action call in `main.dart`, users who have `verified` field to true in their user documents can send messages and photos;
+            - This option must be set the whole chat rooms; not indivisual chat rooms;
+            - And this option must includes all kinds of chat data including texts, images and files;
+  
+
 
 
 

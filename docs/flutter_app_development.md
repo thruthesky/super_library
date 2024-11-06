@@ -1,6 +1,7 @@
 # Flutter Development
 
-You will learn how to develop apps with the Flutter in this page. If you are only interested in building apps with FlutterFlow, this page is not for you.
+This page will teach you how to use the Super library with Flutter to build apps. If you are only interested in building apps with FlutterFlow, this page is not for you.
+
 
 
 

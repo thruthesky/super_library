@@ -3,6 +3,8 @@ description: A flutter package that provides a set of building blocks for buildi
 
 version: 0.0.4
 
+homepage: https://thruthesky.github.io/super_library/
+
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -107,3 +109,12 @@ flutter:
     - assets/rive_animations/
     - assets/pdfs/
     - assets/jsons/
+
+repository: https://github.com/thruthesky/super_library
+issue_tracker: https://github.com/thruthesky/super_library/issues
+topics:
+  - chat
+  - forum
+  - blog
+  - firebase
+  - social

@@ -48,7 +48,9 @@ class _PostUpdateScreenWidgetState extends State<PostUpdateScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: true,
           title: Text(
-            'Update',
+            FFLocalizations.of(context).getText(
+              'c9qliu28' /* Update */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,

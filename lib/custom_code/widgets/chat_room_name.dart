@@ -50,8 +50,10 @@ class _ChatRoomNameState extends State<ChatRoomName> {
             children: [
               UserAvatar(uid: user.uid),
               const SizedBox(width: 16),
-              Text(
-                user.displayName,
+              Expanded(
+                child: Text(
+                  user.displayName,
+                ),
               ),
             ],
           );
@@ -75,30 +77,15 @@ class _ChatRoomNameState extends State<ChatRoomName> {
                   ),
                 ),
               const SizedBox(width: 16),
-              Text(
-                room.name,
+              Expanded(
+                child: Text(
+                  room.name,
+                ),
               ),
             ],
           );
         },
       );
     }
-
-    // return Value(
-    //   ref: ChatService.instance.isSingleChatRoom(widget.uidOrRoomId)
-    //       ? UserService.instance
-    //           .databaseUserRef(
-    //               ChatService.instance.getOtherUid(widget.uidOrRoomId))
-    //           .child(UserData.field.displayName)
-    //       : ChatService.instance.roomsRef
-    //           .child(widget.uidOrRoomId)
-    //           .child(ChatRoom.field.name),
-    //   builder: (chatRoomName, ref) {
-    //     final String chatRoomNameValue = chatRoomName ?? "Chat Room";
-    //     return Text(
-    //       chatRoomNameValue,
-    //     );
-    //   },
-    // );
   }
 }

@@ -46,3 +46,8 @@ double depth(int n) {
 List<int> generateEmptyList(int length) {
   return List.generate(length, (index) => index);
 }
+
+List<String> keys(dynamic json) {
+  if (json == null) return [];
+  return Map<String, dynamic>.from(json).keys.toList();
+}

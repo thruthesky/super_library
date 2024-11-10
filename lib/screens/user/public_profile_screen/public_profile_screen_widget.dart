@@ -71,7 +71,9 @@ class _PublicProfileScreenWidgetState extends State<PublicProfileScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: true,
           title: Text(
-            'Profile',
+            FFLocalizations.of(context).getText(
+              'woh0w582' /* Profile */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -136,7 +138,9 @@ class _PublicProfileScreenWidgetState extends State<PublicProfileScreenWidget> {
                             }.withoutNulls,
                           );
                         },
-                        text: 'Chat',
+                        text: FFLocalizations.of(context).getText(
+                          '4alqmxb3' /* Chat */,
+                        ),
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(

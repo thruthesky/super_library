@@ -1,6 +1,9 @@
+import '/backend/schema/enums/enums.dart';
+import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'report_bottom_sheet_component_model.dart';
@@ -39,9 +42,6 @@ class _ReportBottomSheetComponentWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => ReportBottomSheetComponentModel());
-
-    _model.reasonTextFieldTextController ??= TextEditingController();
-    _model.reasonTextFieldFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -87,76 +87,60 @@ class _ReportBottomSheetComponentWidgetState
               ),
             ),
             Text(
-              'Report',
+              FFLocalizations.of(context).getText(
+                'n2z6citt' /* Report */,
+              ),
               style: FlutterFlowTheme.of(context).titleMedium.override(
                     fontFamily: 'Inter Tight',
                     letterSpacing: 0.0,
                   ),
             ),
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: TextFormField(
-                  controller: _model.reasonTextFieldTextController,
-                  focusNode: _model.reasonTextFieldFocusNode,
-                  autofocus: false,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    labelText: 'Reason',
-                    labelStyle:
-                        FlutterFlowTheme.of(context).labelMedium.override(
-                              fontFamily: 'Inter',
-                              letterSpacing: 0.0,
-                            ),
-                    hintText: 'Tell us what is the report about.',
-                    hintStyle:
-                        FlutterFlowTheme.of(context).labelMedium.override(
-                              fontFamily: 'Inter',
-                              letterSpacing: 0.0,
-                            ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).primary,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 24.0),
+              child: FlutterFlowChoiceChips(
+                options: ReportReason.values
+                    .map((e) => e.name)
+                    .toList()
+                    .map((label) => ChipData(label))
+                    .toList(),
+                onChanged: (val) => safeSetState(
+                    () => _model.choiceChipsValue = val?.firstOrNull),
+                selectedChipStyle: ChipStyle(
+                  backgroundColor: FlutterFlowTheme.of(context).secondaryText,
+                  textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
+                        color: FlutterFlowTheme.of(context).info,
                         letterSpacing: 0.0,
                       ),
-                  maxLines: 5,
-                  minLines: 5,
-                  cursorColor: FlutterFlowTheme.of(context).primaryText,
-                  validator: _model.reasonTextFieldTextControllerValidator
-                      .asValidator(context),
+                  iconColor: FlutterFlowTheme.of(context).alternate,
+                  iconSize: 16.0,
+                  elevation: 0.0,
+                  borderColor: FlutterFlowTheme.of(context).outline,
+                  borderWidth: 1.6,
+                  borderRadius: BorderRadius.circular(24.0),
                 ),
+                unselectedChipStyle: ChipStyle(
+                  backgroundColor: Colors.transparent,
+                  textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Inter',
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        letterSpacing: 0.0,
+                      ),
+                  iconColor: FlutterFlowTheme.of(context).secondaryText,
+                  iconSize: 16.0,
+                  elevation: 0.0,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                chipSpacing: 8.0,
+                rowSpacing: 8.0,
+                multiselect: false,
+                initialized: _model.choiceChipsValue != null,
+                alignment: WrapAlignment.start,
+                controller: _model.choiceChipsValueController ??=
+                    FormFieldController<List<String>>(
+                  [ReportReason.abuse.name],
+                ),
+                wrapped: true,
               ),
             ),
             Padding(
@@ -171,7 +155,9 @@ class _ReportBottomSheetComponentWidgetState
                       onPressed: () async {
                         Navigator.pop(context);
                       },
-                      text: 'Cancel',
+                      text: FFLocalizations.of(context).getText(
+                        'c3z4wt32' /* Cancel */,
+                      ),
                       options: FFButtonOptions(
                         height: 40.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -201,7 +187,7 @@ class _ReportBottomSheetComponentWidgetState
                           widget.type!,
                           widget.id!,
                           widget.reporteeUid!,
-                          _model.reasonTextFieldTextController.text,
+                          _model.choiceChipsValue!,
                           widget.summary!,
                           () async {
                             Navigator.pop(context);
@@ -238,7 +224,9 @@ class _ReportBottomSheetComponentWidgetState
                           },
                         );
                       },
-                      text: 'Submit',
+                      text: FFLocalizations.of(context).getText(
+                        'ptjvb7lb' /* Submit */,
+                      ),
                       options: FFButtonOptions(
                         height: 40.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(

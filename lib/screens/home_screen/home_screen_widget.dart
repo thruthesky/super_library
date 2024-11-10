@@ -59,7 +59,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           title: Text(
-            'Super Library Home',
+            FFLocalizations.of(context).getText(
+              'playet81' /* Super Library Home */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -85,7 +87,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             ),
           ],
           centerTitle: false,
-          elevation: 2.0,
+          elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
@@ -102,7 +104,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Super Library supports the maximum scalabilties to build mid-sized chat and social apps with cost effiency. It is based on the Firebase realtime database.',
+                        FFLocalizations.of(context).getText(
+                          'aed2aepi' /* Super Library supports the max... */,
+                        ),
                         style:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
@@ -117,7 +121,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             await launchURL(
                                 'https://thruthesky.github.io/super_library/');
                           },
-                          text: 'Read detail document',
+                          text: FFLocalizations.of(context).getText(
+                            'vtcq6g9l' /* Read detail document */,
+                          ),
                           options: FFButtonOptions(
                             height: 40.0,
                             padding: const EdgeInsetsDirectional.fromSTEB(
@@ -148,7 +154,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             await launchURL(
                                 'https://thruthesky.github.io/super_library/');
                           },
-                          text: 'Goto ChatroomListViewCopy',
+                          text: FFLocalizations.of(context).getText(
+                            'qjocfdtt' /* Goto ChatroomListViewCopy */,
+                          ),
                           options: FFButtonOptions(
                             height: 40.0,
                             padding: const EdgeInsetsDirectional.fromSTEB(

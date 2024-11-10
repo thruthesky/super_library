@@ -71,7 +71,9 @@ class _UserDisplayNameComponentWidgetState
                   color: Colors.transparent,
                 ),
                 child: Text(
-                  '[Display Name]',
+                  FFLocalizations.of(context).getText(
+                    '098osuhj' /* [Display Name] */,
+                  ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         color: widget.fontColor,

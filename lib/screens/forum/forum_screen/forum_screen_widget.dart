@@ -43,7 +43,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           title: Text(
-            'Forum',
+            FFLocalizations.of(context).getText(
+              '6kq2tdya' /* Forum */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -73,7 +75,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 24.0),
                   child: Text(
-                    'Super Library Data Function',
+                    FFLocalizations.of(context).getText(
+                      '2g3fq3hl' /* Super Library Data Function */,
+                    ),
                     style: FlutterFlowTheme.of(context).titleLarge.override(
                           fontFamily: 'Inter Tight',
                           letterSpacing: 0.0,
@@ -81,7 +85,11 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                   ),
                 ),
                 Text(
-                  'Why:\nIf you are going to build a social app that has a following/follower features with thousands of users who are very active, Firestore is good. But it\'s very costy. And Super library did it with the Realtime Database.',
+                  FFLocalizations.of(context).getText(
+                    'w4i1qf72' /* Why:
+If you are going to build... */
+                    ,
+                  ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         letterSpacing: 0.0,
@@ -105,7 +113,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                             }.withoutNulls,
                           );
                         },
-                        text: 'Greetings',
+                        text: FFLocalizations.of(context).getText(
+                          'zhzaik49' /* Greetings */,
+                        ),
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -138,7 +148,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                             }.withoutNulls,
                           );
                         },
-                        text: 'QnA',
+                        text: FFLocalizations.of(context).getText(
+                          'ginmtvtu' /* QnA */,
+                        ),
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -171,7 +183,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                             }.withoutNulls,
                           );
                         },
-                        text: 'Discussion',
+                        text: FFLocalizations.of(context).getText(
+                          'uk5i3gxt' /* Discussion */,
+                        ),
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -204,7 +218,9 @@ class _ForumScreenWidgetState extends State<ForumScreenWidget> {
                             }.withoutNulls,
                           );
                         },
-                        text: 'News',
+                        text: FFLocalizations.of(context).getText(
+                          'z0lc6ody' /* News */,
+                        ),
                         options: FFButtonOptions(
                           height: 40.0,
                           padding: const EdgeInsetsDirectional.fromSTEB(

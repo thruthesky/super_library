@@ -80,13 +80,17 @@ class _DataUpdateComponentWidgetState extends State<DataUpdateComponentWidget> {
                   obscureText: false,
                   decoration: InputDecoration(
                     isDense: true,
-                    labelText: 'TITLE',
+                    labelText: FFLocalizations.of(context).getText(
+                      '7qn3zl1m' /* TITLE */,
+                    ),
                     labelStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
                               letterSpacing: 0.0,
                             ),
-                    hintText: 'Input title',
+                    hintText: FFLocalizations.of(context).getText(
+                      '4lwru0a6' /* Input title */,
+                    ),
                     hintStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
@@ -144,13 +148,17 @@ class _DataUpdateComponentWidgetState extends State<DataUpdateComponentWidget> {
                   obscureText: false,
                   decoration: InputDecoration(
                     isDense: true,
-                    labelText: 'CONTENT',
+                    labelText: FFLocalizations.of(context).getText(
+                      'v0mlt6fs' /* CONTENT */,
+                    ),
                     labelStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
                               letterSpacing: 0.0,
                             ),
-                    hintText: 'Input Content',
+                    hintText: FFLocalizations.of(context).getText(
+                      '05dtiscc' /* Input Content */,
+                    ),
                     hintStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
@@ -233,7 +241,9 @@ class _DataUpdateComponentWidgetState extends State<DataUpdateComponentWidget> {
                   },
                 );
               },
-              text: 'UPDATE',
+              text: FFLocalizations.of(context).getText(
+                'i9h7g3m9' /* UPDATE */,
+              ),
               options: FFButtonOptions(
                 height: 40.0,
                 padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),

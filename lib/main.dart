@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/internationalization.dart';
 import 'index.dart';
 
 void main() async {
@@ -38,6 +39,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
   ThemeMode _themeMode = ThemeMode.system;
 
   late AppStateNotifier _appStateNotifier;
@@ -51,6 +54,10 @@ class _MyAppState extends State<MyApp> {
     _router = createRouter(_appStateNotifier);
   }
 
+  void setLocale(String language) {
+    safeSetState(() => _locale = createLocale(language));
+  }
+
   void setThemeMode(ThemeMode mode) => safeSetState(() {
         _themeMode = mode;
       });
@@ -60,11 +67,18 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       title: 'Super Library',
       localizationsDelegates: const [
+        FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        FallbackMaterialLocalizationDelegate(),
+        FallbackCupertinoLocalizationDelegate(),
       ],
-      supportedLocales: const [Locale('en', '')],
+      locale: _locale,
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ko'),
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
         useMaterial3: false,
@@ -122,45 +136,55 @@ class _NavBarPageState extends State<NavBarPage> {
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.home_outlined,
               size: 24.0,
             ),
-            label: 'Home',
+            label: FFLocalizations.of(context).getText(
+              'mblo0n8j' /* Home */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.chat,
               size: 24.0,
             ),
-            label: 'Chat',
+            label: FFLocalizations.of(context).getText(
+              'hnjw5axx' /* Chat */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.groups_2,
               size: 24.0,
             ),
-            label: 'Follow',
+            label: FFLocalizations.of(context).getText(
+              '0q5154ha' /* Follow */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.content_paste,
               size: 24.0,
             ),
-            label: 'Forum',
+            label: FFLocalizations.of(context).getText(
+              'axf4dgm2' /* Forum */,
+            ),
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
+            icon: const Icon(
               Icons.menu_rounded,
               size: 24.0,
             ),
-            label: 'Menu',
+            label: FFLocalizations.of(context).getText(
+              'pap2wu3m' /* Menu */,
+            ),
             tooltip: '',
           )
         ],

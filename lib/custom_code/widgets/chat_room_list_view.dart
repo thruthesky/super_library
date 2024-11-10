@@ -52,6 +52,7 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
         query: query,
         builder: (snapshot, fetchMore) {
           return ListView.separated(
+            padding: EdgeInsets.zero,
             itemCount: snapshot.docs.length,
             separatorBuilder: (context, index) => const Divider(
               height: 1,
@@ -117,8 +118,13 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                                 width: 60,
                                 height: 60,
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context).tertiary,
+                                  // color: FlutterFlowTheme.of(context).tertiary,
                                   borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    width: 0.6,
+                                  ),
                                 ),
                                 child: !join.iconUrl.isNullOrEmpty
                                     ? ClipRRect(
@@ -130,9 +136,11 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                                           fit: BoxFit.cover,
                                         ),
                                       )
-                                    : const Icon(
-                                        Icons.chat,
-                                        size: 18,
+                                    : Icon(
+                                        Icons.groups,
+                                        size: 40,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
                                       ),
                               ),
                               if (!join.photoUrl.isNullOrEmpty)
@@ -178,20 +186,25 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                                     'No chat room name',
                                 style: FlutterFlowTheme.of(context).titleMedium,
                               ),
-                              Row(
-                                children: [
-                                  if (join.single == false)
-                                    const Icon(
-                                      Icons.supervisor_account_rounded,
-                                      size: 16,
-                                    ),
-                                  if (join.open == true)
-                                    const Icon(
-                                      Icons.lock_open_rounded,
-                                      size: 16,
-                                    ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     if (join.single == false)
+                              //       const Icon(
+                              //         Icons.supervisor_account_rounded,
+                              //         size: 16,
+                              //       ),
+                              //     if (join.group && join.open == false)
+                              //       const Icon(
+                              //         Icons.group,
+                              //         size: 16,
+                              //       ),
+                              //     if (join.open == true)
+                              //       const Icon(
+                              //         Icons.groups,
+                              //         size: 16,
+                              //       ),
+                              //   ],
+                              // ),
                               if (join.inviterUid != null &&
                                   join.inviterUid!.isNotEmpty)
                                 Text(

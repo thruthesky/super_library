@@ -23,4 +23,6 @@ Future unblockUser(String otherUid) async {
     ),
     UserService.instance.myBlockedUsersRef.child(otherUid).set(null)
   ]);
+
+  await ChatService.instance.joinIfRoomExists(otherUid);
 }

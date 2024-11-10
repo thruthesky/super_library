@@ -67,7 +67,9 @@ class _ChatRoomNameComponentWidgetState
                   color: Colors.transparent,
                 ),
                 child: Text(
-                  '[ Chat Room Name ]',
+                  FFLocalizations.of(context).getText(
+                    '5k6qkt9g' /* [ Chat Room Name ] */,
+                  ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         color: widget.fontColor,

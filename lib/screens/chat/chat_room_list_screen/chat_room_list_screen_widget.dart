@@ -1,3 +1,5 @@
+import '/components/chat/chat_room_create_component/chat_room_create_component_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -44,7 +46,9 @@ class _ChatRoomListScreenWidgetState extends State<ChatRoomListScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           title: Text(
-            'Chat',
+            FFLocalizations.of(context).getText(
+              'bnx69mqo' /* Chat */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -52,7 +56,50 @@ class _ChatRoomListScreenWidgetState extends State<ChatRoomListScreenWidget> {
                   letterSpacing: 0.0,
                 ),
           ),
-          actions: const [],
+          actions: [
+            Builder(
+              builder: (context) => FlutterFlowIconButton(
+                borderRadius: 8.0,
+                buttonSize: 40.0,
+                fillColor: FlutterFlowTheme.of(context).primary,
+                icon: Icon(
+                  Icons.add,
+                  color: FlutterFlowTheme.of(context).info,
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (dialogContext) {
+                      return Dialog(
+                        elevation: 0,
+                        insetPadding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                        alignment: const AlignmentDirectional(0.0, 0.0)
+                            .resolve(Directionality.of(context)),
+                        child: GestureDetector(
+                          onTap: () => FocusScope.of(dialogContext).unfocus(),
+                          child: ChatRoomCreateComponentWidget(
+                            onCreate: (roomId) async {
+                              context.pushNamed(
+                                'ChatRoomScreen',
+                                queryParameters: {
+                                  'uidOrRoomId': serializeParam(
+                                    roomId,
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
           centerTitle: false,
           elevation: 2.0,
         ),

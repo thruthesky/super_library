@@ -11,25 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '/custom_code/actions/super_library.dart';
 
-Future editChatRoom(
-  String? roomId,
-  String name,
-  String? description,
-  String? iconUrl,
-  bool? open,
-  bool? canInvite,
+Future updateChatRoomIconUrl(
+  String roomId,
+  String iconUrl,
 ) async {
   // Add your function code here!
-  if (roomId == null) {
-    await createChatRoom(name, description, iconUrl, open, canInvite);
-  } else {
-    final room = await ChatRoom.get(roomId);
-    await room!.update(
-      name: name,
-      description: description,
-      iconUrl: iconUrl,
-      open: open ?? true,
-      allMembersCanInvite: canInvite ?? true,
-    );
-  }
+
+  final room = await ChatRoom.get(roomId);
+  await room?.updateIconUrl(iconUrl);
 }

@@ -19,9 +19,11 @@ class CommentListTileComponentWidget extends StatefulWidget {
   const CommentListTileComponentWidget({
     super.key,
     required this.comment,
+    this.blockCondition,
   });
 
   final dynamic comment;
+  final bool? blockCondition;
 
   @override
   State<CommentListTileComponentWidget> createState() =>
@@ -107,46 +109,50 @@ class _CommentListTileComponentWidgetState
                       size: 52.0,
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        wrapWithModel(
-                          model: _model.shortDateTimeComponentModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: ShortDateTimeComponentWidget(
-                            timestamp: getJsonField(
-                              widget.comment,
-                              r'''$.createdAt''',
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          wrapWithModel(
+                            model: _model.shortDateTimeComponentModel,
+                            updateCallback: () => safeSetState(() {}),
+                            child: ShortDateTimeComponentWidget(
+                              timestamp: getJsonField(
+                                widget.comment,
+                                r'''$.createdAt''',
+                              ),
                             ),
                           ),
-                        ),
-                        wrapWithModel(
-                          model: _model.userDisplayNameComponentModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: UserDisplayNameComponentWidget(
-                            uid: getJsonField(
-                              widget.comment,
-                              r'''$.uid''',
-                            ).toString(),
+                          wrapWithModel(
+                            model: _model.userDisplayNameComponentModel,
+                            updateCallback: () => safeSetState(() {}),
+                            child: UserDisplayNameComponentWidget(
+                              uid: getJsonField(
+                                widget.comment,
+                                r'''$.uid''',
+                              ).toString(),
+                            ),
                           ),
-                        ),
-                        Text(
-                          getJsonField(
-                            widget.comment,
-                            r'''$.key''',
-                          ).toString(),
-                          style:
-                              FlutterFlowTheme.of(context).labelSmall.override(
-                                    fontFamily: 'Inter',
-                                    letterSpacing: 0.0,
-                                  ),
-                        ),
-                      ],
+                          Text(
+                            getJsonField(
+                              widget.comment,
+                              r'''$.key''',
+                            ).toString(),
+                            maxLines: 1,
+                            style: FlutterFlowTheme.of(context)
+                                .labelSmall
+                                .override(
+                                  fontFamily: 'Inter',
+                                  letterSpacing: 0.0,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -206,7 +212,9 @@ class _CommentListTileComponentWidgetState
                         },
                       ).then((value) => safeSetState(() {}));
                     },
-                    text: 'Reply',
+                    text: FFLocalizations.of(context).getText(
+                      'y5z9xduo' /* Reply */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -252,7 +260,9 @@ class _CommentListTileComponentWidgetState
                           },
                         ).then((value) => safeSetState(() {}));
                       },
-                      text: 'Edit',
+                      text: FFLocalizations.of(context).getText(
+                        'end7bh91' /* Edit */,
+                      ),
                       options: FFButtonOptions(
                         height: 34.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -348,7 +358,9 @@ class _CommentListTileComponentWidgetState
                           );
                         }
                       },
-                      text: 'Delete',
+                      text: FFLocalizations.of(context).getText(
+                        'tdty4uy7' /* Delete */,
+                      ),
                       options: FFButtonOptions(
                         height: 34.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -398,7 +410,16 @@ class _CommentListTileComponentWidgetState
                         },
                       );
                     },
-                    text: _model.likeData ? 'Liked' : 'Like',
+                    text:
+                        '${_model.likeData ? 'Liked' : 'Like'}${(int? likeCount) {
+                      return likeCount != null && likeCount > 0;
+                    }(getJsonField(
+                      widget.comment,
+                      r'''$.likeCount''',
+                    )) ? ' ${getJsonField(
+                            widget.comment,
+                            r'''$.likeCount''',
+                          ).toString()}' : ''}',
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -419,52 +440,138 @@ class _CommentListTileComponentWidgetState
                       borderRadius: BorderRadius.circular(24.0),
                     ),
                   ),
-                  if ((int? likeCount) {
-                    return likeCount != null && likeCount > 0;
-                  }(getJsonField(
-                    widget.comment,
-                    r'''$.likeCount''',
-                  )))
-                    Text(
-                      getJsonField(
-                        widget.comment,
-                        r'''$.likeCount''',
-                      ).toString(),
-                      style: FlutterFlowTheme.of(context).labelSmall.override(
-                            fontFamily: 'Inter',
-                            letterSpacing: 0.0,
-                          ),
-                    ),
-                  FFButtonWidget(
-                    onPressed: () async {
-                      await actions.blockUser(
-                        getJsonField(
-                          widget.comment,
-                          r'''$.uid''',
-                        ).toString(),
-                      );
-                    },
-                    text: 'Block',
-                    options: FFButtonOptions(
-                      height: 34.0,
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                      iconPadding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: Colors.transparent,
-                      textStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Inter',
-                                letterSpacing: 0.0,
+                  if (widget.blockCondition != null)
+                    Builder(
+                      builder: (context) {
+                        if (widget.blockCondition ?? false) {
+                          return FFButtonWidget(
+                            onPressed: () async {
+                              var confirmDialogResponse =
+                                  await showDialog<bool>(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: const Text('Unblocking user'),
+                                            content: const Text(
+                                                'Are you sure you want to unblock this user'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext, false),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext, true),
+                                                child: const Text('Confirm'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ) ??
+                                      false;
+                              if (confirmDialogResponse) {
+                                await actions.unblockUser(
+                                  getJsonField(
+                                    widget.comment,
+                                    r'''$.uid''',
+                                  ).toString(),
+                                );
+
+                                safeSetState(() {});
+                              }
+                            },
+                            text: FFLocalizations.of(context).getText(
+                              'knis7vih' /* Unblock */,
+                            ),
+                            options: FFButtonOptions(
+                              height: 34.0,
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 16.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Colors.transparent,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Inter',
+                                    letterSpacing: 0.0,
+                                  ),
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                width: 1.6,
                               ),
-                      elevation: 0.0,
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        width: 1.6,
-                      ),
-                      borderRadius: BorderRadius.circular(24.0),
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          );
+                        } else {
+                          return FFButtonWidget(
+                            onPressed: () async {
+                              var confirmDialogResponse =
+                                  await showDialog<bool>(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: const Text('Blocking user'),
+                                            content: const Text(
+                                                'Are you sure you want to block this user?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext, false),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext, true),
+                                                child: const Text('Confirm'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ) ??
+                                      false;
+                              if (confirmDialogResponse) {
+                                await actions.blockUser(
+                                  getJsonField(
+                                    widget.comment,
+                                    r'''$.uid''',
+                                  ).toString(),
+                                );
+
+                                safeSetState(() {});
+                              }
+                            },
+                            text: FFLocalizations.of(context).getText(
+                              'mp9ycf3g' /* Block */,
+                            ),
+                            options: FFButtonOptions(
+                              height: 34.0,
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 0.0, 16.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Colors.transparent,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Inter',
+                                    letterSpacing: 0.0,
+                                  ),
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                width: 1.6,
+                              ),
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                  ),
                   FFButtonWidget(
                     onPressed: () async {
                       _model.isReportExist = await actions.reportExists(
@@ -519,7 +626,9 @@ class _CommentListTileComponentWidgetState
 
                       safeSetState(() {});
                     },
-                    text: 'Report',
+                    text: FFLocalizations.of(context).getText(
+                      'zq23c5au' /* Report */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:

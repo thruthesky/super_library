@@ -54,7 +54,6 @@ No. The Super Library can be used with any Flutter project. While it is built sp
 
 ## Current Limitations
 
-- **Widget Builder**: Supported only for Components, not Custom Widgets. This makes integration more complex.
 - **Marketplace**: Super library may not be published in the Marketplace as it uses Firebase, which is against FlutterFlow's principles.
 
 ## Want to Use the Super Library?

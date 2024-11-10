@@ -32,6 +32,7 @@
 - [Developer's guide](#developers-guide)
   - [Testing chat room icon](#testing-chat-room-icon)
 - [Known Issues](#known-issues)
+  - [Chat room update and sync with chat join](#chat-room-update-and-sync-with-chat-join)
   - [No of Chat room message for blocked user](#no-of-chat-room-message-for-blocked-user)
   - [Unblock and new message](#unblock-and-new-message)
   - [Push notification](#push-notification)
@@ -131,6 +132,10 @@ This process ensures that users have control over who can send them messages and
     1. Alternatively, use `editChatRoom` which supports both creation and update.
 3. **Close the Dialog**:
     1. After updating the chat room, close the dialog.
+
+
+
+Note that `ChatMessageListView` listens the changes of the chat room data and it update the memory cache. This means, only if the app is displaying the messages of the chat room, the chat room data will be updated into the memory cache. If the user is not displaying the chat room list view, the chat room data in memory cache will not be updated even if the chat room is updated.
 
 
 
@@ -385,6 +390,16 @@ ChatRoomIcon(
 # Known Issues
 
 
+
+## Chat room update and sync with chat join
+
+
+- When the master changes the chat room name or icon, it is updated in the chat room data, but it's not updated in chat joins in realtime.
+    - This is not a critical issue and we are planning to fix it some day later.
+
+
+
+
 ## No of Chat room message for blocked user
 
 - Login user is A, the other user id B
@@ -411,3 +426,6 @@ But as of now, it's not delivered. We will fix it soon.
 ## Push notification
 
 - To know more about how chat send push notification, refer [Push notification](./push_notifications.md) document.
+
+
+

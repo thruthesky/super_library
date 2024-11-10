@@ -2,6 +2,7 @@
 
 - [User](#user)
 - [Overview](#overview)
+- [User fields](#user-fields)
 - [User Authentication](#user-authentication)
 - [UserAvatar](#useravatar)
 - [DisplayName](#displayname)
@@ -35,7 +36,7 @@
   - [Usage](#usage)
   - [Displaying the block and unblock buttons](#displaying-the-block-and-unblock-buttons)
   - [To display the list of users that are blocked by login user](#to-display-the-list-of-users-that-are-blocked-by-login-user)
-- [Verifying user](#verifying-user)
+- [Verification](#verification)
 - [Widgets](#widgets)
   - [BlockedUser](#blockeduser)
 - [Security](#security)
@@ -44,6 +45,20 @@
 
 - The user's `display_name` and `photo_url` are mirrored from Firestore to the Realtime Database.
 - The user's `display_name` is also stored in `display_name_lowercase` (in lowercase) for better searchability in both Firestore and the Realtime Database.
+
+
+# User fields
+
+There are several predefined User schema fields in Flutterflwo. Super library needs more than those.
+
+- `display_name_lowercase`: String. It's the lower case of the `display_name`
+- `blockedUsers`: List of String. It saves the uid of other users who the login user wants to block.
+- `idCardUrl`: Image path. If you want users to upload their own ID card, you can upload it on Storage and save the url here. And as you know, user document saves private information like email, phone number which should never reveal to the public. See [verification](#verification) for detail.
+- `verified`: bool
+
+
+
+
 
 # User Authentication
 
@@ -237,13 +252,13 @@ Simply display the list of users whose uid is in `blockedUsers` field. You may a
 
 
 
-# Verifying user
+# Verification
 
-
-- The user document in Firestore has a special field named `verified` to check if the user has verified or not.
-- This `verified` field is for noting that if the user has verified with his phone number, or uploading the ID card and admin proves it, or you can set up any logic to prove the verification of users.
-    - Save `true` value to this field if the user has verified.
-
+- Super library users a special field named `verified` from user document to check if the user has verified or not.
+- This `verified` field is for noting that if the user has verified. If the user has verified himself, save `true` value to this field. Otherwise it can be false or not existing.
+- But how the app should verify a user's identity?
+    - It's up to you how you build the logic. You may do so by doing some combination of phone sign-in, and social login, and uploading the ID card.
+    - As long as the user follows the verification login, save `true` to `verified` field.
 
 
 

@@ -111,13 +111,17 @@ class _CommentUpdateComponentWidgetState
                   obscureText: false,
                   decoration: InputDecoration(
                     isDense: true,
-                    labelText: 'CONTENT',
+                    labelText: FFLocalizations.of(context).getText(
+                      '88yerjrg' /* CONTENT */,
+                    ),
                     labelStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
                               letterSpacing: 0.0,
                             ),
-                    hintText: 'Input content',
+                    hintText: FFLocalizations.of(context).getText(
+                      'm2zku8ce' /* Input content */,
+                    ),
                     hintStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
@@ -176,7 +180,9 @@ class _CommentUpdateComponentWidgetState
                     onPressed: () async {
                       Navigator.pop(context);
                     },
-                    text: 'Cancel',
+                    text: FFLocalizations.of(context).getText(
+                      'xxut28yb' /* Cancel */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -244,7 +250,9 @@ class _CommentUpdateComponentWidgetState
                           },
                         );
                       },
-                      text: 'Update',
+                      text: FFLocalizations.of(context).getText(
+                        '3hxkun6n' /* Update */,
+                      ),
                       options: FFButtonOptions(
                         height: 34.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(

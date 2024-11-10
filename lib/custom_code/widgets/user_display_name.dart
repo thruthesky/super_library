@@ -18,7 +18,8 @@ import '/custom_code/actions/super_library.dart';
 /// [nameIfBlockedUser] is displayed if the user is blocked. The default is
 /// 'Blocked user'. If you want to display nothing, set it to an empty string.
 ///
-/// TODO: Does this widget need to have a initialData parameter?
+/// If the [blockStatus] is false, then it will display the user's avatar even
+/// if the user is blocked.
 class UserDisplayName extends StatefulWidget {
   const UserDisplayName({
     super.key,
@@ -29,6 +30,7 @@ class UserDisplayName extends StatefulWidget {
     this.nameIfBlockedUser,
     this.fontSize,
     this.fontColor,
+    this.blockStatus,
   });
 
   final double? width;
@@ -38,6 +40,7 @@ class UserDisplayName extends StatefulWidget {
   final String? nameIfBlockedUser;
   final double? fontSize;
   final Color? fontColor;
+  final bool? blockStatus;
 
   @override
   State<UserDisplayName> createState() => _UserDisplayNameState();
@@ -46,6 +49,10 @@ class UserDisplayName extends StatefulWidget {
 class _UserDisplayNameState extends State<UserDisplayName> {
   @override
   Widget build(BuildContext context) {
+    if (widget.blockStatus == false) {
+      return dislayName();
+    }
+
     return BlockedUser(
         uid: widget.uid,
         builder: (blocked) {
@@ -54,48 +61,52 @@ class _UserDisplayNameState extends State<UserDisplayName> {
             return text(widget.nameIfBlockedUser ?? 'Blocked user');
           }
 
-          // dog('initialData: ${Memory.get<UserData>(widget.uid)?.toJson()}');
-
-          // Prepare: Get the user's display name
-          // Memory Cache Key
-          String displayNameKey = 'displayName-${widget.uid}';
-          String displayName = Memory.get<String>(displayNameKey) ?? '';
-
-          // If there is no display name in memeory cache key, dig into the user
-          // cache memeory.
-          if (displayName.isEmpty) {
-            final Map<String, dynamic>? data =
-                Memory.get<UserData>(widget.uid)?.toJson();
-            if (data != null) {
-              displayName = data[UserData.field.displayName] as String;
-            }
-          }
-
-          return Value(
-            ref: UserService.instance
-                .databaseUserRef(widget.uid)
-                .child(UserData.field.displayName),
-            initialData: displayName,
-            onLoading: text(widget.nameIfEmpty ?? ''),
-            sync: true,
-            builder: (v, r) {
-              String name;
-              if (v == null) {
-                name = '';
-              } else {
-                name = v.toString();
-              }
-
-              /// Cache the displayName into memeory
-              Memory.set<String>(displayNameKey, name);
-
-              if (name.isEmpty) {
-                name = widget.nameIfEmpty ?? '';
-              }
-              return text(name);
-            },
-          );
+          return dislayName();
         });
+  }
+
+  Widget dislayName() {
+    // dog('initialData: ${Memory.get<UserData>(widget.uid)?.toJson()}');
+
+    // Prepare: Get the user's display name
+    // Memory Cache Key
+    String displayNameKey = 'displayName-${widget.uid}';
+    String displayName = Memory.get<String>(displayNameKey) ?? '';
+
+    // If there is no display name in memeory cache key, dig into the user
+    // cache memeory.
+    if (displayName.isEmpty) {
+      final Map<String, dynamic>? data =
+          Memory.get<UserData>(widget.uid)?.toJson();
+      if (data != null) {
+        displayName = data[UserData.field.displayName] as String;
+      }
+    }
+
+    return Value(
+      ref: UserService.instance
+          .databaseUserRef(widget.uid)
+          .child(UserData.field.displayName),
+      initialData: displayName,
+      onLoading: text(widget.nameIfEmpty ?? ''),
+      sync: true,
+      builder: (v, r) {
+        String name;
+        if (v == null) {
+          name = '';
+        } else {
+          name = v.toString();
+        }
+
+        /// Cache the displayName into memeory
+        Memory.set<String>(displayNameKey, name);
+
+        if (name.isEmpty) {
+          name = widget.nameIfEmpty ?? '';
+        }
+        return text(name);
+      },
+    );
   }
 
   Widget text(String name) {

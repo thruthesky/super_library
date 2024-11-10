@@ -9,18 +9,34 @@ import 'package:flutter/material.dart';
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import '/custom_code/actions/super_library.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 Future sendChatMessage(
+  BuildContext context,
   String uidOrRoomId,
   String? text,
   String? url,
+  Future Function(String message) onError,
 ) async {
   // Add your function code here!
-  dog('sendChatMessage: $uidOrRoomId, $text, $url');
-  await ChatService.instance.sendMessage(
-    roomId: uidOrRoomId,
-    text: text,
-    url: url,
-  );
+
+  try {
+    await ChatService.instance.sendMessage(
+      roomId: uidOrRoomId,
+      text: text,
+      url: url,
+    );
+  } catch (e) {
+    if (onError != null) {
+      await onError(e.toString());
+      return;
+    }
+
+    if (context.mounted) {
+      snackbar(
+        context,
+        e.toString(),
+        error: true,
+      );
+    }
+  }
 }

@@ -134,13 +134,17 @@ class _CommentCreateComponentWidgetState
                   obscureText: false,
                   decoration: InputDecoration(
                     isDense: true,
-                    labelText: 'CONTENT',
+                    labelText: FFLocalizations.of(context).getText(
+                      'k7ihw5d9' /* CONTENT */,
+                    ),
                     labelStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
                               letterSpacing: 0.0,
                             ),
-                    hintText: 'Input content',
+                    hintText: FFLocalizations.of(context).getText(
+                      '217hzlnb' /* Input content */,
+                    ),
                     hintStyle:
                         FlutterFlowTheme.of(context).labelMedium.override(
                               fontFamily: 'Inter',
@@ -199,7 +203,9 @@ class _CommentCreateComponentWidgetState
                     onPressed: () async {
                       Navigator.pop(context);
                     },
-                    text: 'Cancel',
+                    text: FFLocalizations.of(context).getText(
+                      'wowvbxvz' /* Cancel */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -251,7 +257,9 @@ class _CommentCreateComponentWidgetState
                           },
                         );
                       },
-                      text: 'Create',
+                      text: FFLocalizations.of(context).getText(
+                        '2nbu8ziq' /* Create */,
+                      ),
                       options: FFButtonOptions(
                         height: 34.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(

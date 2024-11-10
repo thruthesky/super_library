@@ -20,16 +20,14 @@ class DataDetailComponentWidget extends StatefulWidget {
     super.key,
     required this.data,
     required this.onUpdate,
-    required this.onDelete,
     required this.onReply,
-    required this.onReport,
+    this.blockCondition,
   });
 
   final dynamic data;
   final Future Function(dynamic data)? onUpdate;
-  final Future Function()? onDelete;
   final Future Function(dynamic data)? onReply;
-  final Future Function(dynamic data)? onReport;
+  final bool? blockCondition;
 
   @override
   State<DataDetailComponentWidget> createState() =>
@@ -53,6 +51,7 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.data = widget.data;
+      safeSetState(() {});
       await actions.likeExist(
         getJsonField(
           widget.data,
@@ -195,7 +194,9 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                         _model.data!,
                       );
                     },
-                    text: 'Edit',
+                    text: FFLocalizations.of(context).getText(
+                      'opth2ehx' /* Edit */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -227,9 +228,74 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                     ))
                   FFButtonWidget(
                     onPressed: () async {
-                      await widget.onDelete?.call();
+                      var confirmDialogResponse = await showDialog<bool>(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                title: const Text('Deleting  post'),
+                                content: const Text(
+                                    'Are you sure you want to delete this post?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(
+                                        alertDialogContext, false),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext, true),
+                                    child: const Text('Confirm'),
+                                  ),
+                                ],
+                              );
+                            },
+                          ) ??
+                          false;
+                      if (confirmDialogResponse) {
+                        await actions.deleteData(
+                          context,
+                          getJsonField(
+                            widget.data,
+                            r'''$.key''',
+                          ).toString(),
+                          () async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'This post has deleted',
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          },
+                          (error) async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  error,
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          },
+                        );
+                      }
                     },
-                    text: 'Delete',
+                    text: FFLocalizations.of(context).getText(
+                      'xtkghy0m' /* Delete */,
+                    ),
                     options: FFButtonOptions(
                       height: 34.0,
                       padding:
@@ -256,7 +322,9 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                       _model.data!,
                     );
                   },
-                  text: 'Reply',
+                  text: FFLocalizations.of(context).getText(
+                    'lql2cwt0' /* Reply */,
+                  ),
                   options: FFButtonOptions(
                     height: 34.0,
                     padding:
@@ -314,7 +382,16 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
 
                     safeSetState(() {});
                   },
-                  text: _model.likeData ? 'Liked' : 'Like',
+                  text: '${_model.likeData ? 'Liked' : 'Like'}${(getJsonField(
+                        _model.data,
+                        r'''$.likeCount''',
+                      ) != null) && (getJsonField(
+                        _model.data,
+                        r'''$.likeCount''',
+                      ).toString() != '0') ? ' ${getJsonField(
+                      _model.data,
+                      r'''$.likeCount''',
+                    ).toString()}' : ''}',
                   options: FFButtonOptions(
                     height: 34.0,
                     padding:
@@ -334,31 +411,13 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
-                if ((getJsonField(
-                          _model.data,
-                          r'''$.likeCount''',
-                        ) !=
-                        null) &&
-                    (getJsonField(
-                          _model.data,
-                          r'''$.likeCount''',
-                        ).toString() !=
-                        '0'))
-                  Text(
-                    getJsonField(
-                      _model.data,
-                      r'''$.likeCount''',
-                    ).toString(),
-                    style: FlutterFlowTheme.of(context).labelSmall.override(
-                          fontFamily: 'Inter',
-                          letterSpacing: 0.0,
-                        ),
-                  ),
                 FFButtonWidget(
                   onPressed: () {
                     print('FollowButton pressed ...');
                   },
-                  text: 'Follow',
+                  text: FFLocalizations.of(context).getText(
+                    '42vwc8nx' /* Follow */,
+                  ),
                   options: FFButtonOptions(
                     height: 34.0,
                     padding:
@@ -378,30 +437,134 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
                     borderRadius: BorderRadius.circular(24.0),
                   ),
                 ),
-                FFButtonWidget(
-                  onPressed: () {
-                    print('BlockButton pressed ...');
-                  },
-                  text: 'Block',
-                  options: FFButtonOptions(
-                    height: 34.0,
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Colors.transparent,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          letterSpacing: 0.0,
-                        ),
-                    elevation: 0.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      width: 1.6,
-                    ),
-                    borderRadius: BorderRadius.circular(24.0),
+                if (widget.blockCondition != null)
+                  Builder(
+                    builder: (context) {
+                      if (widget.blockCondition ?? false) {
+                        return FFButtonWidget(
+                          onPressed: () async {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: const Text('Unblocking user'),
+                                      content: const Text(
+                                          'Are you sure you want to unblock this user?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: const Text('Confirm'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
+                            if (confirmDialogResponse) {
+                              await actions.unblockUser(
+                                getJsonField(
+                                  widget.data,
+                                  r'''$.uid''',
+                                ).toString(),
+                              );
+
+                              safeSetState(() {});
+                            }
+                          },
+                          text: FFLocalizations.of(context).getText(
+                            'qo47av0o' /* Unblock */,
+                          ),
+                          options: FFButtonOptions(
+                            height: 34.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 16.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: Colors.transparent,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  letterSpacing: 0.0,
+                                ),
+                            elevation: 0.0,
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              width: 1.6,
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        );
+                      } else {
+                        return FFButtonWidget(
+                          onPressed: () async {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: const Text('Blocking User'),
+                                      content: const Text(
+                                          'Are you sure you want to block this user?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: const Text('Confirm'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
+                            if (confirmDialogResponse) {
+                              await actions.blockUser(
+                                getJsonField(
+                                  widget.data,
+                                  r'''$.uid''',
+                                ).toString(),
+                              );
+
+                              safeSetState(() {});
+                            }
+                          },
+                          text: FFLocalizations.of(context).getText(
+                            'm8vsumja' /* Block */,
+                          ),
+                          options: FFButtonOptions(
+                            height: 34.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 16.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: Colors.transparent,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  letterSpacing: 0.0,
+                                ),
+                            elevation: 0.0,
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              width: 1.6,
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        );
+                      }
+                    },
                   ),
-                ),
                 FFButtonWidget(
                   onPressed: () async {
                     _model.isReportExist = await actions.reportExists(
@@ -463,7 +626,9 @@ class _DataDetailComponentWidgetState extends State<DataDetailComponentWidget> {
 
                     safeSetState(() {});
                   },
-                  text: 'Report',
+                  text: FFLocalizations.of(context).getText(
+                    'mnz45tn4' /* Report */,
+                  ),
                   options: FFButtonOptions(
                     height: 34.0,
                     padding:

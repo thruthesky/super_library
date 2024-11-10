@@ -9,8 +9,6 @@ class PostDetailsScreenModel extends FlutterFlowModel<PostDetailsScreenWidget> {
 
   // Model for DataDetailComponent component.
   late DataDetailComponentModel dataDetailComponentModel;
-  // Stores action output result for [Custom Action - reportExists] action in DataDetailComponent widget.
-  bool? isReportExist;
   // Model for CommentListViewComponent component.
   late CommentListViewComponentModel commentListViewComponentModel;
 

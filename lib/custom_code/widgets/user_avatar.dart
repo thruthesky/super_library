@@ -16,21 +16,26 @@ import '/custom_code/actions/super_library.dart';
 ///
 /// Display the user's avatar from the given user ID.
 ///
-/// If the [uid] is a dash(-), then it will display the current user's avatar.
+/// If the [uid] is null, then it will display the current user's avatar.
 /// If the current user is not logged in, then it will display the default avatar.
+///
+/// If the [blockStatus] is false, then it will display the user's avatar even
+/// if the user is blocked.
 class UserAvatar extends StatefulWidget {
   const UserAvatar({
     super.key,
     this.width,
     this.height,
-    required this.uid,
+    this.uid,
     this.radius,
+    this.blockStatus,
   });
 
   final double? width;
   final double? height;
-  final String uid;
+  final String? uid;
   final double? radius;
+  final bool? blockStatus;
 
   @override
   State<UserAvatar> createState() => _UserAvatarState();
@@ -40,13 +45,19 @@ class _UserAvatarState extends State<UserAvatar> {
   final double _defaultSize = 50;
   @override
   Widget build(BuildContext context) {
-    String avatarUid = widget.uid;
+    String avatarUid = widget.uid ?? '';
 
-    if (avatarUid == '-') {
+    /// If the user ID is a dash(-), then it will display the current user's
+    /// avatar.
+    if (avatarUid == '') {
       if (currentUserUid == null) {
         return tempAvatar();
       }
       avatarUid = currentUserUid!;
+    }
+
+    if (widget.blockStatus == false) {
+      return userAvatar(avatarUid);
     }
 
     return BlockedUser(
@@ -55,55 +66,56 @@ class _UserAvatarState extends State<UserAvatar> {
           /// Is the user blocked?
           if (blocked) {
             return tempAvatar(icon: Icons.person_off);
+          } else {
+            return userAvatar(avatarUid);
           }
-
-          // dog('initialData: ${Memory.get<UserData>(avatarUid)?.toJson()}');
-
-          /// Prepare: Get the user's photo URL
-          // Memory Cache Key
-          String urlKey = 'photoUrl-${avatarUid}';
-          // photo URL
-          String url = Memory.get<String>(urlKey) ?? '';
-
-          /// If there is no photo URL in memeory cache key, dig into the user
-          /// cache memeory.
-          if (url.isEmpty) {
-            final Map<String, dynamic>? data =
-                Memory.get<UserData>(avatarUid)?.toJson();
-            if (data != null) {
-              url = data[UserData.field.photoUrl] as String;
-            }
-          }
-
-          ///
-          return Value(
-            ref: UserService.instance
-                .databaseUserRef(avatarUid)
-                .child(UserData.field.photoUrl),
-            initialData: url,
-            sync: true,
-            onLoading: tempAvatar(),
-            builder: (url, r) {
-              if (url == null || url.isEmpty) {
-                return tempAvatar();
-              }
-
-              /// Cache the photo url into memeory
-              Memory.set<String>(urlKey, url);
-
-              return ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(widget.radius ?? _defaultSize),
-                child: CachedNetworkImage(
-                  imageUrl: url,
-                  width: widget.width ?? _defaultSize,
-                  height: widget.height ?? _defaultSize,
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          );
         });
+  }
+
+  Widget userAvatar(String avatarUid) {
+    /// Prepare: Get the user's photo URL
+    // Memory Cache Key
+    String urlKey = 'photoUrl-$avatarUid';
+    // photo URL
+    String url = Memory.get<String>(urlKey) ?? '';
+
+    /// If there is no photo URL in memeory cache key, dig into the user
+    /// cache memeory.
+    if (url.isEmpty) {
+      final Map<String, dynamic>? data =
+          Memory.get<UserData>(avatarUid)?.toJson();
+      if (data != null) {
+        url = data[UserData.field.photoUrl] as String;
+      }
+    }
+
+    ///
+    return Value(
+      ref: UserService.instance
+          .databaseUserRef(avatarUid)
+          .child(UserData.field.photoUrl),
+      initialData: url,
+      sync: true,
+      onLoading: tempAvatar(),
+      builder: (url, r) {
+        if (url == null || url.isEmpty) {
+          return tempAvatar();
+        }
+
+        /// Cache the photo url into memeory
+        Memory.set<String>(urlKey, url);
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(widget.radius ?? _defaultSize),
+          child: CachedNetworkImage(
+            imageUrl: url,
+            width: widget.width ?? _defaultSize,
+            height: widget.height ?? _defaultSize,
+            fit: BoxFit.cover,
+          ),
+        );
+      },
+    );
   }
 
   Widget tempAvatar({IconData? icon}) => ClipRRect(

@@ -15,4 +15,5 @@ class FFLibraryValues {
 
   String? databaseURL = 'https://withcenter-test-4-default-rtdb.firebaseio.com';
   bool? debugLog = true;
+  bool? onlyVerifiedUserSendMessage = false;
 }

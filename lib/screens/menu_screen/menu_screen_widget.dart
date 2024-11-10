@@ -53,7 +53,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           title: Text(
-            'MenuScreen',
+            FFLocalizations.of(context).getText(
+              'pmz1118b' /* MenuScreen */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -109,7 +111,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
                 child: Text(
-                  'User Menu',
+                  FFLocalizations.of(context).getText(
+                    'too58sf2' /* User Menu */,
+                  ),
                   style: FlutterFlowTheme.of(context).titleSmall.override(
                         fontFamily: 'Inter Tight',
                         letterSpacing: 0.0,
@@ -139,7 +143,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                             FontAwesomeIcons.lock,
                           ),
                           title: Text(
-                            'Login',
+                            FFLocalizations.of(context).getText(
+                              'daffns7v' /* Login */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -148,7 +154,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                                 ),
                           ),
                           subtitle: Text(
-                            'Email & Password Sign In',
+                            FFLocalizations.of(context).getText(
+                              '9qp3spg5' /* Email & Password Sign In */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -193,7 +201,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                             FontAwesomeIcons.userTie,
                           ),
                           title: Text(
-                            'Guest A',
+                            FFLocalizations.of(context).getText(
+                              'xop9kxfm' /* Guest A */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -202,7 +212,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                                 ),
                           ),
                           subtitle: Text(
-                            'Login as Guest A',
+                            FFLocalizations.of(context).getText(
+                              'el7bmij0' /* Login as Guest A */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -247,7 +259,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                             FontAwesomeIcons.userTie,
                           ),
                           title: Text(
-                            'Guest B',
+                            FFLocalizations.of(context).getText(
+                              'g8zkvje6' /* Guest B */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -256,7 +270,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                                 ),
                           ),
                           subtitle: Text(
-                            'Login as Guest B',
+                            FFLocalizations.of(context).getText(
+                              '4vcujvpp' /* Login as Guest B */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -303,7 +319,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                             Icons.logout_rounded,
                           ),
                           title: Text(
-                            'Logout',
+                            FFLocalizations.of(context).getText(
+                              '3mzmfllw' /* Logout */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -346,7 +364,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                             FontAwesomeIcons.userEdit,
                           ),
                           title: Text(
-                            'Profile',
+                            FFLocalizations.of(context).getText(
+                              'up518xl9' /* Profile */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .titleLarge
                                 .override(
@@ -355,7 +375,9 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
                                 ),
                           ),
                           subtitle: Text(
-                            'Update your information',
+                            FFLocalizations.of(context).getText(
+                              '6ml6d9r0' /* Update your information */,
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(

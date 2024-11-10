@@ -52,7 +52,9 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: true,
           title: Text(
-            'Profile Update',
+            FFLocalizations.of(context).getText(
+              '47tep5xz' /* Profile Update */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -95,13 +97,17 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                       obscureText: false,
                       decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'Display name',
+                        labelText: FFLocalizations.of(context).getText(
+                          '2rn6slcb' /* Display name */,
+                        ),
                         labelStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
                                   letterSpacing: 0.0,
                                 ),
-                        hintText: 'Input display name',
+                        hintText: FFLocalizations.of(context).getText(
+                          '3qk6bs06' /* Input display name */,
+                        ),
                         hintStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
@@ -160,13 +166,17 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                       obscureText: false,
                       decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'URL',
+                        labelText: FFLocalizations.of(context).getText(
+                          'wciqm5pq' /* URL */,
+                        ),
                         labelStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
                                   letterSpacing: 0.0,
                                 ),
-                        hintText: 'Input photo URL',
+                        hintText: FFLocalizations.of(context).getText(
+                          '33slu6mn' /* Input photo URL */,
+                        ),
                         hintStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
@@ -233,7 +243,9 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
                       ),
                     );
                   },
-                  text: 'Profile Update',
+                  text: FFLocalizations.of(context).getText(
+                    '0pjelu9w' /* Profile Update */,
+                  ),
                   options: FFButtonOptions(
                     height: 40.0,
                     padding:

@@ -52,7 +52,9 @@ class _EmailPasswordLoginScreenWidgetState
           backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: true,
           title: Text(
-            'Email Password Login',
+            FFLocalizations.of(context).getText(
+              'h6wltjwh' /* Email Password Login */,
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
                   color: Colors.white,
@@ -83,13 +85,17 @@ class _EmailPasswordLoginScreenWidgetState
                       obscureText: false,
                       decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'Email',
+                        labelText: FFLocalizations.of(context).getText(
+                          'beqiqwa7' /* Email */,
+                        ),
                         labelStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
                                   letterSpacing: 0.0,
                                 ),
-                        hintText: 'Input email address',
+                        hintText: FFLocalizations.of(context).getText(
+                          'msrz18p4' /* Input email address */,
+                        ),
                         hintStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
@@ -148,13 +154,17 @@ class _EmailPasswordLoginScreenWidgetState
                       obscureText: !_model.passwordVisibility,
                       decoration: InputDecoration(
                         isDense: true,
-                        labelText: 'Password',
+                        labelText: FFLocalizations.of(context).getText(
+                          'khc71ww5' /* Password */,
+                        ),
                         labelStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
                                   letterSpacing: 0.0,
                                 ),
-                        hintText: 'Input password',
+                        hintText: FFLocalizations.of(context).getText(
+                          'bbhcep1q' /* Input password */,
+                        ),
                         hintStyle:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'Inter',
@@ -225,7 +235,9 @@ class _EmailPasswordLoginScreenWidgetState
 
                     context.pushNamed('HomeScreen');
                   },
-                  text: 'Login',
+                  text: FFLocalizations.of(context).getText(
+                    '6pg5l50b' /* Login */,
+                  ),
                   options: FFButtonOptions(
                     height: 40.0,
                     padding:
@@ -248,7 +260,9 @@ class _EmailPasswordLoginScreenWidgetState
                   color: FlutterFlowTheme.of(context).alternate,
                 ),
                 Text(
-                  'The app will create an account if you login for the first time',
+                  FFLocalizations.of(context).getText(
+                    'kusy60jb' /* The app will create an account... */,
+                  ),
                   style: FlutterFlowTheme.of(context).labelSmall.override(
                         fontFamily: 'Inter',
                         letterSpacing: 0.0,

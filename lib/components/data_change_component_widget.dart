@@ -55,17 +55,20 @@ class _DataChangeComponentWidgetState extends State<DataChangeComponentWidget> {
           width: 1.0,
           height: 1.0,
           dataKey: widget.dataKey!,
-          field: widget.field,
+          field: widget.field != null && widget.field != ''
+              ? widget.field
+              : null,
           initialData: widget.initialData!,
           builder: (dynamic data) => widget.builder!(
             data,
           ),
         ),
-        Builder(builder: (_) {
-          return widget.builder!(
-            widget.initialData!,
-          );
-        }),
+        if (false)
+          Builder(builder: (_) {
+            return widget.builder!(
+              widget.initialData!,
+            );
+          }),
       ],
     );
   }

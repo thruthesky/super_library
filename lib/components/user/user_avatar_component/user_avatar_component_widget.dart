@@ -74,7 +74,7 @@ class _UserAvatarComponentWidgetState extends State<UserAvatarComponentWidget> {
                 child: custom_widgets.UserAvatar(
                   width: 50.0,
                   height: 50.0,
-                  uid: widget.uid!,
+                  uid: widget.uid,
                   radius: widget.radius,
                 ),
               ),

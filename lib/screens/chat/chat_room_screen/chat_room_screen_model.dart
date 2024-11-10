@@ -7,10 +7,18 @@ class ChatRoomScreenModel extends FlutterFlowModel<ChatRoomScreenWidget> {
 
   String? roomId;
 
+  String? tmpImagePath;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - getLoginUserUid] action in ChatRoomScreen widget.
   String? loginUserIdResult;
+  // Stores action output result for [Custom Action - readChatRoom] action in IconButton widget.
+  dynamic chatRoomData;
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+
   // State field(s) for MessageTextField widget.
   FocusNode? messageTextFieldFocusNode;
   TextEditingController? messageTextFieldTextController;

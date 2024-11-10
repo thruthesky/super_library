@@ -21,6 +21,7 @@ Future updateChatRoom(
 ) async {
   // Add your function code here!
   final room = await ChatRoom.get(roomId!);
+
   await room!.update(
     name: name,
     description: description,

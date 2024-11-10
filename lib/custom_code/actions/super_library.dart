@@ -8,11 +8,15 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'package:firebase_auth/firebase_auth.dart';
-
+/// Super Library
+///
+/// Last edit: Nov 9, 2024. 16:08PM
+import 'dart:io';
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter/services.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -32,34 +36,10 @@ import 'package:html/dom.dart' hide Text;
 import 'package:html/parser.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-/// Helpers
-///
-/// Helper functions, variables -------------------------------------------------------------------
-///
-FirebaseDatabase get database => SuperLibrary.instance.database;
-fs.FirebaseFirestore get firestore => fs.FirebaseFirestore.instance;
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
-/// [currentUserUid] returns the current user's UID. It returns null if the user is not signed in.
-String? get currentUserUid => fa.FirebaseAuth.instance.currentUser?.uid;
-
-/// [myUid] returns the current user's UID. It throws an exception if the user is not signed in.
-String get myUid {
-  if (fa.FirebaseAuth.instance.currentUser == null) {
-    throw Exception('[myUid] is called but the user is not signed in');
-  }
-  return fa.FirebaseAuth.instance.currentUser!.uid;
-}
-
-/// [signedIn] returns true if the user is signed in with FirebaseAuth. Otherwise, it returns false.
-bool get signedIn => fa.FirebaseAuth.instance.currentUser != null;
-bool get notSignedIn => !signedIn;
-
-/// Database reference for the current user
-DatabaseReference get myRef => userRef(myUid);
-
-DatabaseReference dataRef(String k) => Ref.data.child(k);
-
-/// EO Helpers -------------------------------------------------------------------------------------
+import '/flutter_flow/internationalization.dart';
 
 /// AuthStateChanges
 ///
@@ -126,6 +106,61 @@ class BlockedUser extends StatelessWidget {
         return builder(blockedUsers.contains(uid));
       },
     );
+  }
+}
+
+extension BuildContextThemeExtension on BuildContext {
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  Color get primary => colorScheme.primary;
+  Color get outline => colorScheme.outline;
+  Color get onPrimary => colorScheme.onPrimary;
+  Color get secondary => colorScheme.secondary;
+  Color get onSecondary => colorScheme.onSecondary;
+  Color get transparent => Colors.transparent;
+  Color get primaryContainer => colorScheme.primaryContainer;
+  Color get onPrimaryContainer => colorScheme.onPrimaryContainer;
+  Color get secondaryContainer => colorScheme.secondaryContainer;
+  Color get tertiaryContainer => colorScheme.tertiaryContainer;
+  Color get background => colorScheme.surface;
+  Color get onBackground => colorScheme.onSurface;
+  Color get error => colorScheme.error;
+  Color get onError => colorScheme.onError;
+
+  Color get surface => colorScheme.surface;
+  Color get onSurface => colorScheme.onSurface;
+
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  TextStyle get titleSmall => textTheme.titleSmall!;
+  TextStyle get titleMedium => textTheme.titleMedium!;
+  TextStyle get titleLarge => textTheme.titleLarge!;
+  TextStyle get bodyLarge => textTheme.bodyLarge!;
+  TextStyle get bodyMedium => textTheme.bodyMedium!;
+  TextStyle get bodySmall => textTheme.bodySmall!;
+  TextStyle get labelMedium => textTheme.labelMedium!;
+  TextStyle get labelLarge => textTheme.labelLarge!;
+  TextStyle get labelSmall => textTheme.labelSmall!;
+
+  /// BuildContext.tr() supports two different types of arguments.
+  ///
+  /// 1. Map<String, String> for multiple language texts
+  /// 2. String for getting the text of the key.
+  ///
+  /// Example:
+  /// ```dart
+  /// context.tr({'en': 'oooo', 'ko': 'xxxx'}); // returns the text based on the current language.
+  /// context.tr('yes'); // returns the text of the key 'yes'
+  /// ```
+  tr(dynamic what) {
+    if (what is Map) {
+      final key = what.toString();
+      TranslationService.instance.add({key: what as Map<String, String>});
+      return TranslationService.instance.tr(this, key);
+    } else if (what is String) {
+      return TranslationService.instance.tr(this, what);
+    } else {
+      throw 'context.tr() only accepts Map<String, String> or String';
+    }
   }
 }
 
@@ -439,6 +474,7 @@ class ChatMessage {
 class ChatRoom {
   /// Field names used for the Firestore document
   static const field = (
+    id: 'id',
     name: 'name',
     description: 'description',
     iconUrl: 'iconUrl',
@@ -582,6 +618,7 @@ class ChatRoom {
   /// * Use it only for debug purpose !!
   Map<String, dynamic> toJson() {
     return {
+      field.id: id,
       field.name: name,
       field.description: description,
       field.iconUrl: iconUrl,
@@ -682,7 +719,10 @@ class ChatRoom {
 
   /// [get] gets the cached chat room by id.
   ///
-  /// Note that the chat room data is updated in realtime by [ChatMessageListView] widget.
+  /// * Note that if the chat room data changes, it is updated in realtime by
+  /// * the [ChatMessageListView] widget. So, the chat room data is up-to-date
+  /// * with the realtime database only if the chat room message list view is
+  /// * opened.
   static Future<ChatRoom?> get(
     String id, {
     bool cache = true,
@@ -705,6 +745,8 @@ class ChatRoom {
   ///
   ///
   /// Note that the chat room cannot be turn into single chat room if it's group chat room.
+  ///
+  /// TODO: sync the name with chat room relations;
   Future<void> update({
     String? name,
     String? description,
@@ -736,12 +778,54 @@ class ChatRoom {
     };
 
     await ref.update(updateData);
+
+    if (this.name != name) {
+      // TODO: sync the name with chat room relations;
+    }
+  }
+
+  /// Update the icon for the chat room.
+  ///
+  /// [newIconUrl] is the url of the icon image.
+  ///
+  /// If the icon url is not empty, it will delete the previous icon image.
+  ///
+  /// TODO: sync the icon url with all the chat join relations.
+  Future<void> updateIconUrl(String newIconUrl) async {
+    //
+    if (iconUrl != null && iconUrl!.isNotEmpty) {
+      await UploadService.instance.delete(iconUrl);
+    }
+
+    //
+    await ref.update({
+      field.iconUrl: newIconUrl,
+      field.updatedAt: ServerValue.timestamp,
+    });
   }
 }
 
 class ChatService {
   static ChatService? _instance;
   static ChatService get instance => _instance ??= ChatService._();
+
+  /// Settings of the chat service
+  bool? _verifiedUserOnly;
+  bool get verifiedUserOnly {
+    if (_verifiedUserOnly == null) {
+      verifiedUserOnly = FFLibraryValues().onlyVerifiedUserSendMessage ?? false;
+    }
+    return _verifiedUserOnly!;
+  }
+
+  /// Set the verified user only to send a message.
+  ///
+  /// You can programmatically set the verified user only to send a message.
+  /// Or if you are building app using FlutterFlow, you can set the option
+  /// in the FlutterFlow settings.
+  set verifiedUserOnly(bool b) => _verifiedUserOnly = b;
+
+  /// -- EO Settings of chat service
 
   ChatService._();
 
@@ -759,6 +843,13 @@ class ChatService {
   DatabaseReference get mySettingRef =>
       database.ref().child('chat').child('settings').child(myUid);
 
+  /// To set the verified user can chat only.
+  ///
+  /// Refer the README.md for details.
+  setVerifiedUserOnly(bool b) {
+    verifiedUserOnly = b;
+  }
+
   /// Send a message to the chat room.
   ///
   /// [roomId] may be a user's uid and it can be the chat room id.
@@ -770,6 +861,16 @@ class ChatService {
     // Add your function code here!
 
     // dog('sendMessage() -> roomId: $roomId, text: $text, url: $url');
+
+    // Check if the chat message can be sent for verified user only.
+    if (verifiedUserOnly) {
+      if (UserService.instance.isVerified == false) {
+        throw SuperLibraryException(
+          'chat-send-message/verified-user-only',
+          'Only verified user can send a message',
+        );
+      }
+    }
 
     // Check if the user is blocked by login user
     if (UserService.instance.hasBlocked(otherUidOrRoomId(roomId))) {
@@ -1026,15 +1127,21 @@ class ChatService {
   ///
   /// This method is used to join a chat room.
   ///
-  /// [roomId] may be a user uid. It can be the chat room id.
+  /// [roomId] may be a user uid or a chat room id.
   ///
-  /// Where:
+  /// Invoked from:
   /// - It is called in chat message list view.
   ///
   /// Logic:
-  /// - It update the room.users with current user's uid.
-  /// - If it's single chat room, it will add the other user's uid in the
-  ///   room.users field with requireConsent: true.
+  /// - Check if the user is blocked by login user
+  /// - Get the chat room data from the database.
+  /// - If the chat room does not exist, create a single chat room.
+  /// - If the chat room exists but not joined yet, then join the chat room.
+  /// - If the chat room exists and already joined, then just return.
+  /// - Prepare the data to join the chat room.
+  /// - Update the database with the join data.
+  /// - If it's single chat, add the other user information to my room's join.
+  ///
   Future<void> join(String roomId) async {
     dog("Joining into roomId: $roomId");
 
@@ -1117,7 +1224,7 @@ class ChatService {
     // );
   }
 
-  /// Invite a user to a chat room
+  /// Invite a other user to a chat room
   ///
   /// Only the group chat room can invite a user.
   ///
@@ -1161,7 +1268,18 @@ class ChatService {
     await database.ref().update(joinValues);
   }
 
-  /// Adjust chat data upon entering the chat room
+  /// The login user is entering into the chat room.
+  ///
+  /// This method is called every time when the user is entering into the chat
+  /// room. It does not do anything special for joining or creating the chat
+  /// room. It just updates the chat data like no of new messages upon entering
+  /// the chat room.
+  ///
+  /// Note that
+  /// - The chat room must exist. The chat room is not created in this method
+  ///   unlike the join() method.
+  ///
+  /// - Adjust chat data like no of new messages upon entering the chat room.
   ///
   /// [roomId] may be a user uid or may be the chat room id.
   Future<void> enter(String roomId) async {
@@ -1203,7 +1321,33 @@ class ChatService {
       // TODO how can we reorder the open chats
       // 'chat/joins/$myUid/$roomId/${f.openOrder}': updatedOrder,
     };
+
     await database.ref().update(enterValues);
+  }
+
+  /// [joinIfRoomExists] lets the user join the chat room if the room exists.
+  ///
+  /// This method is similar to [joion] method. The difference is that this
+  /// method checks if the room exists before joining the room.
+  ///
+  /// Returns true if the room exists and the user joined into the room.
+  /// Returns false if the room does not exist.
+  ///
+  /// [uidOrRoomId] may be a user uid or may be the chat room id.
+  ///
+  /// Usage:
+  /// - Use this method on unblocking a user
+  ///   - when user-A blocked user-B, user-A leaves the chat room with user-B if the 1:1 chat room exists.
+  ///     - and later when user-A is unblocking user-B,
+  ///       - use this method to enter the 1:1 chat room with user-B if the chat room exsits.
+  Future<bool> joinIfRoomExists(String uidOrRoomId) async {
+    final roomId = convertIfUidToSingleChatRoomId(uidOrRoomId);
+    final snapshot = await roomRef(roomId).get();
+    if (snapshot.exists == false) {
+      return false;
+    }
+    await join(roomId);
+    return true;
   }
 
   /// [uidOrRoomId] may be a user uid. It can be the chat room id.
@@ -1449,7 +1593,7 @@ class Comment {
     // TODO: check if the comment is deleted
 
     for (String url in urls) {
-      await StorageService.instance.delete(url);
+      await UploadService.instance.delete(url);
     }
 
     // await ref.remove();
@@ -1615,7 +1759,7 @@ class ConfirmDialog extends StatelessWidget {
         children: [
           if (subtitle != null) ...[
             subtitle!,
-            const SizedBox(height: 24),
+            const Divider(height: 48),
           ],
           message,
         ],
@@ -1623,133 +1767,19 @@ class ConfirmDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('no'),
+          child: Text(('no'.tr(context))),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('yes'),
+          child: Text('yes'.tr(context)),
         ),
       ],
     );
   }
 }
 
-/// Component holder class.
-/// Note that, the comopoent is not used in this library due to the widget builder
-// class Component {
-//   static Widget Function(UserData)? userListTile;
-//   static Widget Function(ChatJoin)? chatRoomListTile;
-//   static Widget Function(ChatRoom)? openChatRoomListTile;
-//   static Widget Function(ChatMessage)? chatMessageListTile;
-
-//   /// dataListTile is for displaying data in the DataListView.
-//   static Widget Function(Data)? dataListTile;
-// }
-
-/// User references --------------------------------------------------------------------------------
-/// Database reference for the user with [uid]
-@Deprecated('Use [Ref.user] instead')
-DatabaseReference databaseUserRef(String uid) {
-  return UserService.instance.databaseUserRef(uid);
-}
-
-/// Print log message with emoji 🐶
-void dog(dynamic msg, {int level = 0}) {
-  if (kReleaseMode) return;
-  if (SuperLibrary.instance.debugLog == false) return;
-  log('--> ${msg.toString()}', time: DateTime.now(), name: '🐶', level: level);
-}
-
-String? getSitePreviewMeta(Document document, String parameter) {
-  final metaTags = document.getElementsByTagName("meta");
-  if (metaTags.isEmpty) return null;
-  for (var meta in metaTags) {
-    if (meta.attributes['name'] == parameter) {
-      return meta.attributes['content']?.replaceAll('\n', " ");
-    }
-  }
-  return null;
-}
-
-String? getSitePreviewOGTag(Document document, String parameter) {
-  final metaTags = document.getElementsByTagName("meta");
-  if (metaTags.isEmpty) return null;
-  for (var meta in metaTags) {
-    if (meta.attributes['property'] == parameter) {
-      return meta.attributes['content']?.replaceAll('\n', " ");
-    }
-  }
-  return null;
-}
-
-String? getSitePreviewTag(Document document, String tag) {
-  final metaTags = document.getElementsByTagName(tag);
-  if (metaTags.isEmpty) return null;
-  for (var meta in metaTags) {
-    return meta.text.replaceAll('\n', " ");
-  }
-  return null;
-}
-
-/// load site preview from the url
-///
-/// [text] is a text that contains the url.
-///
-/// It throws exception if it fails to get the site preview.
-///
-/// It returns null if it fails to get the site preview.
-///
-/// It returns the site preview data if it successfully gets the site preview.
-/// But the fields might be null if the site preview data is not found.
-Future<SitePreviewData?> loadSitePreview({
-  required String text,
-}) async {
-  // Get the first url of in the text
-  final RegExp urlRegex = RegExp(r'https?:\/\/\S+');
-  final Match? match = urlRegex.firstMatch(text);
-  final String? url = match?.group(0);
-  if (url == null) {
-    return null;
-  }
-
-  // Get the data from the url (internet)
-  final dio = Dio();
-  Response response;
-  try {
-    response = await dio.get(url);
-  } catch (e) {
-    dog('dio.get($url) Error: $e');
-    throw SuperLibraryException(
-        'load-site-preview/get-failed', 'Failed to get the site preview: $e');
-  }
-  dynamic res = response.data;
-  if (res == null) {
-    throw SuperLibraryException('load-site-preview/response-is-empty',
-        'Result from dio.get($url) is null');
-  }
-  String html = res.toString();
-
-  final Document doc = parse(html);
-
-  String? title =
-      getSitePreviewOGTag(doc, 'og:title') ?? getSitePreviewTag(doc, 'title');
-  String? description = getSitePreviewOGTag(doc, 'og:description') ??
-      getSitePreviewMeta(doc, 'description');
-  String? imageUrl = getSitePreviewOGTag(doc, 'og:image');
-  String? siteName = getSitePreviewOGTag(doc, 'og:site_name') ??
-      getSitePreviewTag(doc, 'title');
-
-  return SitePreviewData(
-    url: url,
-    title: title,
-    description: description,
-    imageUrl: imageUrl,
-    siteName: siteName,
-  );
-}
-
-/// Return true if the chat room is a single chat room.
-bool isSingleChatRoom(roomId) => ChatService.instance.isSingleChatRoom(roomId);
+/// [currentUserUid] returns the current user's UID. It returns null if the user is not signed in.
+String? get currentUserUid => fa.FirebaseAuth.instance.currentUser?.uid;
 
 /// [Data] class is a data modeling class of the `/data` node in the Realtime
 /// database.
@@ -1757,6 +1787,7 @@ bool isSingleChatRoom(roomId) => ChatService.instance.isSingleChatRoom(roomId);
 /// It is not only including the data modeling but also the basic CRUD like
 /// read, write. Anything else than the data modeling and basic CRUD should be
 /// in the [DataService] class.
+///
 class Data {
   String key;
   String uid;
@@ -1961,7 +1992,7 @@ class Data {
     dog('Data.delete() at: ${ref.path}');
 
     for (String url in urls) {
-      await StorageService.instance.delete(url);
+      await UploadService.instance.delete(url);
     }
 
     await ref.update({
@@ -1980,17 +2011,157 @@ class Data {
   }
 }
 
+FirebaseDatabase get database => SuperLibrary.instance.database;
+
+DatabaseReference dataRef(String k) => Ref.data.child(k);
+
 /// [DataService] is a service class that provides anything else than the data
 /// modeling and basic CRUD.
 class DataService {
   //
 }
 
+/// Component holder class.
+/// Note that, the comopoent is not used in this library due to the widget builder
+// class Component {
+//   static Widget Function(UserData)? userListTile;
+//   static Widget Function(ChatJoin)? chatRoomListTile;
+//   static Widget Function(ChatRoom)? openChatRoomListTile;
+//   static Widget Function(ChatMessage)? chatMessageListTile;
+
+//   /// dataListTile is for displaying data in the DataListView.
+//   static Widget Function(Data)? dataListTile;
+// }
+
+/// User references --------------------------------------------------------------------------------
+/// Database reference for the user with [uid]
+@Deprecated('Use [Ref.user] instead')
+DatabaseReference databaseUserRef(String uid) {
+  return UserService.instance.databaseUserRef(uid);
+}
+
+/// Print log message with emoji 🐶
+void dog(dynamic msg, {int level = 0}) {
+  if (kReleaseMode) return;
+  if (SuperLibrary.instance.debugLog == false) return;
+  log('--> ${msg.toString()}', time: DateTime.now(), name: '🐶', level: level);
+}
+
+/// Error Dialog
+class ErrorDialog extends StatelessWidget {
+  const ErrorDialog({super.key, this.title, required this.message});
+
+  final Widget? title;
+  final Widget message;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: title ??
+          Text(
+            'Error'.tr(context),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+      content: message,
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('ok'.tr(context)),
+        ),
+      ],
+    );
+  }
+}
+
+/// Display an alert box.
+///
+/// It requires build context where [toast] does not.
+///
+Future error({
+  required BuildContext context,
+  Widget? title,
+  required Widget message,
+}) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return ErrorDialog(
+        title: title,
+        message: message,
+      );
+    },
+  );
+}
+
+fs.FirebaseFirestore get firestore => fs.FirebaseFirestore.instance;
+
+/// This class represents the User schema in FlutterFlow
 class FFUser {
   static const String displayName = 'display_name';
   static const String photoURL = 'photo_url';
   static const String createdTime = 'created_time';
+  static const String email = 'email';
+  static const String uid = 'uid';
+  static const String phoneNumber = 'phone_number';
+  static const String blockedUsers = 'blockedUsers';
+  static const String idCardUrl = 'idCardUrl';
+  static const String verified = 'verified';
 }
+
+/// Returns the single chat room id of the current user and the other user.
+///
+/// This is a helper function of the [ChatService.makeSingleChatRoomId] method.
+String getSingleChatRoomId(String otherUid) {
+  return ChatService.instance.makeSingleChatRoomId(myUid, otherUid);
+}
+
+String? getSitePreviewMeta(Document document, String parameter) {
+  final metaTags = document.getElementsByTagName("meta");
+  if (metaTags.isEmpty) return null;
+  for (var meta in metaTags) {
+    if (meta.attributes['name'] == parameter) {
+      return meta.attributes['content']?.replaceAll('\n', " ");
+    }
+  }
+  return null;
+}
+
+String? getSitePreviewOGTag(Document document, String parameter) {
+  final metaTags = document.getElementsByTagName("meta");
+  if (metaTags.isEmpty) return null;
+  for (var meta in metaTags) {
+    if (meta.attributes['property'] == parameter) {
+      return meta.attributes['content']?.replaceAll('\n', " ");
+    }
+  }
+  return null;
+}
+
+String? getSitePreviewTag(Document document, String tag) {
+  final metaTags = document.getElementsByTagName(tag);
+  if (metaTags.isEmpty) return null;
+  for (var meta in metaTags) {
+    return meta.text.replaceAll('\n', " ");
+  }
+  return null;
+}
+
+/// hasXxxx helper getters
+bool get hasDisplayName => myDisplayName != null && myDisplayName!.isNotEmpty;
+bool get hasLogin => signedIn;
+bool get hasLoggedIn => hasLogin;
+bool get hasPhotoUrl => myPhotoUrl != null && myPhotoUrl!.isNotEmpty;
+bool get hasSignedIn => signedIn;
+bool get hasVerified => UserService.instance.value(FFUser.verified, false);
+
+/// Returns true if the platform is Android
+bool get isAndroid => Platform.isAndroid;
+
+/// Returns true if the platform is ios.
+bool get isIos => Platform.isIOS;
+
+/// Return true if the chat room is a single chat room.
+bool isSingleChatRoom(roomId) => ChatService.instance.isSingleChatRoom(roomId);
 
 /// Returns true if the text has a valid uid format.
 isUid(String text) {
@@ -1999,6 +2170,8 @@ isUid(String text) {
 
   return true;
 }
+
+bool get isWeb => kIsWeb;
 
 /// Like
 ///
@@ -2047,6 +2220,63 @@ class LikeService {
   DatabaseReference get likesRef => database.ref('likes');
   DatabaseReference likeRef(String path) =>
       likesRef.child('$myUid-${path.replaceAll('/', '-')}');
+}
+
+/// load site preview from the url
+///
+/// [text] is a text that contains the url.
+///
+/// It throws exception if it fails to get the site preview.
+///
+/// It returns null if it fails to get the site preview.
+///
+/// It returns the site preview data if it successfully gets the site preview.
+/// But the fields might be null if the site preview data is not found.
+Future<SitePreviewData?> loadSitePreview({
+  required String text,
+}) async {
+  // Get the first url of in the text
+  final RegExp urlRegex = RegExp(r'https?:\/\/\S+');
+  final Match? match = urlRegex.firstMatch(text);
+  final String? url = match?.group(0);
+  if (url == null) {
+    return null;
+  }
+
+  // Get the data from the url (internet)
+  final dio = Dio();
+  Response response;
+  try {
+    response = await dio.get(url);
+  } catch (e) {
+    dog('dio.get($url) Error: $e');
+    throw SuperLibraryException(
+        'load-site-preview/get-failed', 'Failed to get the site preview: $e');
+  }
+  dynamic res = response.data;
+  if (res == null) {
+    throw SuperLibraryException('load-site-preview/response-is-empty',
+        'Result from dio.get($url) is null');
+  }
+  String html = res.toString();
+
+  final Document doc = parse(html);
+
+  String? title =
+      getSitePreviewOGTag(doc, 'og:title') ?? getSitePreviewTag(doc, 'title');
+  String? description = getSitePreviewOGTag(doc, 'og:description') ??
+      getSitePreviewMeta(doc, 'description');
+  String? imageUrl = getSitePreviewOGTag(doc, 'og:image');
+  String? siteName = getSitePreviewOGTag(doc, 'og:site_name') ??
+      getSitePreviewTag(doc, 'title');
+
+  return SitePreviewData(
+    url: url,
+    title: title,
+    description: description,
+    imageUrl: imageUrl,
+    siteName: siteName,
+  );
 }
 
 /// Memory
@@ -2112,13 +2342,47 @@ class MyDoc extends StatelessWidget {
             snapshot.hasData == false) {
           return const SizedBox.shrink();
         }
-        // dog('MyDoc() snapshot.data: ${snapshot.data}, ${snapshot.data?.length}, $currentUserUid');
+        dog('MyDoc() snapshot.data: ${snapshot.data}, ${snapshot.data?.length}, $currentUserUid');
         return builder(
             (snapshot.data ?? {}).isEmpty == true ? null : snapshot.data);
       },
     );
   }
 }
+
+/// [my] returns the current user's data from Firestore. It is a Map type variable of the Firestore document itself.
+Map<String, dynamic> get my {
+  if (fa.FirebaseAuth.instance.currentUser == null) {
+    throw Exception('[myUid] is called but the user is not signed in');
+  }
+  return UserService.instance.firestoreUserData;
+}
+
+/// [myBlockedUsers] returns the current user's blocked users list.
+List<String> get myBlockedUsers => List<String>.from(my['blockedUsers'] ?? []);
+
+/// [myDisplayName] returns the current user's display name.
+String? get myDisplayName => my[FFUser.displayName];
+
+/// [myPhotoUrl] returns the current user's photo URL in the Firestore user document.
+String? get myPhotoUrl => my[FFUser.photoURL];
+
+/// Database reference for the current user
+DatabaseReference get myRef => userRef(myUid);
+
+/// Firestore reference for the current user
+fs.DocumentReference get myDoc => UserService.instance.myDoc;
+
+/// [myUid] returns the current user's UID. It throws an exception if the user is not signed in.
+String get myUid {
+  if (fa.FirebaseAuth.instance.currentUser == null) {
+    throw Exception('[myUid] is called but the user is not signed in');
+  }
+  return fa.FirebaseAuth.instance.currentUser!.uid;
+}
+
+/// [notSignedIn] returns true if the user is not signed in with FirebaseAuth. Otherwise, it returns false.
+bool get notSignedIn => !signedIn;
 
 /// Return the other user's uid from the single chat room id.
 ///
@@ -2141,6 +2405,18 @@ String otherUidOrRoomId(roomId) {
     return otherUid(roomId);
   } else {
     return roomId;
+  }
+}
+
+/// Returns platform name
+///
+/// You may use [isIos], [isAndroiod], or [isWeb].
+/// It returns one of 'web', 'android', 'fuchsia', 'ios', 'linux', 'macos', 'windows'.
+String platformName() {
+  if (kIsWeb) {
+    return 'web';
+  } else {
+    return defaultTargetPlatform.name.toLowerCase();
   }
 }
 
@@ -2221,6 +2497,9 @@ class Report {
 
 /// [roomRef] returns the chat room reference.
 DatabaseReference roomRef(String roomId) => Ref.room(roomId);
+
+/// [signedIn] returns true if the user is signed in with FirebaseAuth. Otherwise, it returns false.
+bool get signedIn => fa.FirebaseAuth.instance.currentUser != null;
 
 /// [SitePreview] is a widget to show the preview of the site.
 class SitePreview extends StatelessWidget {
@@ -2324,12 +2603,790 @@ class SitePreviewData {
   });
 }
 
-class StorageService {
-  static StorageService? _instance;
-  static StorageService get instance => _instance ??= StorageService._();
+class SuperLibrary {
+  static SuperLibrary? _instance;
+  static SuperLibrary get instance => _instance ??= SuperLibrary._();
+
+  SuperLibrary._();
+
+  String? databaseURL;
+  FirebaseDatabase? _database;
+
+  bool initialized = false;
+
+  bool debugLog = false;
+
+  /// Returns the firebase database
+  ///
+  /// * It is important to use this method to get the database reference.
+  /// * Do not use `FirebaseDatabase.instance` directly.
+  ///
+  /// If it's web, then it requires the databaseURL.
+  ///
+  /// For mobile app, the databaseURL is automatically set in the google
+  /// service files by the FlutterFlow framework.
+  FirebaseDatabase get database {
+    if (kIsWeb) {
+      databaseURL ??= FFLibraryValues().databaseURL;
+      if (databaseURL == null) {
+        throw Exception('SuperLibrary.databaseURL is null');
+      }
+
+      _database ??= FirebaseDatabase.instanceFor(
+        app: Firebase.app(),
+        databaseURL: databaseURL,
+      );
+
+      return _database!;
+    }
+    return FirebaseDatabase.instance;
+  }
+}
+
+class SuperLibraryException implements Exception {
+  final String code;
+  final String message;
+
+  SuperLibraryException(
+    this.code,
+    this.message,
+  );
+
+  @override
+  String toString() {
+    return 'SuperLibraryException: ($code) $message';
+  }
+}
+
+extension SuperLibraryIntExtension on int {
+  /// Change the integer of milliseconds to a DateTime object
+  DateTime get toDateTime => DateTime.fromMillisecondsSinceEpoch(this);
+}
+
+extension SuperLibraryMapExtension on Map {
+  String tr(BuildContext context) {
+    return context.tr(this);
+  }
+}
+
+/// String Extension to check if a string is null or empty
+///
+/// Checks if a String? is null or not in the extends clause.
+extension SuperLibraryNullableStringExtension on String? {
+  /// Returns true if the string is null or empty
+  bool get isNullOrEmpty => this == null || this!.isEmpty;
+
+  /// If the string is null or empty, then it will return the newString
+  String or(String newString) => isNullOrEmpty ? newString : this!;
+}
+
+extension SuperLibraryStringExtension on String {
+  /// If the string is empty, return the newString.
+  ///
+  /// example
+  /// ```dart
+  /// String gender = user.gender.or(null);
+  /// ```
+  String or(String newString) => isEmpty ? newString : this;
+
+  /// Cut the string
+  ///
+  /// [suffix] is the string to be added at the end of the string. You may want
+  /// to add '...' at the end of the string.
+  ///
+  /// ```dart
+  /// Text( comment.content.cut(56, suffix: '...') );
+  /// ```
+  String cut(int length, {String suffix = ''}) {
+    String temp = this;
+    temp = temp.trim();
+    temp = temp.replaceAll('\n', ' ');
+    temp = temp.replaceAll('\r', ' ');
+    temp = temp.replaceAll('\t', ' ');
+    return temp.length > length ? '${temp.substring(0, length)}$suffix' : temp;
+  }
+
+  /// Localization
+  /// Example:
+  /// ```dart
+  /// 'Hello'.tr(context)
+  /// ```
+  String tr(BuildContext context) {
+    final String v = FFLocalizations.of(context).getText(toLowerCase());
+    if (v.trim().isEmpty) {
+      return this;
+    }
+    return v;
+  }
+}
+
+/// DateTime extension
+///
+///
+extension SuperLibraryDateTimeExtension on DateTime {
+  /// Returns a string of "yyyy-MM-dd"
+  String get short => shortDateTime;
+
+  /// Returns date if the date is today, otherwise returns time
+  ///
+  String get shortDateTime {
+    return isToday ? jm : md;
+  }
+
+  /// Returns a string of "yyyy-MM-dd"
+  String get yMd {
+    return DateFormat.yMd().format(this);
+  }
+
+  /// Converts a string to a DateTime object and returns it in YYYY-MM-DD HH:mm:ss format.
+  ///
+  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+  String get yMdjm {
+    return DateFormat.yM().add_jm().format(this);
+  }
+
+  /// Converts a string to a DateTime object and returns it in MM-DD format.
+  ///
+  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+  String get md {
+    return DateFormat.Md().format(this);
+  }
+
+  /// Returns a string of "yyyy-MM-dd HH:mm:ss"
+  String get jm {
+    return DateFormat.jm().format(this);
+  }
+
+  /// Returns in the format of 'jms' (e.g. 5:08:37 PM)
+  ///
+  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+  String get jms {
+    return DateFormat.jms().format(this);
+  }
+
+  /// Returns a string of "yy-MM-dd"
+  ///
+  /// from: https://github.com/jayeshpansheriya/awesome_extensions/blob/main/lib/date_extensions/date_extension.dart
+  bool get isToday {
+    final nowDate = DateTime.now();
+    return year == nowDate.year && month == nowDate.month && day == nowDate.day;
+  }
+
+  /// Returns true if the date is tomorrow
+  bool get isTomorrow {
+    final nowDate = DateTime.now();
+    return year == nowDate.year &&
+        month == nowDate.month &&
+        day == nowDate.day + 1;
+  }
+
+  /// Returns true if the date is past.
+  ///
+  /// It returns true even if it is today but the time is past.
+  ///
+  /// It is a simple alias of `isBefore(DateTime.now())`.
+  bool get isPast {
+    final nowDate = DateTime.now();
+    return isBefore(nowDate);
+  }
+
+  /// Returns true if the date is future.
+  ///
+  /// It returns true even if it is today but the time is future.
+  ///
+  /// It is a simple alias of `isAfter(DateTime.now())`.
+  ///
+  /// See also: https://api.flutter.dev/flutter/dart-core/DateTime/isBefore.html
+  /// See also: https://api.flutter.dev/flutter/dart-core/DateTime/compareTo.html
+  bool get isFuture {
+    final nowDate = DateTime.now();
+    return isAfter(nowDate);
+  }
+
+  /// The day after this [DateTime]
+  DateTime get nextDay => add(const Duration(days: 1));
+
+  /// The day previous this [DateTime]
+  DateTime get previousDay => subtract(const Duration(days: 1));
+}
+
+/// Put this at the bottom !!
+Future superLibrary() async {
+  // Add your function code here!
+}
+
+/// Display a snackbar
+///
+/// When the body of the snackbar is tapped, [onTap] will be called with a callback that will hide the snackbar.
+///
+/// Call the function parameter passed on the callback to close the snackbar.
+/// ```dart
+/// toast( title: 'title',  message: 'message', onTap: (close) => close());
+/// toast(  title: 'error title', message: 'error message',  error: true );
+/// ```
+///
+/// The difference between [toast] and [toastError] is the color of the snackbar.
+///
+/// The difference between [toast] and [snackbar] is that [snackbar]
+/// - is a copy version of FlutterFlow's [showSnackBar] method.
+/// - does not have a title.
+/// - does not have an icon.
+/// - does not have a close button.
+/// - the title and message are widgets while the [snackbar] has only strings.
+///
+ScaffoldFeatureController toast({
+  required BuildContext context,
+  Widget? title,
+  required Widget message,
+  Icon? icon,
+  Duration duration = const Duration(seconds: 8),
+  Function(Function)? onTap,
+  bool? error,
+  bool hideCloseButton = false,
+  Color? backgroundColor,
+  Color? foregroundColor,
+  double runSpacing = 12,
+}) {
+  if (error == true) {
+    backgroundColor ??= Theme.of(context).colorScheme.error;
+    foregroundColor ??= Theme.of(context).colorScheme.onError;
+  }
+
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      duration: duration,
+      backgroundColor: backgroundColor,
+      content: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (onTap == null) return;
+
+                onTap(() {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                });
+              },
+              child: Row(children: [
+                if (icon != null) ...[
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      iconTheme: IconThemeData(color: foregroundColor),
+                    ),
+                    child: icon,
+                  ),
+                  SizedBox(width: runSpacing),
+                ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (title != null) title,
+                      message,
+                    ],
+                  ),
+                ),
+              ]),
+            ),
+          ),
+          if (hideCloseButton == false)
+            TextButton(
+              onPressed: () {
+                if (!context.mounted) {
+                  dog('toast(): context is not mouned!');
+                  return;
+                }
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+              child: Text(
+                'dismiss'.tr(context),
+                style: TextStyle(color: foregroundColor),
+              ),
+            )
+        ],
+      ),
+    ),
+  );
+}
+
+/// Display a snackbar with an error color
+ScaffoldFeatureController toastError({
+  required BuildContext context,
+  Widget? title,
+  required Widget message,
+  Icon? icon,
+  Duration duration = const Duration(seconds: 8),
+  Function(Function)? onTap,
+  bool? error,
+  bool hideCloseButton = false,
+  Color? backgroundColor,
+  Color? foregroundColor,
+  double runSpacing = 12,
+}) {
+  return toast(
+    context: context,
+    title: title,
+    message: message,
+    icon: icon,
+    duration: duration,
+    onTap: onTap,
+    error: true,
+    hideCloseButton: hideCloseButton,
+    backgroundColor: backgroundColor,
+    foregroundColor: foregroundColor,
+    runSpacing: runSpacing,
+  );
+}
+
+/// Text Translation Service
+class TranslationService {
+  static TranslationService? _instance;
+  static TranslationService get instance =>
+      _instance ??= TranslationService._();
+  TranslationService._() {
+    kTranslationsMap.addAll({
+      'yes': {
+        'en': 'Yes',
+        'ko': '예',
+      },
+      'no': {
+        'en': 'No',
+        'ko': '아니요',
+      },
+      'ok': {
+        'en': 'OK',
+        'ko': '확인',
+      },
+      'error': {
+        'en': 'Error',
+        'ko': '에러',
+      },
+    });
+  }
+
+  /// Add translations to the map of the Flutter Localization translations
+  add(Map<String, Map<String, String>> translations) {
+    /// make the key of the translations lowercase
+    final Map<String, Map<String, String>> lowerCaseTranslations = {};
+    translations.forEach((key, value) {
+      lowerCaseTranslations[key.toLowerCase()] = value;
+    });
+
+    kTranslationsMap.addAll(lowerCaseTranslations);
+  }
+
+  /// Returns the translation of the key
+  String tr(BuildContext context, String key) {
+    String text = FFLocalizations.of(context).getText(key.toLowerCase());
+
+    if (text.trim().isEmpty) {
+      return key;
+    } else {
+      return text;
+    }
+  }
+}
+
+/// General Upload Widget
+///
+/// This widget is displaying an child widget and is used to upload an image,
+/// video, or file.
+///
+/// You can change the following `photoCamera,photoGallery,videoCamera,videoGallery,fromGallery,fromFile` upload source property
+/// with bool value true/false if you want to limit the upload source.
+///
+/// Or Simply use the following named constructor to:
+///
+/// Upload specific types of files you can use the name constructor:
+/// [Upload.image], [Upload.video],  [Upload.file].
+///
+/// The [onUpload] function is called when the upload is complete.
+///
+/// [onBeginUpload] is called before the upload starts. If it's null, then it will continue uploading;
+/// If it's not null and If it returns false, the upload will not start.
+///
+///
+/// If [photoGallery] is set to true, it will get only photos from gallery.
+///
+/// If [videoGallery] is set to true, it will get only videos from gallery.
+///
+/// If [photoCamera] is set to true, it will get only photos from camera.
+///
+/// If [videoCamera] is set to true, it will get only videos from camera.
+///
+/// If [fromGallery] is set to true, it will get whatever from Gallery.
+/// It can be any file like image, pdf, zip, video, audio, etc.
+///
+/// If [fromFile] is set to true, it will get whatever from file storage(Not from gallery).
+/// It can be any file like image, pdf, zip, video, audio, etc.
+class Upload extends StatelessWidget {
+  const Upload({
+    super.key,
+    required this.onUpload,
+    this.onUploadSourceSelected,
+    this.photoCamera = true,
+    this.photoGallery = true,
+    this.videoCamera = true,
+    this.videoGallery = true,
+    this.fromGallery = true,
+    this.fromFile = true,
+    this.progress,
+    this.complete,
+    this.onBeginUpload,
+    this.child = const Icon(Icons.add),
+    this.visualDensity,
+    this.iconPadding,
+    this.uploadBottomSheetPadding,
+    this.uploadBottomSheetSpacing,
+  });
+
+  final void Function(String url) onUpload;
+  final void Function(UploadSourceType?)? onUploadSourceSelected;
+
+  final Widget child;
+  final Function(double)? progress;
+  final Function()? complete;
+  final Future Function()? onBeginUpload;
+  final VisualDensity? visualDensity;
+
+  final bool photoCamera;
+  final bool photoGallery;
+
+  final bool videoCamera;
+  final bool videoGallery;
+
+  final bool fromGallery;
+  final bool fromFile;
+
+  final EdgeInsetsGeometry? iconPadding;
+  final EdgeInsetsGeometry? uploadBottomSheetPadding;
+  final double? uploadBottomSheetSpacing;
+
+  /// Upload Icon Button for Image from Galery and Camera
+  const Upload.image({
+    required this.onUpload,
+    super.key,
+    this.onUploadSourceSelected,
+    this.photoCamera = true,
+    this.photoGallery = true,
+    this.progress,
+    this.complete,
+    this.onBeginUpload,
+    this.child = const Padding(
+        padding: EdgeInsets.all(8), child: Icon(Icons.camera_alt)),
+    this.visualDensity,
+    this.iconPadding,
+    this.uploadBottomSheetPadding,
+    this.uploadBottomSheetSpacing,
+  })  : videoCamera = false,
+        videoGallery = false,
+        fromGallery = false,
+        fromFile = false;
+
+  /// Upload Icon Button for Video from Galery and Camera
+  const Upload.video({
+    required this.onUpload,
+    super.key,
+    this.onUploadSourceSelected,
+    this.videoCamera = true,
+    this.videoGallery = true,
+    this.progress,
+    this.complete,
+    this.onBeginUpload,
+    this.child =
+        const Padding(padding: EdgeInsets.all(8), child: Icon(Icons.videocam)),
+    this.visualDensity,
+    this.iconPadding,
+    this.uploadBottomSheetPadding,
+    this.uploadBottomSheetSpacing,
+  })  : photoCamera = false,
+        photoGallery = false,
+        fromGallery = false,
+        fromFile = false;
+
+  /// Upload Icon Button for files from Gallery and file storage
+  const Upload.file({
+    required this.onUpload,
+    super.key,
+    this.onUploadSourceSelected,
+    this.fromGallery = true,
+    this.fromFile = true,
+    this.progress,
+    this.complete,
+    this.onBeginUpload,
+    this.child = const Padding(
+        padding: EdgeInsets.all(8), child: Icon(Icons.attach_file)),
+    this.visualDensity,
+    this.iconPadding,
+    this.uploadBottomSheetPadding,
+    this.uploadBottomSheetSpacing,
+  })  : photoCamera = false,
+        photoGallery = false,
+        videoCamera = false,
+        videoGallery = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: child,
+      onTap: () async {
+        if (onBeginUpload != null) {
+          final re = await onBeginUpload!.call();
+          if (re == false) {
+            return;
+          }
+        }
+        if (context.mounted) {
+          final uploadedUrl = await UploadService.instance.upload(
+            context: context,
+            photoGallery: photoGallery,
+            photoCamera: photoCamera,
+            videoGallery: videoGallery,
+            videoCamera: videoCamera,
+            fromGallery: fromGallery,
+            fromFile: fromFile,
+            progress: progress,
+            complete: complete,
+            spacing: uploadBottomSheetSpacing,
+            padding: uploadBottomSheetPadding,
+            onUploadSourceSelected: onUploadSourceSelected,
+          );
+          if (uploadedUrl != null) {
+            onUpload.call(uploadedUrl);
+          }
+        }
+      },
+    );
+  }
+}
+
+class UploadSelectionBottomSheet extends StatelessWidget {
+  const UploadSelectionBottomSheet({
+    super.key,
+    this.photoGallery = true,
+    this.photoCamera = true,
+    this.videoGallery = false,
+    this.videoCamera = false,
+    this.fromGallery = false,
+    this.fromFile = false,
+    this.padding,
+    this.spacing,
+  });
+
+  final bool? photoGallery;
+  final bool? photoCamera;
+  final bool? videoGallery;
+  final bool? videoCamera;
+  final bool? fromGallery;
+  final bool? fromFile;
+  final EdgeInsetsGeometry? padding;
+  final double? spacing;
+
+  /// if padding and uploadBottmSheetPadding is not set return `EdgeInsets.zero`
+  EdgeInsetsGeometry get getPadding =>
+      padding ??
+      UploadService.instance.uploadBottomSheetPadding ??
+      EdgeInsets.zero;
+
+  /// if spacing and uploadBottomSheetSpacing is not set return `null`
+  double? get getSpacing =>
+      spacing ?? UploadService.instance.uploadBottomSheetSpacing;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: getPadding,
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const SizedBox(width: 48),
+                Expanded(
+                  child: Text(
+                    'Upload from'.tr(context),
+                    style: Theme.of(context).textTheme.labelLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IconButtonTheme(
+                  // It should not be affected in themings because
+                  // sometimes it might be wierd to have borders here.
+                  data: const IconButtonThemeData(),
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.cancel),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (photoGallery == true) ...[
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: Text('Select photo from gallery'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.photoGallery);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            if (photoCamera == true) ...[
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: Text('Take photo from camera'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.photoCamera);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            if (videoGallery == true) ...[
+              ListTile(
+                leading: const Icon(Icons.videocam),
+                title: Text('Select video from gallery'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.videoGallery);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            if (videoCamera == true) ...[
+              ListTile(
+                leading: const Icon(Icons.video_call),
+                title: Text('Take video from camera'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.videoCamera);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            if (fromGallery == true) ...[
+              ListTile(
+                leading: const Icon(Icons.file_present_rounded),
+                title: Text('Take file from gallery'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.mediaGallery);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            if (fromFile == true) ...[
+              ListTile(
+                leading: const Icon(Icons.snippet_folder_rounded),
+                title: Text('Choose file'.tr(context)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.pop(context, UploadSourceType.file);
+                },
+              ),
+              if (getSpacing != null) SizedBox(height: getSpacing),
+            ],
+            SizedBox(height: getSpacing != null && getSpacing! >= 8 ? 8 : 16),
+            TextButton(
+              child: Text('Close'.tr(context),
+                  style: TextStyle(color: Theme.of(context).primaryColor)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UploadService {
+  static UploadService? _instance;
+  static UploadService get instance => _instance ??= UploadService._();
+
+  EdgeInsetsGeometry? uploadBottomSheetPadding;
+  double? uploadBottomSheetSpacing;
 
   ///
-  StorageService._();
+  UploadService._();
+
+  // StorageCustomize customize = StorageCustomize();
+
+  /// [enableFilePickerExceptionHandler] is a flag to enable the exception
+  /// handler. If it is true, it will show an error toast message when the user
+  /// denies the permission to access the camera or the gallery. By default,
+  /// it is true. If you want to handle the exception by yourself, set it to
+  /// false.
+  bool enableFilePickerExceptionHandler = true;
+
+  init({
+    // StorageCustomize? customize,
+    bool? enableFilePickerExceptionHandler,
+    EdgeInsetsGeometry? uploadBottomSheetPadding,
+    double? uploadBottomSheetSpacing,
+  }) {
+    // if (customize != null) {
+    //   this.customize = customize;
+    // }
+    if (enableFilePickerExceptionHandler != null) {
+      this.enableFilePickerExceptionHandler = enableFilePickerExceptionHandler;
+    }
+
+    this.uploadBottomSheetPadding = uploadBottomSheetPadding;
+    this.uploadBottomSheetSpacing = uploadBottomSheetSpacing;
+  }
+
+  /// 이미지 업로드 소스(갤러리 또는 카메라) 선택창을 보여주고, 선택된 소스를 반환한다.
+  ///
+  /// [photoCamera] default true, 는 카메라를 선택할 수 있게 할지 여부이다.
+  /// [photoGallery] default true, 는 갤러리를 선택할 수 있게 할지 여부이다.
+  ///
+  /// [videoCamera] default false, indicate whether to allow the video camera to be selected
+  /// [videoGallery] default false, indicate whethere to allow the video gallery to be selected
+  ///
+  ///
+  /// [fromGallery] default false, indicate whether to allow to select file from gallery
+  /// [fromFile] default false, indicate whether to allow to select file from storage
+  ///
+  /// [spacing] default none, spacing between the selection,
+  /// [padding] default EdgeInsets.zero, padding of the bottomsheet
+  ///
+  /// 사용자에게 사진/파일 업로드를 요청한다.
+  ///
+  /// 커스텀 디자인은 [customize] 에서 할 수 있다.
+  Future<UploadSourceType?> chooseUploadSource({
+    required BuildContext context,
+    bool? photoGallery,
+    bool? photoCamera,
+    bool? videoGallery,
+    bool? videoCamera,
+    bool? fromGallery,
+    bool? fromFile,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
+  }) async {
+    return await showModalBottomSheet(
+      context: context,
+      builder: (_) => UploadSelectionBottomSheet(
+        photoGallery: photoGallery,
+        photoCamera: photoCamera,
+        videoGallery: videoGallery,
+        videoCamera: videoCamera,
+        fromGallery: fromGallery,
+        fromFile: fromFile,
+        spacing: spacing,
+        padding: padding,
+      ),
+    );
+  }
 
   /// Delete the uploaded file from Firebase Storage by the url.
   ///
@@ -2373,104 +3430,293 @@ class StorageService {
       await ref.remove();
     }
   }
-}
 
-class SuperLibrary {
-  static SuperLibrary? _instance;
-  static SuperLibrary get instance => _instance ??= SuperLibrary._();
+  Future<String?> getFilePathFromPicker({
+    required BuildContext context,
+    required UploadSourceType? source,
+    double maxHeight = 1024,
+    double maxWidth = 1024,
+    int imageQuality = 95,
+  }) async {
+    if (source == null) return null;
 
-  SuperLibrary._();
-
-  String? databaseURL;
-  FirebaseDatabase? _database;
-
-  bool initialized = false;
-
-  bool debugLog = false;
-
-  /// Returns the firebase database
-  ///
-  /// * It is important to use this method to get the database reference.
-  /// * Do not use `FirebaseDatabase.instance` directly.
-  ///
-  /// If it's web, then it requires the databaseURL.
-  ///
-  /// For mobile app, the databaseURL is automatically set in the google
-  /// service files by the FlutterFlow framework.
-  FirebaseDatabase get database {
-    if (kIsWeb) {
-      databaseURL ??= FFLibraryValues().databaseURL;
-      if (databaseURL == null) {
-        throw Exception('SuperLibrary.databaseURL is null');
+    try {
+      if (source == UploadSourceType.photoCamera) {
+        final XFile? image = await ImagePicker().pickImage(
+          source: ImageSource.camera,
+          maxHeight: maxHeight,
+          maxWidth: maxWidth,
+          imageQuality: imageQuality,
+        );
+        return image?.path;
+      } else if (source == UploadSourceType.photoGallery) {
+        final XFile? image =
+            await ImagePicker().pickImage(source: ImageSource.gallery);
+        return image?.path;
+      } else if (source == UploadSourceType.videoCamera) {
+        final XFile? video =
+            await ImagePicker().pickVideo(source: ImageSource.camera);
+        return video?.path;
+      } else if (source == UploadSourceType.videoGallery) {
+        final XFile? video =
+            await ImagePicker().pickVideo(source: ImageSource.gallery);
+        return video?.path;
+      } else if (source == UploadSourceType.mediaGallery) {
+        final XFile? image = await ImagePicker().pickMedia();
+        return image?.path;
+      } else if (source == UploadSourceType.file) {
+        final FilePickerResult? result = await FilePicker.platform.pickFiles();
+        return result?.files.first.path;
       }
+      return null;
+    } on PlatformException catch (error) {
+      if (enableFilePickerExceptionHandler == false) rethrow;
 
-      _database ??= FirebaseDatabase.instanceFor(
-        app: Firebase.app(),
-        databaseURL: databaseURL,
-      );
-
-      return _database!;
+      if (error.code == 'photo_access_denied') {
+        toastError(
+          context: context,
+          title: Text('Gallery Access Denied'.tr(context)),
+          message: Text(
+              'Access permission to the gallery has been denied'.tr(context)),
+        );
+      } else if (error.code == 'camera_access_denied') {
+        toastError(
+          context: context,
+          title: Text('Camera Access Denied'.tr(context)),
+          message: Text(
+              'Access permission to the Camera has been denied'.tr(context)),
+        );
+      } else {
+        /// rethrow the unhandled error from PlatformException if there's any
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
     }
-    return FirebaseDatabase.instance;
+    return null;
+  }
+
+  /// Update photos in the Firebase Storage.
+  ///
+  /// 사용자에게 사진/파일 업로드를 요청한다.
+  ///
+  /// 1. It displays the upload source selection dialog (camera or gallery).
+  /// 2. It picks the file
+  /// 3. It compresses the file
+  /// 4. It uploads and calls back the function for the progress indicator.
+  /// 5. It returns the download url of the uploaded file.
+  ///
+  /// If the user cancels the upload, it returns null.
+  ///
+  /// Ask user to upload a photo or a file
+  ///
+  /// Call this method when the user presses the button to upload a photo or a file.
+  ///
+  /// This method does not handle any exception. You may handle it outisde if you want.
+  ///
+  /// [saveAs] is the path on the Firebase storage to save the uploaded file.
+  /// If it's empty, it willl save the file under "/users/$uid/". You can use
+  /// this option to save the file under a different path.
+  ///
+  /// [photoCamera] is a flag to allow the user to choose the camera as the image source.
+  ///
+  /// [photoGallery] is a flag to allow the user to choose the gallery as the image source.
+  ///
+  /// [videoCamera] is a flag to allow the user to choose the camera as the video source.
+  ///
+  /// [videoGallery] is a flag to allow the user to choose the gallery as the video source.
+  ///
+  ///
+  /// [fromGallery] is a flag to allow the user to choose the gallery as the file source.
+  ///
+  /// [fromFile] is a flag to allow the user to choose the storage as the file source.
+  ///
+  /// [maxHeight] is the maximum height of the image to upload.
+  ///
+  /// [maxWidth] is the maximum width of the image to upload.
+  ///
+  /// If specified, the images will be at most [maxWidth] wide and
+  /// [maxHeight] tall. Otherwise the images will be returned at it's
+  /// original width and height.
+  ///
+  /// The image compression quality is no longer supported. For using image
+  /// thumbnail, refer to README.md
+  ///
+  /// It returns the download url of the uploaded file.
+  Future<String?> upload({
+    required BuildContext context,
+    Function(double)? progress,
+    Function()? complete,
+    Function(UploadSourceType?)? onUploadSourceSelected,
+    String? saveAs,
+    bool? photoCamera = true,
+    bool? photoGallery = true,
+    bool? videoCamera = false,
+    bool? videoGallery = false,
+    bool? fromGallery = false,
+    bool? fromFile = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
+    double maxHeight = 1024,
+    double maxWidth = 1024,
+    int imageQuality = 95,
+  }) async {
+    final source = await chooseUploadSource(
+      context: context,
+      photoCamera: photoCamera,
+      photoGallery: photoGallery,
+      videoCamera: videoCamera,
+      videoGallery: videoGallery,
+      fromGallery: fromGallery,
+      fromFile: fromFile,
+      spacing: spacing,
+      padding: padding,
+    );
+    onUploadSourceSelected?.call(source);
+    if (context.mounted) {
+      return await uploadFrom(
+        context: context,
+        source: source,
+        progress: progress,
+        complete: complete,
+        saveAs: saveAs,
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
+        imageQuality: imageQuality,
+      );
+    }
+    return null;
+  }
+
+  /// Upload a file (or an image) to Firebase Storage.
+  ///
+  /// This method must be the only method that upload a file/photo into Storage
+  /// or, the listing photos from `/storage` will not work properly.
+  ///
+  /// 범용 업로드 함수이며, 모든 곳에서 사용하면 된다.
+  ///
+  /// [path] is the file path on mobile phone(local storage) to upload.
+  ///
+  ///
+  /// It returns the download url of the uploaded file.
+  ///
+  /// [progress] is a callback function that is called whenever the upload progress is changed.
+  ///
+  /// [complete] is a callback function that is called when the upload is completed.
+  ///
+  /// [compressQuality] is the quality of the compress for the image before uploading.
+  /// 중요, compresssion 을 하면 이미지 가로/세로가 자동 보정 된다. 따라서 업로드를 하는 경우, 꼭 사용해야 하는 옵션이다.
+  /// 참고로 compression 은 기본 이미지 용량의 내용에 따라 달라 진다.
+  /// 이 값이 22 이면, 10M 짜리 파일이 140Kb 로 작아진다.
+  /// 이 값이 70 이면, 30M 짜리 파일이 1M 로 작아진다.
+  /// 이 값이 80 이면, 10M 짜리 파일이 700Kb 로 작아진다. 80 이면 충분하다. 기본 값이다.
+  /// 이 값이 0 이면, compress 를 하지 않는다. 즉, 원본 사진을 그대로 올린다.
+  ///
+  /// [saveAs] is the path for the uploaded file to be saved in Firebase Storage.
+  /// If it is null, it will be uploaded to the default path.
+  ///
+  /// This method does not handle any exception. You may handle it outisde if you want.
+  ///
+  ///
+  Future<String?> uploadFile({
+    Function(double)? progress,
+    Function? complete,
+    // Updated the default into zero
+    // because videos and files will have problem
+    // if we compress them using FlutterImageCompress.
+    String? path,
+    String? saveAs,
+    String? type,
+  }) async {
+    if (path == null) return null;
+    File file = File(path);
+    if (!file.existsSync()) {
+      log('File does not exist: $path');
+      throw Exception('File does not exist: $path');
+    }
+
+    final storageRef = FirebaseStorage.instance.ref();
+    final fileRef =
+        storageRef.child(saveAs ?? "users/$myUid/${file.path.split('/').last}");
+    // Review: Here only Image can be compressed. File and Video cannot be compressed.
+    // It may cause error if you try to compress file or video.
+    // So, we should check the file type before compressing.
+    // Or... add custom compressing function for file and video, and/or image.
+    // if (compressQuality > 0) {
+    // final xfile = await FlutterImageCompress.compressAndGetFile(
+    //   file.absolute.path,
+    //   '${file.absolute.path}.compressed.jpg',
+    //   quality: 100 - compressQuality,
+    // );
+    // file = File(xfile!.path);
+    // }
+    final uploadTask = fileRef.putFile(file);
+    if (progress != null) {
+      uploadTask.snapshotEvents.listen((event) {
+        double rate = event.bytesTransferred / event.totalBytes;
+        progress(rate < 0.2 ? 0.2 : rate);
+      });
+    }
+
+    /// wait until upload-complete
+    await uploadTask.whenComplete(() => complete?.call());
+    final url = await fileRef.getDownloadURL();
+    // print(fileRef.fullPath);
+
+    return url;
+  }
+
+  /// Call this if method of uploading (like, from camera) is already known.
+  ///
+  /// [source] can be SourceType.photoGallery, SourceType.photoCamera,
+  /// SourceType.videoGallery, SourceType.videoCamera, SourceType.file
+  /// may return null if [source] is invalid.
+  Future<String?> uploadFrom({
+    required BuildContext context,
+    required UploadSourceType? source,
+    Function(double)? progress,
+    Function? complete,
+    String? saveAs,
+    String? type,
+    double maxHeight = 1024,
+    double maxWidth = 1024,
+    int imageQuality = 95,
+  }) async {
+    if (source == null) return null;
+    String? path = await getFilePathFromPicker(
+      context: context,
+      source: source,
+      maxHeight: maxHeight,
+      maxWidth: maxWidth,
+    );
+    return await uploadFile(
+      path: path,
+      saveAs: saveAs,
+      progress: progress,
+      complete: complete,
+      type: type,
+    );
   }
 }
 
-extension SuperLibraryIntExtension on int {
-  /// Change the integer of milliseconds to a DateTime object
-  DateTime get toDateTime => DateTime.fromMillisecondsSinceEpoch(this);
-}
+enum UploadSourceType {
+  /// Opens up the device camera, letting the user to take a new picture.
+  photoCamera,
 
-class SuperLibraryException implements Exception {
-  final String code;
-  final String message;
+  /// Opens the user's gallery to select a photo(s) and photo only.
+  photoGallery,
 
-  SuperLibraryException(
-    this.code,
-    this.message,
-  );
+  /// Open up the user's gallery to select a video(s) and video and some audio files only.
+  videoGallery,
 
-  @override
-  String toString() {
-    return 'SuperLibraryException: ($code) $message';
-  }
-}
+  /// Open up the device camera, letting the user take video from camera
+  videoCamera,
 
-/// String Extension to check if a string is null or empty
-///
-/// Checks if a String? is null or not in the extends clause.
-extension SuperLibraryNullableStringExtension on String? {
-  /// Returns true if the string is null or empty
-  bool get isNullOrEmpty => this == null || this!.isEmpty;
+  /// Open up the gallery folder for picking up any type of media
+  mediaGallery,
 
-  /// If the string is null or empty, then it will return the newString
-  String or(String newString) => isNullOrEmpty ? newString : this!;
-}
-
-extension SuperLibraryStringExtension on String {
-  /// If the string is empty, return the newString.
-  ///
-  /// example
-  /// ```dart
-  /// String gender = user.gender.or(null);
-  /// ```
-  String or(String newString) => isEmpty ? newString : this;
-
-  /// Cut the string
-  ///
-  /// [suffix] is the string to be added at the end of the string. You may want
-  /// to add '...' at the end of the string.
-  ///
-  /// ```dart
-  /// Text( comment.content.cut(56, suffix: '...') );
-  /// ```
-  String cut(int length, {String suffix = ''}) {
-    String temp = this;
-    temp = temp.trim();
-    temp = temp.replaceAll('\n', ' ');
-    temp = temp.replaceAll('\r', ' ');
-    temp = temp.replaceAll('\t', ' ');
-    return temp.length > length ? '${temp.substring(0, length)}$suffix' : temp;
-  }
+  /// Open up file
+  file,
 }
 
 /// User Data
@@ -2579,6 +3825,30 @@ class UserData {
 DatabaseReference userPhotoUrlRef(String uid) =>
     databaseUserRef(uid).child(UserData.field.photoUrl);
 
+/// [UserReady] is a builder widget that displays the child widget only when
+/// the user's document is ready.
+///
+/// To update the text that is displayed when the user is not signed in, you
+/// can update the localization.
+class UserReady extends StatelessWidget {
+  const UserReady({super.key, required this.builder});
+
+  final Widget Function() builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return MyDoc(
+      builder: (my) => my == null
+          ? Center(
+              child: Text(
+                'Please, sign in first'.tr(context),
+              ),
+            )
+          : builder(),
+    );
+  }
+}
+
 /// Database reference for the user of the uid
 DatabaseReference userRef(String uid) => Ref.user(uid);
 
@@ -2615,12 +3885,22 @@ class UserService {
   }
 
   /// Short alias for [getValueFromFirestoreMemoryUserData]
+  ///
+  /// Get a value in the firestoreUserData that is the user data from the Firestore user document
+  ///
+  /// Example:
+  /// ```dart
+  /// final displayName = value<String>('displayName', '');
+  /// ```
   T value<T>(String k, T defaultValue) =>
       getValueFromFirestoreMemoryUserData(k, defaultValue);
 
   /// Get the blocked users of the current user
   List get blockedUsers => value<List>('blockedUsers', []);
   String? get photoUrl => value<String?>('photoUrl', null);
+  bool get isVerified => value<bool>('verified', false);
+
+  ///
 
   bool hasBlocked(String uid) => blockedUsers.contains(uid) == true;
 
@@ -2779,18 +4059,48 @@ class UserService {
     );
   }
 
-  /// This is a simple log method. But it makes sure that the user's document
-  /// exists in the Firestore.
+  deleteProfilePhoto() async {
+    await myDoc.set(
+      {
+        'photo_url': fs.FieldValue.delete(),
+        'updatedAt': fs.FieldValue.serverTimestamp(),
+      },
+      fs.SetOptions(merge: true),
+    );
+  }
+
+  /// This is a simple log in method.
+  ///
+  /// It creates the user's document if it does not exist.
+  ///
+  /// Logic:
+  /// - Read the user's document from the Firestore.
+  /// - If it does not exists, then create the user's document with the following fields
+  ///  - uid
+  /// - created_time
+  /// - email
+  /// - phone_number
   ///
   /// So, if you are unsure if the user's document exists in the Firestore, you
   /// can use this method after a user logs in.
   login() async {
-    await myDoc.set(
-      {
-        'loginAt': fs.FieldValue.serverTimestamp(),
-      },
-      fs.SetOptions(merge: true),
-    );
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      throw SuperLibraryException(
+          'UserService::login()', 'User is not signed in');
+    }
+    final snapshot = await myDoc.get();
+    if (snapshot.exists == false) {
+      await myDoc.set({
+        FFUser.uid: myUid,
+        FFUser.createdTime: fs.FieldValue.serverTimestamp(),
+        if (currentUser.email != null) FFUser.email: currentUser.email,
+        if (currentUser.phoneNumber != null)
+          FFUser.phoneNumber: currentUser.phoneNumber,
+      }, fs.SetOptions(merge: true));
+    } else {
+      // Do nothing here
+    }
   }
 }
 
@@ -2917,99 +4227,42 @@ class ValueListView extends StatelessWidget {
   }
 }
 
-/// DateTime extension
-///
-///
-extension SuperLibraryDateTimeExtension on DateTime {
-  /// Returns a string of "yyyy-MM-dd"
-  String get short => shortDateTime;
-
-  /// Returns date if the date is today, otherwise returns time
-  ///
-  String get shortDateTime {
-    return isToday ? jm : md;
-  }
-
-  /// Returns a string of "yyyy-MM-dd"
-  String get yMd {
-    return DateFormat.yMd().format(this);
-  }
-
-  /// Converts a string to a DateTime object and returns it in YYYY-MM-DD HH:mm:ss format.
-  ///
-  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
-  String get yMdjm {
-    return DateFormat.yM().add_jm().format(this);
-  }
-
-  /// Converts a string to a DateTime object and returns it in MM-DD format.
-  ///
-  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
-  String get md {
-    return DateFormat.Md().format(this);
-  }
-
-  /// Returns a string of "yyyy-MM-dd HH:mm:ss"
-  String get jm {
-    return DateFormat.jm().format(this);
-  }
-
-  /// Returns in the format of 'jms' (e.g. 5:08:37 PM)
-  ///
-  /// See also: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
-  String get jms {
-    return DateFormat.jms().format(this);
-  }
-
-  /// Returns a string of "yy-MM-dd"
-  ///
-  /// from: https://github.com/jayeshpansheriya/awesome_extensions/blob/main/lib/date_extensions/date_extension.dart
-  bool get isToday {
-    final nowDate = DateTime.now();
-    return year == nowDate.year && month == nowDate.month && day == nowDate.day;
-  }
-
-  /// Returns true if the date is tomorrow
-  bool get isTomorrow {
-    final nowDate = DateTime.now();
-    return year == nowDate.year &&
-        month == nowDate.month &&
-        day == nowDate.day + 1;
-  }
-
-  /// Returns true if the date is past.
-  ///
-  /// It returns true even if it is today but the time is past.
-  ///
-  /// It is a simple alias of `isBefore(DateTime.now())`.
-  bool get isPast {
-    final nowDate = DateTime.now();
-    return isBefore(nowDate);
-  }
-
-  /// Returns true if the date is future.
-  ///
-  /// It returns true even if it is today but the time is future.
-  ///
-  /// It is a simple alias of `isAfter(DateTime.now())`.
-  ///
-  /// See also: https://api.flutter.dev/flutter/dart-core/DateTime/isBefore.html
-  /// See also: https://api.flutter.dev/flutter/dart-core/DateTime/compareTo.html
-  bool get isFuture {
-    final nowDate = DateTime.now();
-    return isAfter(nowDate);
-  }
-
-  /// The day after this [DateTime]
-  DateTime get nextDay => add(const Duration(days: 1));
-
-  /// The day previous this [DateTime]
-  DateTime get previousDay => subtract(const Duration(days: 1));
-}
-
-/// Put this at the bottom !!
-Future superLibrary() async {
-  // Add your function code here!
+/// Display a snackbar
+snackbar(
+  BuildContext context,
+  String message, {
+  bool loading = false,
+  int duration = 8,
+  bool error = false,
+}) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: error ? FlutterFlowTheme.of(context).error : null,
+      content: Row(
+        children: [
+          if (loading)
+            const Padding(
+              padding: EdgeInsetsDirectional.only(end: 10.0),
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          Expanded(
+              child: Text(
+            message,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          )),
+        ],
+      ),
+      duration: Duration(seconds: duration),
+    ),
+  );
 }
 
 // End custom action code

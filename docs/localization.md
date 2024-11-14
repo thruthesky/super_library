@@ -1,8 +1,7 @@
 # Localization
 
-Super library simply follows the way how the FlutterFlow localizes. Simply translate the texts in language settings of FlutterFlow.
+Super library simply follows the way how the FlutterFlow localizes.
 
+If you want to add custom translations, you can add the translation with `LocaleService.instance.add()`.
 
-To customize the localization used by the source code in super library, you can use `TranslationService`.
-
-
+Refere [Developer's Tip - Localization](./developer_tip.md#localization)

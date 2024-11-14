@@ -5,7 +5,7 @@
   - [snackbar](#snackbar)
   - [confirm dialog](#confirm-dialog)
   - [error dialog](#error-dialog)
-- [Translation and Localization](#translation-and-localization)
+- [Localization](#localization)
   - [Get current locale](#get-current-locale)
 - [User](#user)
   - [User data and UserData class](#user-data-and-userdata-class)
@@ -21,7 +21,9 @@
   - [To display open chat room list](#to-display-open-chat-room-list)
   - [To display my chat room list](#to-display-my-chat-room-list)
   - [To display chat input message box based on the user login status](#to-display-chat-input-message-box-based-on-the-user-login-status)
+  - [Creating chat room with chat room ID](#creating-chat-room-with-chat-room-id)
 - [Upload](#upload)
+  - [UploadImage](#uploadimage)
 
 
 ## How to test comment
@@ -116,18 +118,23 @@ createData(
 
 
 
-# Translation and Localization
+# Localization
 
-- Super library uses the default localization of Flutter SDK.
+- Super library uses the default localization of Flutter SDK. And that is how FlutterFlow localize.
 
-- Apply the Flutter SDK localization like below;
+- By default, the localization and the related code are in the `super_library/lib/custom_code/actions/locale_api.dart`.
+  - If you want to change the default localization,
+    - You can edit the `locale_api.dart`
+    - Or you can overwrite the locales with `LocalService.instance.add()`.
+
+- The `LocaleService.instance.init()` is called by the `SuperLibrary` constructor. So, it will be available after SuperLibrary is instantiated.
 
 ```dart
 class _MyApp extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    TranslationService.instance.add({
+    LocaleService.instance.add({
       'super library': {
         'en': 'Super Library',
         'ko': '슈퍼 라이브러리',
@@ -680,6 +687,28 @@ class FakeChatMessageInput extends StatelessWidget {
 }
 ```
 
+## Creating chat room with chat room ID
+
+It is recommended to use the `createChatRoom` function to create a chat room. But if you are source coding with Flutter, you can use the `ChatRoom.create` method to create a chat room. With `ChatRoom.create`, you can set a chat room id.
+
+Example:
+
+```dart
+ChatRoom.create(
+  id: '-ChatRoomID',
+  name: 'All Chat Room',
+  description: 'Everyone can chat here',
+  iconUrl: null,
+  group: true,
+  open: true,
+  single: false,
+  allMembersCanInvite: true,
+);
+```
+
+Use case:
+- When you have accidentally deleted the chat room, you can recover the chat room.
+
 
 
 # Upload
@@ -837,3 +866,19 @@ class _UserAvatarUpdateState extends State<UserAvatarUpdate> {
   }
 }
 ```
+
+
+
+## UploadImage
+
+
+- While you may enjoy using `Upload.image`, you can use `UploadImage` with pre-defined UI/UX.
+
+
+```dart
+UploadImage(
+  onUpload: (url) => setState(() => iconUrl = url),
+),
+```
+
+

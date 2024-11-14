@@ -95,8 +95,23 @@ This process ensures that users have control over who can send them messages and
 
 ## Sending a chat message
 
-- Whenever a chat message is sent, it contains the sender's uid, displayName, photoUrl if the user has.
-
+- When a chat message is sent,
+    - the sender's uid, displayName, photoUrl are saved
+        - /chat/messages/(room_id)/(message_id)
+        - /chat/joins/(room_user_uid)/(room_id)
+    - the no of new message will be increased at
+        - `/chat/settings/(room_user_uid) { newMessageCount: 00 }` for total number for new message.
+        - `/chat/joins/(room_user_uid)/(room_id): { newMessageCount: 00 }` for the number of each chat room.
+    - If it's single chat room,
+        - even if there is ther other user is not in the `users` field, it will send a message.
+            - This is for the case of:
+                - When A sends chat message to B for the first,
+                - Then A left the chat room with B,
+                - B enters the chat room
+                - B sends a message
+                  - But the message is not delivered to B
+                - It sends a message from B to A even if A is not in the room.
+        - Note that when A creates the single chat room with B, A and B are added to the `users` field.
 
 
 
@@ -179,6 +194,9 @@ ElevatedButton(
   },
   child: const Text('Save'),
 ```
+
+
+
 
 
 

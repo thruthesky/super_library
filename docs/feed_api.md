@@ -24,6 +24,14 @@ It also gives you an option to get who follow you and who you follow.
 
 ## How to use follow, unfollow and isFollowing custom actions
 
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
 1. Create a screen named `PublicProfileScreen`.
 2. Create a Local page state variable and named it as `isFollowing` with `Boolean` as type.
 

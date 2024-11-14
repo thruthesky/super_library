@@ -24,33 +24,6 @@ It also gives you an option to get who follow you and who you follow.
 
 ## How to use follow, unfollow and isFollowing custom actions
 
-```mermaid
-flowchart TB
-  node_1(["On Page Load"])
-  node_2["isFollowing"]
-  node_5[("Set Local Page State\nisFollowing (true/false)")]
-  node_3[/"FollowButton"\]
-  node_4[/"UnfollowButton"\]
-  node_6[("set to true\nfollow/whoIfollow/myUid/otherUid = true\nfollow/whoFollowMe/otherUid/myUid = true")]
-  node_7[("set to null\nfollow/whoIfollow/myUid/otherUid = null\nfollow/whoFollowMe/otherUid/myUid = null")]
-  node_8{"result"}
-  node_9{"result"}
-  node_11[/"SnackBar with error message"/]
-  node_12[/"Snackbar with error message"/]
-  node_1 --> node_2
-  node_2 --> node_5
-  node_5 --"false\nShow FollowButton"--> node_3
-  node_5 --"true\nShow UnfollowButton"--> node_4
-  node_3 --> node_6
-  node_4 --> node_7
-  node_6 --> node_8
-  node_8 --"onFollow\nSet to true"--> node_5
-  node_7 --> node_9
-  node_9 --"onUnFollow\nSet to false"--> node_5
-  node_8 --"onFailure"--> node_11
-  node_9 --"onFailure"--> node_12
-```
-
 1. Create a screen named `PublicProfileScreen`.
 2. Create a Local page state variable and named it as `isFollowing` with `Boolean` as type.
 

@@ -261,6 +261,8 @@ Simply display the list of users whose uid is in `blockedUsers` field. You may a
     - As long as the user follows the verification login, save `true` to `verified` field.
 
 
+- For testing purpose, you may set the `verfied` feild to `true` to a user. So that the user does not have to verify.
+
 
 
 # Widgets

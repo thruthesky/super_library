@@ -2,7 +2,7 @@
 cloud_firestore=/Users/thruthesky/.pub-cache/hosted/pub.dev/cloud_firestore-5.4.4/
 cloud_firestore_web=/Users/thruthesky/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.3.2/
 file_picker=/Users/thruthesky/.pub-cache/hosted/pub.dev/file_picker-8.1.2/
-file_selector_linux=/Users/thruthesky/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3/
+file_selector_linux=/Users/thruthesky/.pub-cache/hosted/pub.dev/file_selector_linux-0.9.3+1/
 file_selector_macos=/Users/thruthesky/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4+2/
 file_selector_windows=/Users/thruthesky/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+3/
 firebase_auth=/Users/thruthesky/.pub-cache/hosted/pub.dev/firebase_auth-5.3.1/

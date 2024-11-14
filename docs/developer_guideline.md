@@ -27,7 +27,6 @@
 - [Feed API](#feed-api)
   - [Database Structure](#database-structure)
 
-
 ## How to test comment
 
 - To test a comment creation, you would do something below;
@@ -52,7 +51,6 @@ await showModalBottomSheet(
 );
 ```
 
-
 - To create a comment under the first level comment
 
 ```dart
@@ -73,7 +71,6 @@ await showModalBottomSheet(
     },
 );
 ```
-
 
 - Create a data and its comment
 
@@ -96,8 +93,6 @@ createData(
 );
 ```
 
-
-
 ## snackbar
 
 - FlutterFlow has `showSnackbar` method and you can use it.
@@ -106,25 +101,16 @@ createData(
   - `snackbar` displays the elipsis while `showSnackbar` displays overflow.
   - `snackbar` has `error` option to display the snackbar with error background.
 
-
-
 ## confirm dialog
 
-
-
-
 ## error dialog
-
-
-
-
-
 
 # Localization
 
 - Super library uses the default localization of Flutter SDK. And that is how FlutterFlow localize.
 
 - By default, the localization and the related code are in the `super_library/lib/custom_code/actions/locale_api.dart`.
+
   - If you want to change the default localization,
     - You can edit the `locale_api.dart`
     - Or you can overwrite the locales with `LocalService.instance.add()`.
@@ -171,6 +157,7 @@ class _MyApp extends State<MyApp> {
 - Then, use like below;
 
 Example:
+
 ```dart
 ElevatedButton(
   onPressed: () {
@@ -182,9 +169,11 @@ ElevatedButton(
   child: Text('language'.tr(context)),
 ),
 ```
+
 - Or you can use the `tr` method with a Map type.
 
 Example:
+
 ```dart
 {
   'en': 'Sign in with phone number',
@@ -192,36 +181,30 @@ Example:
 }.tr(context)
 ```
 
-
 - You can add the texts directly to the `context.tr` method.
 
 ```dart
 context.tr({'en': 'oooo', 'ko': 'xxxx'}); // returns the text based on the current language.
 ```
 
-
 ## Get current locale
-
-
 
 ```dart
 Text('Locale: ${FFLocalizations.of(context).locale.languageCode}'),
 ```
 
-
 # User
-
 
 ## User data and UserData class
 
 - The Super Library is designed for FlutterFlow and follows its database structure.
+
   - FlutterFlow uses Firestore for user data storage.
   - The Super Library focuses on using the Realtime Database.
     - It mirrors user data from Firestore to the Realtime Database.
       - When users update their profiles, the data is saved in the Realtime Database.
 
 - The `UserData` class models user data in the Realtime Database.
-
 
 ## Update user profile data
 
@@ -237,23 +220,24 @@ UserService.instance.updateProfile(
 ## To display widgets based on user's login status
 
 - `MyDoc` rebuilds the widget with `null` if:
+
   - The user's document does not exist (user considered logged out) even if the user logged in
   - The user is not logged in
   - The user is in the middle of logging in (already logged in, but document not yet loaded or while loading)
   - The user has logged in and docuemnt has loaded but the document is empty.
 
 - `MyDoc` rebuilds the widget with user data of `Map<String, dynamic>` type if:
+
   - The user is logged in and the document is loaded and the document is not empty.
 
 - Use `MyDoc` to display different widgets based on the user's login status.
 - `MyDoc` minimizes flickering, making it ideal for conditional rendering.
 
-
 - Use `MyDoc` to display different widgets based on the user's login status. With `MyDoc`, you can display one widget when the user is logged in and another when they are logged out.
 - `MyDoc` minimizes flickering, making it ideal for conditional rendering. So, it is a good idea to use `MyDoc` to display widgets based on the user's login status.
 
-
 Example:
+
 ```dart
 return MyDoc(builder: (data) {
   if (data == null) {
@@ -265,11 +249,10 @@ return MyDoc(builder: (data) {
 }
 ```
 
-
-
 ## To display user avatar
 
 - Use `UserAvatar` to display a user's photo including login user's photo from the Realtime Database.
+
   - Note that the user's photo url will be saved into the Firestore and mirrored into the Realtime Database.
 
 - To update the user's photo, use `UserService.instance.profileUpdate` method.
@@ -346,30 +329,23 @@ class _UserAvatarUpdateState extends State<UserAvatarUpdate> {
 }
 ```
 
-
-
-
 # Chat
-
 
 ## Chat Setup
 
 - To allow only verified users send message, do the following;
+
 ```dart
 ChatService.instance.setVerifiedUserOnly(true);
 ```
-
-
 
 ## Displaying a chat message of a chat room
 
 To display a chat room message list, use `ChatMessageListView(uidOrRoomId: ...)`. Pass the other user's UID for a 1:1 chat, or the chat room ID if available. The chat room ID can represent either a 1:1 chat or a group chat.
 
-
 ```dart
 ChatMessageListView(uidOrRoomId: '-O7NWCPZH3go57WNDzYn')
 ```
-
 
 You can add an event handler when the user's profile photo is being tapped on the chat message bubble. The example below opens a user's public profile when the user's profile photo is tapped.
 
@@ -386,8 +362,6 @@ ChatMessageListView(
               )),
 ),
 ```
-
-
 
 ## Displaying a chat room screen with the chat message list view and chat input box
 
@@ -532,7 +506,6 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
 }
 ```
 
-
 ## Handling error on sending a chat message
 
 - Sending chat message may produce an error. You can catch error message like below and handle it in anyway you want.
@@ -562,11 +535,6 @@ sendChatMessage(context, widget.uidOrRoomId, text, uploadedUrl,
   }
 });
 ```
-
-
-
-
-
 
 ## To display open chat room list
 
@@ -598,7 +566,6 @@ class _OpenChatRoomListScreenState extends State<OpenChatRoomListScreen> {
 }
 ```
 
-
 ## To display my chat room list
 
 To display the chat room list, you can show it on the chat room list screen or include it within an IndexedStack on the home screen.
@@ -614,10 +581,6 @@ ChatRoomListView(
 ),
 ```
 
-
-
-
-
 ## To display chat input message box based on the user login status
 
 - Use `MyDoc` to display fake chat input message widget if the user is not logged in.
@@ -629,7 +592,6 @@ MyDoc(
       : const ChatMessageInput(uidOrRoomId: '-O7NWCPZH3go57WNDzYn'),
 ),
 ```
-
 
 Example of `FakeChatMessageInput` widget
 
@@ -709,21 +671,18 @@ ChatRoom.create(
 ```
 
 Use case:
+
 - When you have accidentally deleted the chat room, you can recover the chat room.
 
-
-
 # Upload
-
 
 - `UploadStorage` provides a way of uploading files into Firebase Stroage service.
 
 - `Upload` widget provides a UI and Logic to upload files.
-    - `Upload.image`
-    - `Upload.file`
-    - `Upload.video`
 
-
+  - `Upload.image`
+  - `Upload.file`
+  - `Upload.video`
 
 - Below is an example of custom UI
 
@@ -788,8 +747,6 @@ Upload.image(
   ),
 ),
 ```
-
-
 
 - Below is an example of uploading user avatar
 
@@ -869,13 +826,9 @@ class _UserAvatarUpdateState extends State<UserAvatarUpdate> {
 }
 ```
 
-
-
 ## UploadImage
 
-
 - While you may enjoy using `Upload.image`, you can use `UploadImage` with pre-defined UI/UX.
-
 
 ```dart
 UploadImage(
@@ -883,21 +836,49 @@ UploadImage(
 ),
 ```
 
-
-
-
-
 # Feed API
 
 In this chapter, the Feed functionality is explained. If you are using FlutterFlow without source coding, please refer [Feed API](./feed_api.md) document.
 
-
 ## Database Structure
 
+`/follow/feed/$uid/$dataKey`
 
-- `/follow/feed/`
-- 
+```json
+/follow
+    /feed {
+      "$uid": {
+          "$dataKey": {
+              "content": "...",
+              "createdAt": "...",
+              "displayName": "...",
+              "photoUrl": "...",
+              "uid": "...",
+              "updatedAt": "...",
+          },
+      },
+    }
+```
 
+`/follow/whoFollowMe/$myUid/$otherUid`
 
+```json
+/follow
+    /whoFollowMe {
+      "$myUid": {
+          "$otherUid": true
+      },
+    }
 
+```
 
+`/follow/whoIFollow/$otherUid/$myUid`
+
+```json
+/follow
+    /whoFollowMe {
+      "$myUid": {
+          "$otherUid": true
+      },
+    }
+```

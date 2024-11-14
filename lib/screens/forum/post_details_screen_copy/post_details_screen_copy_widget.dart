@@ -5,11 +5,11 @@ import '/components/data/data_detail_component/data_detail_component_widget.dart
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'post_details_screen_model.dart';
-export 'post_details_screen_model.dart';
+import 'post_details_screen_copy_model.dart';
+export 'post_details_screen_copy_model.dart';
 
-class PostDetailsScreenWidget extends StatefulWidget {
-  const PostDetailsScreenWidget({
+class PostDetailsScreenCopyWidget extends StatefulWidget {
+  const PostDetailsScreenCopyWidget({
     super.key,
     required this.data,
   });
@@ -17,19 +17,20 @@ class PostDetailsScreenWidget extends StatefulWidget {
   final dynamic data;
 
   @override
-  State<PostDetailsScreenWidget> createState() =>
-      _PostDetailsScreenWidgetState();
+  State<PostDetailsScreenCopyWidget> createState() =>
+      _PostDetailsScreenCopyWidgetState();
 }
 
-class _PostDetailsScreenWidgetState extends State<PostDetailsScreenWidget> {
-  late PostDetailsScreenModel _model;
+class _PostDetailsScreenCopyWidgetState
+    extends State<PostDetailsScreenCopyWidget> {
+  late PostDetailsScreenCopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => PostDetailsScreenModel());
+    _model = createModel(context, () => PostDetailsScreenCopyModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -53,7 +54,7 @@ class _PostDetailsScreenWidgetState extends State<PostDetailsScreenWidget> {
           automaticallyImplyLeading: true,
           title: Text(
             FFLocalizations.of(context).getText(
-              'sjlapi91' /* Post Details */,
+              '8bax65wg' /* Post Details */,
             ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Inter Tight',
@@ -73,7 +74,7 @@ class _PostDetailsScreenWidgetState extends State<PostDetailsScreenWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: wrapWithModel(
                     model: _model.dataDetailComponentModel,
                     updateCallback: () => safeSetState(() {}),

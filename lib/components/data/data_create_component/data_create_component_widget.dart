@@ -90,34 +90,34 @@ class _DataCreateComponentWidgetState extends State<DataCreateComponentWidget> {
                             ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).outline,
-                        width: 1.0,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).secondary,
-                        width: 1.0,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                    fillColor: Colors.transparent,
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
@@ -158,40 +158,41 @@ class _DataCreateComponentWidgetState extends State<DataCreateComponentWidget> {
                             ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).outline,
-                        width: 1.0,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).secondary,
-                        width: 1.0,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.0,
+                        width: 1.6,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(24.0),
                     ),
                     filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                    fillColor: Colors.transparent,
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         letterSpacing: 0.0,
                       ),
-                  maxLines: 5,
+                  maxLines: 7,
+                  minLines: 4,
                   cursorColor: FlutterFlowTheme.of(context).primaryText,
                   validator: _model.contentTextControllerValidator
                       .asValidator(context),

@@ -177,11 +177,10 @@ class _ChatRoomEditComponentWidgetState
                             child: FlutterFlowIconButton(
                               borderColor:
                                   FlutterFlowTheme.of(context).primaryText,
-                              borderRadius: 14.0,
+                              borderRadius: 16.0,
                               borderWidth: 1.0,
                               buttonSize: 40.0,
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              fillColor: Colors.transparent,
                               icon: Icon(
                                 Icons.camera_alt,
                                 color: FlutterFlowTheme.of(context).primaryText,
@@ -221,28 +220,28 @@ class _ChatRoomEditComponentWidgetState
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
@@ -283,28 +282,28 @@ class _ChatRoomEditComponentWidgetState
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
@@ -345,28 +344,28 @@ class _ChatRoomEditComponentWidgetState
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).primaryText,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).error,
-                            width: 1.0,
+                            width: 1.6,
                           ),
                           borderRadius: BorderRadius.circular(24.0),
                         ),

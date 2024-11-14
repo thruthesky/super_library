@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'profile_update_screen_model.dart';
 export 'profile_update_screen_model.dart';
 
@@ -24,6 +25,11 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfileUpdateScreenModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.loginUserUidActionOutput = await actions.getLoginUserUid();
+    });
 
     _model.displayNameTextController ??= TextEditingController();
     _model.displayNameFocusNode ??= FocusNode();
@@ -74,15 +80,19 @@ class _ProfileUpdateScreenWidgetState extends State<ProfileUpdateScreenWidget> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Align(
-                  alignment: AlignmentDirectional(0.0, 0.0),
+                Align(
+                  alignment: const AlignmentDirectional(0.0, 0.0),
                   child: SizedBox(
                     width: 120.0,
                     height: 120.0,
                     child: custom_widgets.UserAvatar(
                       width: 120.0,
                       height: 120.0,
-                      uid: '-',
+                      uid: _model.loginUserUidActionOutput != null &&
+                              _model.loginUserUidActionOutput != ''
+                          ? _model.loginUserUidActionOutput
+                          : '-',
+                      blockStatus: false,
                     ),
                   ),
                 ),

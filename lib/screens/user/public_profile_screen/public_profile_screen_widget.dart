@@ -3,6 +3,7 @@ import '/components/user/user_display_name_component/user_display_name_component
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:async';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -34,12 +35,28 @@ class _PublicProfileScreenWidgetState extends State<PublicProfileScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.likeExist(
-        'users/${widget.uid}',
-        (value) async {
-          _model.likeData = value;
-          safeSetState(() {});
-        },
+      unawaited(
+        () async {
+          await actions.likeExist(
+            'users/${widget.uid}',
+            (value) async {
+              _model.likeData = value;
+              safeSetState(() {});
+            },
+          );
+        }(),
+      );
+      unawaited(
+        () async {
+          await actions.isFollowing(
+            context,
+            widget.uid!,
+            (value) async {
+              _model.isFollowing = value;
+              safeSetState(() {});
+            },
+          );
+        }(),
       );
       _model.likeCountOutputInit = await actions.readPathField(
         context,
@@ -139,7 +156,7 @@ class _PublicProfileScreenWidgetState extends State<PublicProfileScreenWidget> {
                           );
                         },
                         text: FFLocalizations.of(context).getText(
-                          '4alqmxb3' /* Chat */,
+                          'uww2puuu' /* Chat */,
                         ),
                         options: FFButtonOptions(
                           height: 40.0,
@@ -227,6 +244,151 @@ class _PublicProfileScreenWidgetState extends State<PublicProfileScreenWidget> {
                                     letterSpacing: 0.0,
                                   ),
                         ),
+                      Builder(
+                        builder: (context) {
+                          if (_model.isFollowing) {
+                            return FFButtonWidget(
+                              onPressed: () async {
+                                await actions.unfollow(
+                                  context,
+                                  widget.uid!,
+                                  () async {
+                                    ScaffoldMessenger.of(context)
+                                        .clearSnackBars();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Unfollowing',
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                        ),
+                                        duration: const Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                      ),
+                                    );
+                                    _model.isFollowing = false;
+                                    safeSetState(() {});
+                                  },
+                                  (error) async {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error,
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                        ),
+                                        duration: const Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context).error,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              text: FFLocalizations.of(context).getText(
+                                'p2xhfbdg' /* Unfollow */,
+                              ),
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 16.0, 0.0),
+                                iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Colors.transparent,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      letterSpacing: 0.0,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  width: 1.6,
+                                ),
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                            );
+                          } else {
+                            return FFButtonWidget(
+                              onPressed: () async {
+                                await actions.follow(
+                                  context,
+                                  widget.uid!,
+                                  () async {
+                                    ScaffoldMessenger.of(context)
+                                        .clearSnackBars();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Following...',
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                        ),
+                                        duration: const Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                      ),
+                                    );
+                                    _model.isFollowing = true;
+                                    safeSetState(() {});
+                                  },
+                                  (error) async {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error,
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                        ),
+                                        duration: const Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context).error,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              text: FFLocalizations.of(context).getText(
+                                '4alqmxb3' /* Follow */,
+                              ),
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 16.0, 0.0),
+                                iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Colors.transparent,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      letterSpacing: 0.0,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  width: 1.6,
+                                ),
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ].divide(const SizedBox(width: 16.0)),
                   ),
                 ),

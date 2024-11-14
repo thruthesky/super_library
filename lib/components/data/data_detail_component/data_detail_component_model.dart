@@ -2,7 +2,6 @@ import '/components/data/field/data_detail_content_component/data_detail_content
 import '/components/data/field/data_detail_title_component/data_detail_title_component_widget.dart';
 import '/components/user/user_avatar_component/user_avatar_component_widget.dart';
 import '/components/user/user_display_name_component/user_display_name_component_widget.dart';
-import '/components/utility/short_date_time_component/short_date_time_component_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'data_detail_component_widget.dart' show DataDetailComponentWidget;
 import 'package:flutter/material.dart';
@@ -15,22 +14,22 @@ class DataDetailComponentModel
 
   dynamic data;
 
+  bool moreOptions = false;
+
   ///  State fields for stateful widgets in this component.
 
   // Model for UserAvatarComponent component.
   late UserAvatarComponentModel userAvatarComponentModel;
   // Model for UserDisplayNameComponent component.
   late UserDisplayNameComponentModel userDisplayNameComponentModel;
-  // Model for ShortDateTimeComponent component.
-  late ShortDateTimeComponentModel shortDateTimeComponentModel;
+  // Stores action output result for [Custom Action - reportExists] action in ReportButton widget.
+  bool? isReportExist;
   // Model for DataDetailTitleComponent component.
   late DataDetailTitleComponentModel dataDetailTitleComponentModel;
   // Model for DataDetailContentComponent component.
   late DataDetailContentComponentModel dataDetailContentComponentModel;
   // Stores action output result for [Custom Action - readDataField] action in LikeButton widget.
   dynamic likeCountOutput;
-  // Stores action output result for [Custom Action - reportExists] action in ReportButton widget.
-  bool? isReportExist;
 
   @override
   void initState(BuildContext context) {
@@ -38,8 +37,6 @@ class DataDetailComponentModel
         createModel(context, () => UserAvatarComponentModel());
     userDisplayNameComponentModel =
         createModel(context, () => UserDisplayNameComponentModel());
-    shortDateTimeComponentModel =
-        createModel(context, () => ShortDateTimeComponentModel());
     dataDetailTitleComponentModel =
         createModel(context, () => DataDetailTitleComponentModel());
     dataDetailContentComponentModel =
@@ -50,7 +47,6 @@ class DataDetailComponentModel
   void dispose() {
     userAvatarComponentModel.dispose();
     userDisplayNameComponentModel.dispose();
-    shortDateTimeComponentModel.dispose();
     dataDetailTitleComponentModel.dispose();
     dataDetailContentComponentModel.dispose();
   }

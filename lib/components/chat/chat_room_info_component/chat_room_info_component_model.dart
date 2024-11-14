@@ -15,6 +15,13 @@ class ChatRoomInfoComponentModel
   void updateUserUidsAtIndex(int index, Function(String) updateFn) =>
       userUids[index] = updateFn(userUids[index]);
 
+  ///  State fields for stateful widgets in this component.
+
+  // State field(s) for open widget.
+  bool? openValue;
+  // State field(s) for allMembersCanInvite widget.
+  bool? allMembersCanInviteValue;
+
   @override
   void initState(BuildContext context) {}
 

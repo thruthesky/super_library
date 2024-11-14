@@ -1,5 +1,5 @@
+import '/components/data/data_list_tile_component/data_list_tile_component_widget.dart';
 import '/components/data/data_list_view_component/data_list_view_component_widget.dart';
-import '/components/data_list_tile_component/data_list_tile_component_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -99,24 +99,27 @@ class _PostListScreenWidgetState extends State<PostListScreenWidget> {
         ),
         body: SafeArea(
           top: true,
-          child: wrapWithModel(
-            model: _model.dataListViewComponentModel,
-            updateCallback: () => safeSetState(() {}),
-            child: DataListViewComponentWidget(
-              category: widget.category!,
-              builder: (dynamic data) => DataListTileComponentWidget(
-                data: data,
-                onTap: () async {
-                  context.pushNamed(
-                    'PostDetailsScreen',
-                    queryParameters: {
-                      'data': serializeParam(
-                        FFAppState().dataListTileComponentActionParameter,
-                        ParamType.JSON,
-                      ),
-                    }.withoutNulls,
-                  );
-                },
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+            child: wrapWithModel(
+              model: _model.dataListViewComponentModel,
+              updateCallback: () => safeSetState(() {}),
+              child: DataListViewComponentWidget(
+                category: widget.category!,
+                builder: (dynamic data) => DataListTileComponentWidget(
+                  data: data,
+                  onTap: () async {
+                    context.pushNamed(
+                      'PostDetailsScreen',
+                      queryParameters: {
+                        'data': serializeParam(
+                          FFAppState().dataListTileComponentActionParameter,
+                          ParamType.JSON,
+                        ),
+                      }.withoutNulls,
+                    );
+                  },
+                ),
               ),
             ),
           ),

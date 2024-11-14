@@ -160,8 +160,8 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Read detail document',
       'ko': '자세한 문서 읽기',
     },
-    'qjocfdtt': {
-      'en': 'Goto ChatroomListViewCopy',
+    'yw86bglk': {
+      'en': 'Feed list view',
       'ko': '채팅방으로 이동목록보기복사',
     },
     'mblo0n8j': {
@@ -231,7 +231,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '이메일 주소를 입력하세요',
     },
     '9eetr5hx': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     'khc71ww5': {
@@ -243,7 +243,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '비밀번호를 입력하세요',
     },
     'wy0ja86e': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     '6pg5l50b': {
@@ -274,7 +274,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '표시 이름을 입력하세요',
     },
     'kj5nnm4r': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     'wciqm5pq': {
@@ -286,7 +286,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '사진 URL을 입력하세요',
     },
     '2lfpkd8z': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     '0pjelu9w': {
@@ -414,11 +414,77 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Profile',
       'ko': '윤곽',
     },
-    '4alqmxb3': {
+    'uww2puuu': {
       'en': 'Chat',
       'ko': '채팅',
     },
+    'p2xhfbdg': {
+      'en': 'Unfollow',
+      'ko': '채팅',
+    },
+    '4alqmxb3': {
+      'en': 'Follow',
+      'ko': '채팅',
+    },
     'c7opyvou': {
+      'en': 'Home',
+      'ko': '집',
+    },
+  },
+  // FeedScreen
+  {
+    'xi65xko6': {
+      'en': 'Who follow me',
+      'ko': '',
+    },
+    '8lxncbt9': {
+      'en': 'Who I follow me',
+      'ko': '',
+    },
+    'r516jm08': {
+      'en': 'Create A',
+      'ko': '',
+    },
+    'z5mdg649': {
+      'en': 'Create B',
+      'ko': '',
+    },
+    'kughqm1v': {
+      'en': 'Update A',
+      'ko': '',
+    },
+    '8uz5b8hz': {
+      'en': 'Update B',
+      'ko': '',
+    },
+    'a0ppp4g4': {
+      'en': 'Delete A',
+      'ko': '',
+    },
+    '8tzuiw92': {
+      'en': 'Delete B',
+      'ko': '',
+    },
+    '6qfk4pab': {
+      'en': 'Feeds',
+      'ko': '',
+    },
+    'x33ci2my': {
+      'en': 'Feeds',
+      'ko': '페이지 제목',
+    },
+    'gne62pyn': {
+      'en': 'Home',
+      'ko': '',
+    },
+  },
+  // PostDetailsScreenCopy
+  {
+    '8bax65wg': {
+      'en': 'Post Details',
+      'ko': '게시물 세부 정보',
+    },
+    'p2rn2hyt': {
       'en': 'Home',
       'ko': '집',
     },
@@ -433,14 +499,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Delete',
       'ko': '삭제',
     },
-    'lql2cwt0': {
-      'en': 'Reply',
-      'ko': '회신하다',
-    },
-    '42vwc8nx': {
-      'en': 'Follow',
-      'ko': '따르다',
-    },
     'qo47av0o': {
       'en': 'Unblock',
       'ko': '',
@@ -452,6 +510,14 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     'mnz45tn4': {
       'en': 'Report',
       'ko': '보고서',
+    },
+    'lql2cwt0': {
+      'en': 'Reply',
+      'ko': '회신하다',
+    },
+    '42vwc8nx': {
+      'en': 'Follow',
+      'ko': '따르다',
     },
   },
   // DataCreateComponent
@@ -465,7 +531,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '제목을 입력하세요',
     },
     'x07zv3za': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     '7lfic231': {
@@ -477,7 +543,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '입력 내용',
     },
     '86lx6h02': {
-      'en': 'initial Value',
+      'en': '',
       'ko': '',
     },
     '4drp86mr': {
@@ -616,7 +682,27 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   },
   // ChatRoomInfoComponent
   {
+    '985gnmkb': {
+      'en': 'Open',
+      'ko': '',
+    },
+    '7uhaqsi3': {
+      'en': 'Anyone can join',
+      'ko': '',
+    },
+    '6qhhwlcu': {
+      'en': 'Invite',
+      'ko': '',
+    },
+    'smtxv6ip': {
+      'en': 'Everyone can invite others',
+      'ko': '',
+    },
     '0cfglr7y': {
+      'en': 'Master Users',
+      'ko': '',
+    },
+    'fil06lh7': {
       'en': 'Members',
       'ko': '',
     },
@@ -780,8 +866,16 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Invite Users',
       'ko': '',
     },
+    'h2i1j6te': {
+      'en': '',
+      'ko': '',
+    },
     'ic862ajs': {
       'en': 'Input name of the user',
+      'ko': '',
+    },
+    'yg6yzq71': {
+      'en': '',
       'ko': '',
     },
     'drjme0xm': {
@@ -816,6 +910,10 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'ko': '단추',
     },
     'ibz13zd5': {
+      'en': 'TextField',
+      'ko': '',
+    },
+    'n83iyi20': {
       'en': 'TextField',
       'ko': '',
     },

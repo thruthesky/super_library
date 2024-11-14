@@ -19,8 +19,8 @@ Future<dynamic> readDataField(
 
   try {
     final data = await Data.readField(key, field);
-    dog("readData() returns: $data");
-    print("readData() returns: $data");
+    // dog("readData() returns: $data");
+    // print("readData() returns: $data");
     return data;
   } catch (e) {
     dog('Error on readData: $e');

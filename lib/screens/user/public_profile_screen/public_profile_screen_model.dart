@@ -12,6 +12,8 @@ class PublicProfileScreenModel
 
   int? likeCount;
 
+  bool isFollowing = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - readPathField] action in PublicProfileScreen widget.

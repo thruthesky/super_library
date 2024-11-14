@@ -8,20 +8,19 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/custom_code/actions/super_library.dart';
+import '/custom_code/actions/feed_api.dart';
 
-Future likeExist(
-  String path,
-  Future Function(bool value) callback,
+Future unfollow(
+  BuildContext context,
+  String otherUid,
+  Future Function()? onUnfollow,
+  Future Function(String error)? onFailure,
 ) async {
-  if (currentUserUid == null) {
-    return callback(false);
+  // Add your function code here!
+  try {
+    await FeedService.instance.unfollow(otherUid);
+    await onUnfollow?.call();
+  } catch (e) {
+    await onFailure?.call(e.toString());
   }
-
-  final event = await LikeService.instance.likeRef(path).once();
-  if (event.snapshot.exists) {
-    callback(true);
-    return;
-  }
-  callback(false);
 }

@@ -6,6 +6,8 @@ class ProfileUpdateScreenModel
     extends FlutterFlowModel<ProfileUpdateScreenWidget> {
   ///  State fields for stateful widgets in this page.
 
+  // Stores action output result for [Custom Action - getLoginUserUid] action in ProfileUpdateScreen widget.
+  String? loginUserUidActionOutput;
   // State field(s) for displayName widget.
   FocusNode? displayNameFocusNode;
   TextEditingController? displayNameTextController;

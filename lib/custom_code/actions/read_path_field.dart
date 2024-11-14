@@ -17,8 +17,8 @@ Future<dynamic> readPathField(
 ) async {
   try {
     final data = await database.ref(path).child(field).get();
-    dog("readData() returns: $data");
-    print("readData() returns: $data");
+    // dog("readData() returns: $data");
+    // print("readData() returns: $data");
     if (data.exists == false) {
       return null;
     }

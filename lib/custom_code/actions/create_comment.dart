@@ -38,7 +38,7 @@ Future createComment(
     parentKey = parent['key'];
   }
 
-  dog('--> createComment rootKey: $rootKey, parentKey: $parentKey, content: $content, urls: $urls');
+  // dog('--> createComment rootKey: $rootKey, parentKey: $parentKey, content: $content, urls: $urls');
 
   try {
     final ref = await Comment.create(

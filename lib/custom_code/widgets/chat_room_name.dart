@@ -48,12 +48,13 @@ class _ChatRoomNameState extends State<ChatRoomName> {
           final user = UserData.fromJson(data, uid);
           return Row(
             children: [
-              UserAvatar(uid: user.uid),
+              UserAvatar(
+                uid: user.uid,
+                radius: 22,
+              ),
               const SizedBox(width: 16),
               Expanded(
-                child: Text(
-                  user.displayName,
-                ),
+                child: UserDisplayName(uid: uid, fontSize: 22),
               ),
             ],
           );

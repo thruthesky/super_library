@@ -43,8 +43,8 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
   Widget build(BuildContext context) {
     return MyDoc(builder: (data) {
       if (data == null) {
-        return const Center(
-          child: Text('Please sign in to view chat rooms'),
+        return Center(
+          child: Text('Please sign in to view chat rooms'.tr(context)),
         );
       }
 
@@ -69,9 +69,9 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                     if (context.mounted) {
                       final re = await confirm(
                         context: context,
-                        title: const Text('New chat'),
-                        message:
-                            const Text('Do you want to join this chat room?'),
+                        title: Text('New chat'.tr(context)),
+                        message: Text(
+                            'Do you want to join this chat room?'.tr(context)),
                       );
                       if (re != true) {
                         return;
@@ -109,6 +109,7 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                             uid: ChatService.instance.getOtherUid(join.roomId),
                             width: 60,
                             height: 60,
+                            radius: 24,
                           )
                         else ...[
                           Stack(
@@ -119,7 +120,7 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                                 height: 60,
                                 decoration: BoxDecoration(
                                   // color: FlutterFlowTheme.of(context).tertiary,
-                                  borderRadius: BorderRadius.circular(30),
+                                  borderRadius: BorderRadius.circular(24),
                                   border: Border.all(
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
@@ -128,7 +129,7 @@ class _ChatRoomListViewState extends State<ChatRoomListView> {
                                 ),
                                 child: !join.iconUrl.isNullOrEmpty
                                     ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(30),
+                                        borderRadius: BorderRadius.circular(24),
                                         child: CachedNetworkImage(
                                           imageUrl: join.iconUrl!,
                                           width: 60,

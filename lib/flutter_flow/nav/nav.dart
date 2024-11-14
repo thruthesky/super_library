@@ -142,6 +142,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.String,
             ),
           ),
+        ),
+        FFRoute(
+          name: 'FeedScreen',
+          path: '/feedScreen',
+          builder: (context, params) => const FeedScreenWidget(),
+        ),
+        FFRoute(
+          name: 'PostDetailsScreenCopy',
+          path: '/postDetailsScreenCopy',
+          builder: (context, params) => PostDetailsScreenCopyWidget(
+            data: params.getParam(
+              'data',
+              ParamType.JSON,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

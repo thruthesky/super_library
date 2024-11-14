@@ -72,16 +72,17 @@ class _MenuScreenWidgetState extends State<MenuScreenWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
                 child: SizedBox(
                   width: 120.0,
                   height: 120.0,
                   child: custom_widgets.UserAvatar(
                     width: 120.0,
                     height: 120.0,
-                    uid: '-',
+                    uid: _model.loginUserUidState,
                     radius: 64.0,
+                    blockStatus: false,
                   ),
                 ),
               ),

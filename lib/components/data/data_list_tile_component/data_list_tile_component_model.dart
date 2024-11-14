@@ -6,6 +6,16 @@ import 'package:flutter/material.dart';
 
 class DataListTileComponentModel
     extends FlutterFlowModel<DataListTileComponentWidget> {
+  ///  Local state fields for this component.
+
+  List<String> urls = [];
+  void addToUrls(String item) => urls.add(item);
+  void removeFromUrls(String item) => urls.remove(item);
+  void removeAtIndexFromUrls(int index) => urls.removeAt(index);
+  void insertAtIndexInUrls(int index, String item) => urls.insert(index, item);
+  void updateUrlsAtIndex(int index, Function(String) updateFn) =>
+      urls[index] = updateFn(urls[index]);
+
   ///  State fields for stateful widgets in this component.
 
   // Model for UserAvatarComponent component.

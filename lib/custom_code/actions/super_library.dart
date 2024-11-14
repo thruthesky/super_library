@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 /// Super Library
 ///
-/// Last edit: Nov 9, 2024. 16:08PM
+/// Last edit: Nov 14, 2024. 10:31PM
 import 'dart:io';
 import 'dart:async';
 import 'dart:developer';
@@ -40,6 +40,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '/flutter_flow/internationalization.dart';
+import '/custom_code/actions/locale_api.dart';
 
 /// AuthStateChanges
 ///
@@ -154,10 +155,10 @@ extension BuildContextThemeExtension on BuildContext {
   tr(dynamic what) {
     if (what is Map) {
       final key = what.toString();
-      TranslationService.instance.add({key: what as Map<String, String>});
-      return TranslationService.instance.tr(this, key);
+      LocaleService.instance.add({key: what as Map<String, String>});
+      return LocaleService.instance.tr(this, key);
     } else if (what is String) {
-      return TranslationService.instance.tr(this, what);
+      return LocaleService.instance.tr(this, what);
     } else {
       throw 'context.tr() only accepts Map<String, String> or String';
     }
@@ -589,16 +590,16 @@ class ChatRoom {
       name: json[field.name] ?? '',
       description: json[field.description] ?? '',
       iconUrl: json[field.iconUrl],
-      open: json[field.open],
+      open: json[field.open] ?? false,
       openCreatedAt: json[field.openCreatedAt] is num
           ? DateTime.fromMillisecondsSinceEpoch(json[field.openCreatedAt])
           : DateTime.now(),
-      single: json[field.single],
-      group: json[field.group],
+      single: json[field.single] ?? false,
+      group: json[field.group] ?? false,
       users: json[field.users] is Map
           ? Map<String, bool>.from(json[field.users])
           : {},
-      masterUsers: List<String>.from(json[field.masterUsers]),
+      masterUsers: List<String>.from(json[field.masterUsers] ?? {}),
       blockedUsers: Map<String, bool>.from(json[field.blockedUsers] ?? {}),
       createdAt: json[field.createdAt] is num
           ? DateTime.fromMillisecondsSinceEpoch(json[field.createdAt])
@@ -878,7 +879,7 @@ class ChatService {
     }
 
     // Convert the single chat room id if it's single chat room.
-    roomId = convertIfUidToSingleChatRoomId(roomId);
+    roomId = getRoomIdIfUid(roomId);
 
     // Get the cached user data
     final my = await UserData.get(myUid);
@@ -915,7 +916,17 @@ class ChatService {
 
     final Map<String, Object?> updates = {};
     const f = ChatJoin.field;
-    for (String uid in room.userUids) {
+
+    /// Chat room users
+    /// To send message to the other user even if he left. Refer the [Sending a chat message](https://thruthesky.github.io/super_library/chat/#sending-a-chat-message) for the details.
+    List<String> roomUserUids = room.userUids;
+    if (roomUserUids.length != 2 && room.single && isSingleChatRoom(roomId)) {
+      // If it's single chat, add the other user's uid to the roomUserUids.
+      // roomUserUids = [myUid, getOtherUid(roomId)];
+      roomUserUids = roomId.split(singleChatRoomJoinSeparator);
+    }
+
+    for (String uid in roomUserUids) {
       // dog('sendMessage() user uid: $uid');
       if (uid == myUid) {
         // If it's my join data
@@ -1074,7 +1085,7 @@ class ChatService {
   /// - To make it clean code, it will automatically convert the other uid into
   /// chat room id. So, the developer can simply pass the other user's uid or
   /// chat room id.
-  String convertIfUidToSingleChatRoomId(String otherUid) {
+  String getRoomIdIfUid(String otherUid) {
     // If it's a node key, return it as it is.
     if (otherUid.startsWith('-')) {
       return otherUid;
@@ -1143,7 +1154,7 @@ class ChatService {
   /// - If it's single chat, add the other user information to my room's join.
   ///
   Future<void> join(String roomId) async {
-    dog("Joining into roomId: $roomId");
+    // dog("Joining into roomId: $roomId");
 
     // Check if the user is blocked by login user
     if (UserService.instance.hasBlocked(otherUidOrRoomId(roomId))) {
@@ -1175,7 +1186,7 @@ class ChatService {
     }
 
     // Hereby, [room] is ready.
-    dog("continue the join work for the room now: $room");
+    // dog("continue the join work for the room now: $room");
 
     final timestamp = await getDatabaseServerTimestamp();
     final negativeTimestamp = -1 * timestamp;
@@ -1213,7 +1224,7 @@ class ChatService {
       }
     }
 
-    dog("Joining: $joinValues");
+    // dog("Joining: $joinValues");
 
     await database.ref().update(joinValues);
 
@@ -1233,7 +1244,7 @@ class ChatService {
     required String roomId,
     required String otherUid,
   }) async {
-    dog("Inviting into roomId: $roomId, otherUid: $otherUid");
+    // dog("Inviting into roomId: $roomId, otherUid: $otherUid");
     // Prepare
     const f = ChatJoin.field;
     ChatRoom? room = await ChatRoom.get(roomId);
@@ -1264,7 +1275,7 @@ class ChatService {
       'chat/joins/$otherUid/${room.id}/${f.inviterUid}': my.uid,
       'chat/joins/$otherUid/${room.id}/${f.inviterName}': my.displayName,
     };
-    dog("Inviting: $joinValues");
+    // dog("Inviting: $joinValues");
     await database.ref().update(joinValues);
   }
 
@@ -1283,7 +1294,7 @@ class ChatService {
   ///
   /// [roomId] may be a user uid or may be the chat room id.
   Future<void> enter(String roomId) async {
-    dog("Entering into roomId: $roomId");
+    // dog("Entering into roomId: $roomId");
     // Check if the user is blocked by login user
     if (UserService.instance.hasBlocked(otherUidOrRoomId(roomId))) {
       throw SuperLibraryException('chat/enter', 'User is blocked');
@@ -1341,7 +1352,7 @@ class ChatService {
   ///     - and later when user-A is unblocking user-B,
   ///       - use this method to enter the 1:1 chat room with user-B if the chat room exsits.
   Future<bool> joinIfRoomExists(String uidOrRoomId) async {
-    final roomId = convertIfUidToSingleChatRoomId(uidOrRoomId);
+    final roomId = getRoomIdIfUid(uidOrRoomId);
     final snapshot = await roomRef(roomId).get();
     if (snapshot.exists == false) {
       return false;
@@ -1358,7 +1369,7 @@ class ChatService {
   /// - Delete the chat join data of the user.
   Future<void> leave(String uidOrRoomId) async {
     // Add your function code here!
-    final roomId = convertIfUidToSingleChatRoomId(uidOrRoomId);
+    final roomId = getRoomIdIfUid(uidOrRoomId);
 
     await joinsRef.child(roomId).remove();
     await roomRef(roomId).child('users').child(myUid).remove();
@@ -1533,12 +1544,12 @@ class Comment {
       field.depth: (depth + 1),
     };
 
-    print('comment path: ${ref.path}');
-    dog('comment: $comment');
+    // print('comment path: ${ref.path}');
+    // dog('comment: $comment');
 
     await ref.set(comment);
 
-    dog('data path: ${dataRef(rootKey).path}');
+    // dog('data path: ${dataRef(rootKey).path}');
 
     /// Increment the comment count of the root.
     await dataRef(rootKey).update({
@@ -1913,7 +1924,7 @@ class Data {
 
     DatabaseReference ref = Ref.data.push();
 
-    dog('Data.create() at: ${ref.path} with: $data');
+    // dog('Data.create() at: ${ref.path} with: $data');
     await ref.set(data);
 
     return ref;
@@ -1989,7 +2000,7 @@ class Data {
   /// It does not actually delete the data. It just sets the [deleted] field to
   /// true and sets empty to the [title] and [content],[urls] fields.
   Future<void> delete() async {
-    dog('Data.delete() at: ${ref.path}');
+    // dog('Data.delete() at: ${ref.path}');
 
     for (String url in urls) {
       await UploadService.instance.delete(url);
@@ -2342,7 +2353,7 @@ class MyDoc extends StatelessWidget {
             snapshot.hasData == false) {
           return const SizedBox.shrink();
         }
-        dog('MyDoc() snapshot.data: ${snapshot.data}, ${snapshot.data?.length}, $currentUserUid');
+        // dog('MyDoc() snapshot.data: ${snapshot.data}, ${snapshot.data?.length}, $currentUserUid');
         return builder(
             (snapshot.data ?? {}).isEmpty == true ? null : snapshot.data);
       },
@@ -2603,11 +2614,51 @@ class SitePreviewData {
   });
 }
 
+/// Display a snackbar
+snackbar(
+  BuildContext context,
+  String message, {
+  bool loading = false,
+  int duration = 8,
+  bool error = false,
+}) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: error ? FlutterFlowTheme.of(context).error : null,
+      content: Row(
+        children: [
+          if (loading)
+            const Padding(
+              padding: EdgeInsetsDirectional.only(end: 10.0),
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          Expanded(
+              child: Text(
+            message,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          )),
+        ],
+      ),
+      duration: Duration(seconds: duration),
+    ),
+  );
+}
+
 class SuperLibrary {
   static SuperLibrary? _instance;
   static SuperLibrary get instance => _instance ??= SuperLibrary._();
 
-  SuperLibrary._();
+  SuperLibrary._() {
+    LocaleService.instance.add(defaultLocales);
+  }
 
   String? databaseURL;
   FirebaseDatabase? _database;
@@ -2940,55 +2991,6 @@ ScaffoldFeatureController toastError({
   );
 }
 
-/// Text Translation Service
-class TranslationService {
-  static TranslationService? _instance;
-  static TranslationService get instance =>
-      _instance ??= TranslationService._();
-  TranslationService._() {
-    kTranslationsMap.addAll({
-      'yes': {
-        'en': 'Yes',
-        'ko': '예',
-      },
-      'no': {
-        'en': 'No',
-        'ko': '아니요',
-      },
-      'ok': {
-        'en': 'OK',
-        'ko': '확인',
-      },
-      'error': {
-        'en': 'Error',
-        'ko': '에러',
-      },
-    });
-  }
-
-  /// Add translations to the map of the Flutter Localization translations
-  add(Map<String, Map<String, String>> translations) {
-    /// make the key of the translations lowercase
-    final Map<String, Map<String, String>> lowerCaseTranslations = {};
-    translations.forEach((key, value) {
-      lowerCaseTranslations[key.toLowerCase()] = value;
-    });
-
-    kTranslationsMap.addAll(lowerCaseTranslations);
-  }
-
-  /// Returns the translation of the key
-  String tr(BuildContext context, String key) {
-    String text = FFLocalizations.of(context).getText(key.toLowerCase());
-
-    if (text.trim().isEmpty) {
-      return key;
-    } else {
-      return text;
-    }
-  }
-}
-
 /// General Upload Widget
 ///
 /// This widget is displaying an child widget and is used to upload an image,
@@ -3159,6 +3161,97 @@ class Upload extends StatelessWidget {
           }
         }
       },
+    );
+  }
+}
+
+/// UploadImage
+///
+/// This widget has a complete set of uploading image.
+///
+class UploadImage extends StatefulWidget {
+  const UploadImage({
+    super.key,
+    required this.onUpload,
+    this.initialUrl,
+    this.size = 140,
+  });
+
+  final void Function(String url) onUpload;
+  final String? initialUrl;
+  final double size;
+
+  @override
+  State<UploadImage> createState() => _UploadImageState();
+}
+
+class _UploadImageState extends State<UploadImage> {
+  String? imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    imageUrl = widget.initialUrl;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Upload.image(
+      onUpload: (url) {
+        setState(() {
+          imageUrl = url;
+        });
+        widget.onUpload(url);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imageUrl == null)
+            Icon(
+              Icons.image,
+              size: widget.size,
+            ),
+          if (imageUrl != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Container(
+                width: widget.size,
+                height: widget.size,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl!,
+                  width: widget.size,
+                  height: widget.size,
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (imageUrl == null) ...[
+                const Icon(Icons.camera_alt),
+                const SizedBox(width: 8),
+                const Text('Upload'),
+              ],
+              if (imageUrl != null)
+                TextButton.icon(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () async {
+                    await UploadService.instance.delete(imageUrl);
+                    setState(() {
+                      imageUrl = null;
+                    });
+                  },
+                  label: const Text('Delete'),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -3825,25 +3918,33 @@ class UserData {
 DatabaseReference userPhotoUrlRef(String uid) =>
     databaseUserRef(uid).child(UserData.field.photoUrl);
 
-/// [UserReady] is a builder widget that displays the child widget only when
-/// the user's document is ready.
+/// [UserReady] is a simple wrapper of [MyDoc] that rebuilds the child widget
+/// when the user's document is ready.
+///
+/// [builder] is the builder widget to be called and display the widget when
+/// when the user is signed in.
+///
+/// [notReady] is the widget (not a builder) that is displayed when the user
+/// is not signed in.
 ///
 /// To update the text that is displayed when the user is not signed in, you
 /// can update the localization.
 class UserReady extends StatelessWidget {
-  const UserReady({super.key, required this.builder});
+  const UserReady({super.key, required this.builder, this.notReady});
 
   final Widget Function() builder;
+  final Widget? notReady;
 
   @override
   Widget build(BuildContext context) {
     return MyDoc(
       builder: (my) => my == null
-          ? Center(
-              child: Text(
-                'Please, sign in first'.tr(context),
-              ),
-            )
+          ? notReady ??
+              Center(
+                child: Text(
+                  'Please, sign in first'.tr(context),
+                ),
+              )
           : builder(),
     );
   }
@@ -3856,7 +3957,7 @@ class UserService {
   static UserService? _instance;
   static UserService get instance => _instance ??= UserService._();
   UserService._() {
-    dog('UserService._() began to initialize');
+    // dog('UserService._() began to initialize');
     _listenAndMirrorUserData();
     initialized = true;
   }
@@ -3980,13 +4081,13 @@ class UserService {
     mirrorSubscription =
         fa.FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
-        dog('Super library -> _listenAndMirrorUserData() -> User is not signed in. So, return');
+        // dog('Super library -> _listenAndMirrorUserData() -> User is not signed in. So, return');
         firestoreUserData.clear();
         changes.add({});
         return;
       }
 
-      dog('Super library -> _listenAndMirrorUserData() -> User is signed in. So, mirror the user data');
+      // dog('Super library -> _listenAndMirrorUserData() -> User is signed in. So, mirror the user data');
 
       userDocumentSubscription?.cancel();
       // ! Warning: careful for recursive call by updating the user document and listening to it.
@@ -4225,44 +4326,6 @@ class ValueListView extends StatelessWidget {
       },
     );
   }
-}
-
-/// Display a snackbar
-snackbar(
-  BuildContext context,
-  String message, {
-  bool loading = false,
-  int duration = 8,
-  bool error = false,
-}) {
-  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: error ? FlutterFlowTheme.of(context).error : null,
-      content: Row(
-        children: [
-          if (loading)
-            const Padding(
-              padding: EdgeInsetsDirectional.only(end: 10.0),
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          Expanded(
-              child: Text(
-            message,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          )),
-        ],
-      ),
-      duration: Duration(seconds: duration),
-    ),
-  );
 }
 
 // End custom action code

@@ -22,3 +22,7 @@ export '/screens/chat/chat_room_list_screen/chat_room_list_screen_widget.dart'
     show ChatRoomListScreenWidget;
 export '/screens/user/public_profile_screen/public_profile_screen_widget.dart'
     show PublicProfileScreenWidget;
+export '/screens/feed/feed_screen/feed_screen_widget.dart'
+    show FeedScreenWidget;
+export '/screens/forum/post_details_screen_copy/post_details_screen_copy_widget.dart'
+    show PostDetailsScreenCopyWidget;

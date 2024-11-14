@@ -54,7 +54,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   StreamSubscription<DatabaseEvent>? roomDataSubscription;
 
-  String get roomId => ChatService.instance.convertIfUidToSingleChatRoomId(
+  String get roomId => ChatService.instance.getRoomIdIfUid(
         widget.uidOrRoomId,
       );
 
@@ -69,7 +69,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
   }
 
   init() async {
-    dog('ChatMessageListView.init()');
+    // dog('ChatMessageListView.init()');
     await ChatService.instance.join(roomId);
     await ChatService.instance.enter(roomId);
 
@@ -153,6 +153,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                           uid: message.senderUid,
                           width: iconSize,
                           height: iconSize,
+                          radius: iconSize / 2.34,
                         ),
                         SizedBox(width: iconPadding),
                       ],
@@ -326,8 +327,8 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
         );
       },
       emptyBuilder: () {
-        return const Center(
-          child: Text('No messages yet'),
+        return Center(
+          child: Text('No chat messages yet'.tr(context)),
         );
       },
     );

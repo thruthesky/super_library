@@ -40,9 +40,9 @@ class _DataChangeListenerState extends State<DataChangeListener> {
     super.initState();
 
     stream = database.ref(widget.path).onValue.listen((event) async {
-      dog(event.snapshot.value);
+      // dog(event.snapshot.value);
 
-      print("DataChangeListener -> ${event.snapshot.value}");
+      // print("DataChangeListener -> ${event.snapshot.value}");
       SchedulerBinding.instance.addPostFrameCallback((_) async {
         if (mounted && event.snapshot.exists == false) {
           widget.onChange(null);

@@ -8,20 +8,12 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/custom_code/actions/super_library.dart';
+import '/custom_code/actions/feed_api.dart';
 
-Future likeExist(
-  String path,
-  Future Function(bool value) callback,
+Future updateFeed(
+  BuildContext context,
+  dynamic data,
 ) async {
-  if (currentUserUid == null) {
-    return callback(false);
-  }
-
-  final event = await LikeService.instance.likeRef(path).once();
-  if (event.snapshot.exists) {
-    callback(true);
-    return;
-  }
-  callback(false);
+  // Add your function code here!
+  await Feed.update(data);
 }

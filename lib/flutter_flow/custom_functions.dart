@@ -51,3 +51,9 @@ List<String> keys(dynamic json) {
   if (json == null) return [];
   return Map<String, dynamic>.from(json).keys.toList();
 }
+
+List<String> listStringToListImage(List<String>? stringList) {
+  if (stringList == null) return [];
+
+  return stringList;
+}

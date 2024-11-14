@@ -245,7 +245,7 @@ class ThemeTypography extends Typography {
         'Inter',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 12.0,
+        fontSize: 11.0,
       );
   String get bodyLargeFamily => 'Inter';
   TextStyle get bodyLarge => GoogleFonts.getFont(

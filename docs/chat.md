@@ -29,6 +29,7 @@
 - [Widgets](#widgets)
   - [ChatMessageListView](#chatmessagelistview)
     - [Callback functions on ChatMessageListView](#callback-functions-on-chatmessagelistview)
+  - [Display no of new messages](#display-no-of-new-messages)
 - [Developer's guide](#developers-guide)
   - [Testing chat room icon](#testing-chat-room-icon)
 - [Known Issues](#known-issues)
@@ -112,6 +113,8 @@ This process ensures that users have control over who can send them messages and
                   - But the message is not delivered to B
                 - It sends a message from B to A even if A is not in the room.
         - Note that when A creates the single chat room with B, A and B are added to the `users` field.
+
+
 
 
 
@@ -385,6 +388,11 @@ Component.openChatRoomListTile = (room) => OpenChatRoomListTileWidget(
 
 
 
+## Display no of new messages
+
+
+
+
 
 
 # Developer's guide
@@ -420,8 +428,10 @@ ChatRoomIcon(
 
 ## No of Chat room message for blocked user
 
+@TODO: This clause is ambiguios. Update it more.
+
 - Login user is A, the other user id B
-    - A sent 2 message to B
+    - A sent 2 messages to B
         - The no of new messages is 2.
         - Then, A blocked B.
             - The no of new messages is still 2.

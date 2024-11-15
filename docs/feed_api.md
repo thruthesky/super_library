@@ -220,7 +220,7 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
 Feed is often use after a data was created. e.g. A user post a data, and we update the feed of this user followers.
 
-- After a `Data` is created using `createData` Custom Action. It will call the `onCreate` callback that has the `key` of Data that was created. (To know more about createData refer to [createData](data/#createdata))
+- After a `Data` is created using `createData` Custom Action. It will call the `onCreate` callback that has the `key` of Data that was created. (To know more about createData refer to [createData](/data/#createdata))
 
   ![alt text](images/feed/feed_create_data_callback.png)
 
@@ -228,7 +228,7 @@ Feed is often use after a data was created. e.g. A user post a data, and we upda
 
   ![alt text](images/feed/feed_create_data_key.png)
 
-- Then we name the Action Output Variable Name e.g. `readDataOutput`. (To know more about readData refer to [createData](data/#readdata))
+- Then we name the Action Output Variable Name e.g. `readDataOutput`. (To know more about readData refer to [readData](/data/#readdata))
 
   ![alt text](images/feed/feed_create_read.png)
 

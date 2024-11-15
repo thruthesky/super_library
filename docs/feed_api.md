@@ -220,7 +220,9 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
 Feed is often use after a data was created. e.g. A user post a data, then we create the feed of this user followers using the information from the data.
 
-Created feeds will have the following fields and will be added to other user's feed: /follow/feed/$otherUid/$dataKey
+Created feeds will have the following fields and will be added to followers feed of the current user:
+
+/follow/feed/$otherUid/$dataKey
 
 ```json
 /follow

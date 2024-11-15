@@ -1,0 +1,2015 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../dart_extensions/">
+      
+      
+        <link rel="next" href="../design/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>Data - Super Library</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Super Library" class="md-header__button md-logo" aria-label="Super Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Super Library
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Super Library" class="md-nav__button md-logo" aria-label="Super Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Super Library
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Super Library
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../best_practice/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Best practices
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blocking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blocking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building_with_flutter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flutter App Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud_functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cloud Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comment API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core_developer_guide_line/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Core Developer’s Guideline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_actions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Actions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dart_extensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart Extensions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suggested Use Cases
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Database Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields-of-a-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fields of a Node
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openning-data-list-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Openning data list screen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-data-group-by-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      List data group by category
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="List data group by category">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-design-on-data-list-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom design on data list screen
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-data-value-in-custom-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display data value in custom design
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#displaying-data-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Displaying Data Details
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reactivity-of-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reactivity of the Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reactivity of the Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datachange-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataChange widget
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-custom-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data custom actions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data custom actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      createData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      readData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteData
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developers-guide-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer's guide line
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer's guide line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#to-get-data-of-a-category-in-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      To get data of a category in order
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developer_guideline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Developer Guideline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feed_api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feed API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../known_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../localization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Localization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../push_notifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Push notifications
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick_start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reporting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sample Projects
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security_rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../todo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TODOs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trouble_shooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trouble Shooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29" >
+        
+          
+          <label class="md-nav__link" for="__nav_29" id="__nav_29_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Common library
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_29_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29">
+            <span class="md-nav__icon md-icon"></span>
+            Common library
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Library
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_2" id="__nav_29_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Components
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_2">
+            <span class="md-nav__icon md-icon"></span>
+            Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/components/country_picker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Country Picker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_3" id="__nav_29_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom actions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_3">
+            <span class="md-nav__icon md-icon"></span>
+            Custom actions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_actions/package_info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Package Info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_actions/show_app_update_dialog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    showAppUpdateDialog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_4" id="__nav_29_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_4">
+            <span class="md-nav__icon md-icon"></span>
+            Custom functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_functions/formatInternationalPhoneNumber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    formatInternationalPhoneNumber function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_5" id="__nav_29_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom widgets
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_5">
+            <span class="md-nav__icon md-icon"></span>
+            Custom widgets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_widgets/comm_circular_progress_indicator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CommonCircularProgressIndicator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suggested Use Cases
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Database Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields-of-a-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fields of a Node
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openning-data-list-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Openning data list screen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-data-group-by-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      List data group by category
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="List data group by category">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-design-on-data-list-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom design on data list screen
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-data-value-in-custom-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display data value in custom design
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#displaying-data-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Displaying Data Details
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reactivity-of-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reactivity of the Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reactivity of the Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datachange-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataChange widget
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-custom-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data custom actions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data custom actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      createData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readdata" class="md-nav__link">
+    <span class="md-ellipsis">
+      readData
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletedata" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteData
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developers-guide-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Developer's guide line
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Developer's guide line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#to-get-data-of-a-category-in-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      To get data of a category in order
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="data">Data</h1>
+<p>Imagine you are building a social app that displays users' tweets, photos, and comments on a scrollable main screen. If your app grows, using Firestore can become expensive due to the costs associated with reading, writing, and downloading the size of documents from Firestore.</p>
+<p>Using the Realtime Database is faster, cheaper, and simpler.</p>
+<ul>
+<li><a href="#data">Data</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#suggested-use-cases">Suggested Use Cases</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#database-structure">Database Structure</a><ul>
+<li><a href="#security">Security</a></li>
+<li><a href="#data-format">Data Format</a></li>
+<li><a href="#example-structure">Example Structure</a></li>
+<li><a href="#fields-of-a-node">Fields of a Node</a></li>
+</ul>
+</li>
+<li><a href="#openning-data-list-screen">Openning data list screen</a></li>
+<li><a href="#create-a-data">Create a data</a></li>
+<li><a href="#list-data-group-by-category">List data group by category</a><ul>
+<li><a href="#custom-design-on-data-list-screen">Custom design on data list screen</a></li>
+<li><a href="#display-data-value-in-custom-design">Display data value in custom design</a></li>
+</ul>
+</li>
+<li><a href="#displaying-data-details">Displaying Data Details</a></li>
+<li><a href="#reactivity-of-the-data">Reactivity of the Data</a><ul>
+<li><a href="#datachange-widget">DataChange widget</a></li>
+</ul>
+</li>
+<li><a href="#data-custom-actions">Data custom actions</a><ul>
+<li><a href="#createdata">createData</a></li>
+<li><a href="#updatedata">updateData</a></li>
+<li><a href="#readdata">readData</a></li>
+<li><a href="#deletedata">deleteData</a></li>
+</ul>
+</li>
+<li><a href="#developers-guide-line">Developer's guide line</a><ul>
+<li><a href="#to-get-data-of-a-category-in-order">To get data of a category in order</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="features">Features</h2>
+<p>The <code>Data</code> provides default CRUD operations for the Realtime Database:</p>
+<ul>
+<li><strong>readData</strong>: Custom action to read data.</li>
+<li><strong>createData</strong>: Custom action to create data.</li>
+<li><strong>updateData</strong>: Custom action to update data.</li>
+<li><strong>deleteData</strong>: Custom action to delete data.</li>
+<li><strong>DataListView</strong>: Widget to display a list of values in a data group.</li>
+<li><strong>DataChange</strong>: Widget that calls a callback action when the data changes. It is used to display the changes of the data on the screen.</li>
+</ul>
+<p>With the <code>Comment</code>, you can easily build blog or forum community apps. Refer to the <code>Comment</code> documentation for more details.</p>
+<h2 id="suggested-use-cases">Suggested Use Cases</h2>
+<p>If you want to build the following features in your apps, <code>Data</code> functionality is good;</p>
+<ul>
+<li>Blogs, News, Reminders</li>
+<li>Forum (Built-in BBS) based community apps</li>
+<li>Social apps with listing/scrolling activity wall screen</li>
+<li>Shopping mall apps</li>
+<li>Any functionality that related in creating and listing articles</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;.read&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;$key&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;.write&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;newData.child(&#39;uid&#39;).val() === auth.uid || ( data.child(&#39;uid&#39;).val() === auth.uid &amp;&amp; !newData.exists() )&quot;</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;.validate&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;newData.val().length &gt; 0&quot;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">},</span>
+</span></code></pre></div>
+<h2 id="database-structure">Database Structure</h2>
+<p>To achieve the concept of <code>SSOT</code> (Single Source of Truth), we save all data in the <code>/data</code> node in the Realtime Database.</p>
+<h3 id="security">Security</h3>
+<ul>
+<li>To prevent attacks that involve writing excessively large data (e.g., very long titles or content), you can add security rules to limit the size of these fields.<ul>
+<li>By default, the title is limited in <code>2048</code> letters and the content is limited in <code>65536</code> letters by the security rules. You can change them and add more rules.</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-format">Data Format</h3>
+<ul>
+<li>Data in the Realtime Database is stored in JSON format.</li>
+<li>The first level of keys in the <code>/data</code> node are the IDs of the data entries.</li>
+<li>The second level of keys are the properties of each data entry.</li>
+</ul>
+<h3 id="example-structure">Example Structure</h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">/da</span><span class="kc">ta</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;key-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nt">&quot;property-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nt">&quot;property-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">&quot;key-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="nt">&quot;property-1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="nt">&quot;property-2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="fields-of-a-node">Fields of a Node</h3>
+<ul>
+<li><strong>uid</strong>: The creator's user ID.</li>
+<li><strong>category</strong>: The category of the data, ordered by recent data(article).</li>
+<li><strong>order</strong>: The order of the data.</li>
+<li><strong>title</strong>: The title of the data.</li>
+<li><strong>content</strong>: The content of the data.</li>
+<li><strong>urls</strong>: URLs of photos and files associated with the data.</li>
+<li><strong>createdAt</strong>: The creation timestamp.</li>
+<li><strong>updatedAt</strong>: The update timestamp.</li>
+<li><strong>custom fields</strong>: You can add as much extra fields as you want.</li>
+</ul>
+<p>Example representation:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="err">/da</span><span class="kc">ta</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="err">/key</span><span class="mi">-1</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;qna-1630000000000&quot;</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-1630000000000</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">&quot;uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;title&quot;</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">&quot;urls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;url1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;url2&quot;</span><span class="p">],</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1630000000000</span><span class="p">,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">&quot;updatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1630000000000</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="openning-data-list-screen">Openning data list screen</h2>
+<ul>
+<li>Create a screen to list the data.<ul>
+<li>Let's name it as <code>DataListScreen</code>.</li>
+<li>Add a required page parameter named <code>category</code> with the type of String.</li>
+</ul>
+</li>
+<li>Insert the <code>DataListView</code> in the body passing the <code>category</code> page parameter.</li>
+<li>Add a create button on the app bar.<ul>
+<li>When the user taps, open the <code>DataCreateScreen</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-data">Create a data</h2>
+<ul>
+<li>Create a screen to create a data.<ul>
+<li>Let's name it as <code>DataCreateScreen</code>.</li>
+<li>Add a required page parameter named <code>category</code> with the type of String.</li>
+</ul>
+</li>
+<li>Add some text fields with submit button.<ul>
+<li>Text field of title, content would be needed.</li>
+<li>You can add any extra fields(key/value pair) into the data.</li>
+</ul>
+</li>
+<li>When the user taps on the submit button, you can connect the <code>createData</code> custom action like below.<ul>
+<li>For category field, pass the category of page parameter.</li>
+<li>For title, pass the input text of title.</li>
+<li>For content, pass the input text of content.</li>
+<li>For extra field, you need to pass an JSON object. It is a good idea to create a <code>Create Map</code> to save extra keys/values into the data.</li>
+<li>For urls field, you need to pass a List of String. It can by an empty List.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/data_create_cutsom_action_image.png" /></p>
+<ul>
+<li>Add <code>onCreate</code> action to navigate back to the DataListScreen.</li>
+<li>Add <code>onFailure</code> action to dsiplay the error.</li>
+</ul>
+<h2 id="list-data-group-by-category">List data group by category</h2>
+<ul>
+<li>
+<p>Create a screen named <code>DataListScreen</code> to display the list of a data group by category.</p>
+<ul>
+<li>Add a required page parameter named <code>category</code> with the type of String.</li>
+</ul>
+</li>
+<li>
+<p>Add <code>DataListView</code> super library widget into the body</p>
+</li>
+<li>Pass the category page parameter to the widget.</li>
+</ul>
+<h3 id="custom-design-on-data-list-screen">Custom design on data list screen</h3>
+<ul>
+<li>If you want to customize the design in <code>DataListView</code> with your component.</li>
+<li>Create a component named as <code>AppDataListTile</code>. In fact, it can be any name.</li>
+<li>Simply pass the <code>AppDataListTile</code> to widget builder of the <code>DataListView</code> custom widget.<ul>
+<li>Display the data information in the <code>AppDataListTile</code> component. It's really upto you what information you want to show in your custom design.</li>
+<li>Add the <code>data</code> parameter of <code>JSON</code> type to your <code>AppDataListTile</code> component.</li>
+</ul>
+</li>
+</ul>
+<h3 id="display-data-value-in-custom-design">Display data value in custom design</h3>
+<ul>
+<li>
+<p>Data passed to your component is in JSON. So, you can use the <code>JSON path</code> to display what's in the data. For instance</p>
+<ul>
+<li><code>$.title</code>: the title of the data</li>
+<li><code>$.content</code>: the content of the data</li>
+<li><code>$.uid</code>: the uid of the creator.<ul>
+<li>You can display the creator's avatar by passing the uid to <code>UserAvatar</code>.</li>
+<li>You can dispaly the creator's display name by passing the uid to <code>DisplayName</code>.</li>
+</ul>
+</li>
+<li><code>$.createdAt</code>: the timestamp of the data creation.</li>
+<li><code>$.urls</code>: the string array of urls that are saved with the data.</li>
+<li><code>$.category</code>: the category.</li>
+</ul>
+</li>
+<li>
+<p>You can add and display whatever key/value pairs as much as you want.</p>
+<ul>
+<li>Below is an example of showing the custom key/value data.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/data_display_custom_data.png" /></p>
+<h2 id="displaying-data-details">Displaying Data Details</h2>
+<p>You can design the UI/UX based on your specific needs.</p>
+<p>To display full details of the data when tapped from the <code>DataListView</code> or a custom component, follow these steps:</p>
+<ol>
+<li><strong>Create a Screen</strong>: </li>
+<li>Name it <code>DataViewScreen</code>.</li>
+<li>
+<p>Add a required page parameter named <code>data</code> of the JSON type.</p>
+</li>
+<li>
+<p><strong>Open DataViewScreen</strong>:</p>
+</li>
+<li>
+<p>When an item is tapped in the <code>DataListView</code>, open <code>DataViewScreen</code> with the <code>data</code> parameter.</p>
+</li>
+<li>
+<p><strong>Design DataViewScreen</strong>:</p>
+</li>
+<li>Customize the screen to display the data details.</li>
+<li>Consider adding the following buttons:<ul>
+<li><code>like</code></li>
+<li><code>reply</code></li>
+<li><code>chat</code></li>
+<li><code>block</code></li>
+<li><code>report</code></li>
+<li><code>edit</code></li>
+<li><code>delete</code></li>
+</ul>
+</li>
+<li>Add a tap action on the user's profile photo to open the user's public profile screen.</li>
+<li>Add a tap action to show the original image if displaying thumbnails.</li>
+</ol>
+<h2 id="reactivity-of-the-data">Reactivity of the Data</h2>
+<h3 id="datachange-widget">DataChange widget</h3>
+<p>The <code>DataChange</code> widget listens and rebuild your component whenever the data changes.</p>
+<p>For instance, you build a forum app</p>
+<ul>
+<li>To reflect the changes of the title,</li>
+<li>Create a component named <code>PostTitle</code> with a String <code>title</code> parameter.<ul>
+<li>And display the <code>title</code> in the component.</li>
+</ul>
+</li>
+<li>
+<p>Then, add the <code>DataChange</code> widget on your screen(or a component)</p>
+<ul>
+<li>Passing the <code>dataKey</code> as the data key,</li>
+<li>and the <code>field</code> as <code>title</code>.</li>
+<li>Then, add the <code>PostTitle</code> component to the <code>builder</code> of the <code>DataChange</code> widget.</li>
+<li>pass the widget builder parameter <code>data</code> to <code>title</code> parameter of <code>PostTile</code> </li>
+</ul>
+</li>
+<li>
+<p>To reflect the content and other properties of the data,</p>
+</li>
+<li>Create a component named <code>PostData</code> with a JSON <code>data</code> parameter.<ul>
+<li>And display the properties of the data by accessing <code>$.title</code>, <code>$.content</code>, <code>$.uid</code>, <code>$.createdAt</code>, <code>$.urls</code>, and more.</li>
+<li>Since the parameter of the <code>data</code> is JSON and it has the whole data, you can display whatever you like.</li>
+</ul>
+</li>
+<li>Then, add the <code>DataChange</code> widget on yor screen(or a comment)<ul>
+<li>Passing the <code>dataKey</code> as the data key,</li>
+<li>and the <code>field</code> as null</li>
+<li>Then pass the <code>PostData</code> to the <code>builder</code> of the <code>DataChange</code> widget.</li>
+<li>Pass the widget builder parameter <code>data</code> to the <code>data</code> parameter of the  <code>PostData</code>.</li>
+</ul>
+</li>
+</ul>
+<p>You can use the <code>DataChange</code> to listen for the realtime update of the data.</p>
+<h2 id="data-custom-actions">Data custom actions</h2>
+<h3 id="createdata">createData</h3>
+<h3 id="updatedata">updateData</h3>
+<h3 id="readdata">readData</h3>
+<ul>
+<li>You may use <code>readData</code> custom action to read the data on data update screen.</li>
+</ul>
+<h3 id="deletedata">deleteData</h3>
+<ul>
+<li><strong>onDelete</strong>: this callback action will be called if the data has been deleted.</li>
+<li><strong>onFailure</strong>: this callback action will be called if the deletion has failed.</li>
+</ul>
+<h2 id="developers-guide-line">Developer's guide line</h2>
+<h3 id="to-get-data-of-a-category-in-order">To get data of a category in order</h3>
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">final</span><span class="w"> </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PostService</span><span class="p">.</span><span class="n">instance</span><span class="p">.</span><span class="n">postsRef</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="p">.</span><span class="n">orderByChild</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p">.</span><span class="n">startAt</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">$</span><span class="n">category</span><span class="s1">-&#39;</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">.</span><span class="n">endAt</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">$</span><span class="n">category</span><span class="s1">-9999999999999999999999&#39;</span><span class="p">);</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="kd">final</span><span class="w"> </span><span class="n">snapshot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">await</span><span class="w"> </span><span class="n">ref</span><span class="p">.</span><span class="kd">get</span><span class="p">();</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">children</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;v: </span><span class="si">${</span><span class="n">v</span><span class="p">.</span><span class="n">key</span><span class="si">}</span><span class="s1">, value: </span><span class="si">${</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">Map</span><span class="p">)[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">);</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Withcenter, Inc.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/thruthesky/test" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>

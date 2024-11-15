@@ -1,0 +1,1705 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../features/">
+      
+      
+        <link rel="next" href="../known_issues/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>Feed API - Super Library</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#feed-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Super Library" class="md-header__button md-logo" aria-label="Super Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Super Library
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Feed API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Super Library" class="md-nav__button md-logo" aria-label="Super Library" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Super Library
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Super Library
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../best_practice/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Best practices
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blocking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blocking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building_with_flutter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flutter App Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloud_functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cloud Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comment API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core_developer_guide_line/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Core Developer’s Guideline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_actions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Actions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom_functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dart_extensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart Extensions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developer_guideline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Developer Guideline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Feed API
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Feed API
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suggested Use Case
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-follow-unfollow-and-isfollowing-custom-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use follow, unfollow and isFollowing custom actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-display-users-who-follow-me" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to display users who follow me
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-display-users-who-i-follow" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to display users who I follow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-createfeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use createFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-updatefeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use updateFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-deletefeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use deleteFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-list-feeds" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to list feeds
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../known_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../localization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Localization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../push_notifications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Push notifications
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick_start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reporting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sample Projects
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security_rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Security Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../todo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TODOs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trouble_shooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trouble Shooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29" >
+        
+          
+          <label class="md-nav__link" for="__nav_29" id="__nav_29_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Common library
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_29_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29">
+            <span class="md-nav__icon md-icon"></span>
+            Common library
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Common Library
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_2" id="__nav_29_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Components
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_2">
+            <span class="md-nav__icon md-icon"></span>
+            Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/components/country_picker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Country Picker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_3" id="__nav_29_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom actions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_3">
+            <span class="md-nav__icon md-icon"></span>
+            Custom actions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_actions/package_info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Package Info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_actions/show_app_update_dialog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    showAppUpdateDialog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_4" id="__nav_29_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_4">
+            <span class="md-nav__icon md-icon"></span>
+            Custom functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_functions/formatInternationalPhoneNumber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    formatInternationalPhoneNumber function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_29_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_29_5" id="__nav_29_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Custom widgets
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_29_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_29_5">
+            <span class="md-nav__icon md-icon"></span>
+            Custom widgets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_library/custom_widgets/comm_circular_progress_indicator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CommonCircularProgressIndicator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suggested Use Case
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-follow-unfollow-and-isfollowing-custom-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use follow, unfollow and isFollowing custom actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-display-users-who-follow-me" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to display users who follow me
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-display-users-who-i-follow" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to display users who I follow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-createfeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use createFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-updatefeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use updateFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-deletefeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to use deleteFeed
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-list-feeds" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to list feeds
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="feed-api">Feed API</h1>
+<p>In this document, the feed functionality for FlutterFlow is explained. If you want to work with the source coding, please refer the <a href="../developer_guideline/#feed-api">Feed API in Developer Guideline</a>.</p>
+<h2 id="features">Features</h2>
+<p>Feed API allows you to follow and unfollow users. It also gives you an option to get who follow you and who you follow.</p>
+<ul>
+<li><strong>isFollowing</strong>: Custom action to check if you are following the other user.</li>
+<li><strong>follow</strong>: Custom action to follow other user.</li>
+<li>
+<p><strong>unfollow</strong>: Custom action to unfollow other user you are following.</p>
+</li>
+<li>
+<p><strong>getWhoFollowMe</strong>: Custom action to get a list of users who follow me.</p>
+</li>
+<li><strong>getWhoIFollow</strong>: Custom action to get a list of users who I follow.</li>
+<li><strong>createFeed</strong>: Custom action to create a feed.</li>
+<li><strong>updateFeed</strong>: Custom action to update a feed.</li>
+<li><strong>deleteFeed</strong>: Custom action to delete a feed.</li>
+</ul>
+<h2 id="suggested-use-case">Suggested Use Case</h2>
+<ul>
+<li>Showing the feeds of the other users that the current user is following.</li>
+<li>Showing a button to follow/unfollow the other user.</li>
+<li>Display who follow the user and who the user follows.</li>
+<li>Create Feed after a Data is created.</li>
+<li>Update Feed after a Data is updated.</li>
+<li>Delete Feed after a Data is deleted.</li>
+</ul>
+<h2 id="how-to-use-follow-unfollow-and-isfollowing-custom-actions">How to use follow, unfollow and isFollowing custom actions</h2>
+<ul>
+<li>Create a screen named <code>PublicProfileScreen</code>.</li>
+<li>Create a Local page state variable and named it as <code>isFollowing</code> with <code>Boolean</code> as type.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_is_following_page_state.png" /></p>
+<ul>
+<li>
+<p>Under the page <code>On Page Load</code> trigger add the <code>isFollowing</code> custom action.</p>
+</li>
+<li>
+<p><strong>otherUid</strong>: Pass the uid of the other user.</p>
+</li>
+<li>
+<p><strong>callback</strong>: This callback will return boolean if you follow or not the other user.</p>
+<p><img alt="image.png" src="../images/feed/feed_is_following_on_page_load.png" /></p>
+</li>
+<li>
+<p>Inside the <code>callback</code> action, add an action that will update the local page state variable <code>isFollowing</code> with the return value.</p>
+<p><img alt="image.png" src="../images/feed/feed_is_following_callback.png" /></p>
+</li>
+<li>
+<p>Next, add a button on the screen and name it as <code>FollowButton</code> change the text to <code>Follow</code>.</p>
+</li>
+<li>
+<p>Select <code>FollowButton</code> widget and under the widget property panel add the custom action <code>follow</code> .</p>
+<ul>
+<li><strong>otherUid</strong>: Input the other user uid.</li>
+<li><strong>onFollow</strong>: This callback will be called if no error on follow action.</li>
+<li><strong>onFailure</strong>: This callback will trigger if theres any error on the action with an error message.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_follow.png" /></p>
+</li>
+</ul>
+<p>e.g. <strong>onFollow</strong></p>
+<ul>
+<li>(Optional) Show a snack message success follow.</li>
+<li>
+<p>Set the local page state variable <code>isFollowing</code> to true.</p>
+<p><img alt="image.png" src="../images/feed/feed_follow_on_follow.png" /></p>
+</li>
+</ul>
+<p>e.g. <strong>onFailure</strong> Show a snack message with the error message..</p>
+<p><img alt="image.png" src="../images/feed/feed_follow_on_failure.png" /></p>
+<ul>
+<li>
+<p>Next, Add a button on the screen and name it <code>UnfollowButton</code> change the text to <code>Unfollow</code>.</p>
+</li>
+<li>
+<p>Select <code>UnfollowButton</code> widget and under the widget property panel add and action and select the custom action <code>unfollow</code>.</p>
+<ul>
+<li><strong>otherUid</strong>: Input the other user uid.</li>
+<li><strong>onUnfollow</strong>: This callback will be called if no error on unfollow action.</li>
+<li><strong>onFailure</strong>: This callback will trigger if theres any error on the action with an error message.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_unfollow.png" /></p>
+</li>
+</ul>
+<p>e.g. <strong>onUnfollow</strong></p>
+<ul>
+<li>(Optional) Show a snack message success unfollow.</li>
+<li>Set the local page state variable <code>isFollowing</code> to false.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_unfollow_on_unfollow.png" /></p>
+<p>e.g. <strong>onFailure</strong> Show a snack message with the error message.</p>
+<p><img alt="image.png" src="../images/feed/feed_unfollow_on_failure.png" /></p>
+<ul>
+<li>Lastly, to show only the button that is needed. we will wrap this two button with contidinal widget. and the select the isFollowing local state for the condition.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_follow_if.png" /></p>
+<ul>
+<li>And the widget tree will look like below.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_follow_if_tree.png" /></p>
+<ul>
+<li>Run the app and it should toggle from Follow to Unfollow when the button is clicked.</li>
+</ul>
+<h2 id="how-to-display-users-who-follow-me">How to display users who follow me</h2>
+<ul>
+<li>Create a new screen named <code>WhoFollowMeScreen</code>.</li>
+<li>
+<p>Get the List of users who follow me using the <code>getWhoFollowMe</code> custom action.</p>
+</li>
+<li>
+<p>First select the page and add an action <code>On Page Load</code> trigger, then add the <code>getWhoFollowMe</code> custom action and set the <code>Action Output Variable Name</code> e.g <code>getWhoFollowMeOutput</code>.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me.png" /></p>
+</li>
+<li>
+<p>Then rebuild the current page once the data is loaded. We add another action <code>Update Page State</code> no need to set any field, just change the <code>Update Type</code> to <code>Rebuild Current Page</code>.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_rebuild.png" /></p>
+</li>
+<li>
+<p>Sample Setup to display the users who follow me.</p>
+</li>
+<li>
+<p>On the widget tree add a <code>Row Widget</code> or <code>Column Widget</code>, in this case we will use a <code>Row Widget</code>.</p>
+</li>
+<li>Inside the <code>Row widget</code> add a <code>Column Widget</code>.</li>
+<li>Inside the <code>Column Widget</code> add the <code>UserAvatarComponent</code> and <code>UserDisplayNameComponent</code>.</li>
+<li>
+<p>Your Widget Tree will look like below.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_tree.png" /></p>
+</li>
+<li>
+<p><strong>Important!</strong> To avoid null error, first we need to check if the <code>getWhoFollowMeOutput</code> Action output has value. You can either hide the row when the output is not set or you can wrap the row with conditional widget and display empty message if the output is not set or empty.</p>
+</li>
+<li>
+<p>In this example we will just hide the Row if the output is not set.</p>
+</li>
+<li>
+<p>First Select the <code>Row Widget</code>,</p>
+</li>
+<li>
+<p>Under the widget properties, enable the visibility set the condition by navigating to action output, select <code>getWhoFollowMeOutput</code> and from the available option select <code>Is Set and Not Empty</code> and confirm.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_row_visibility.png" /></p>
+</li>
+<li>
+<p>Next to use the <code>getWhoFollowMeOutput</code> action output, on the Property Panel click the 4th Tab (Generate Dynamic Children tab).</p>
+</li>
+<li>Input Variable Name. e.g. <code>whoFollowMe</code></li>
+<li>Next set the <code>Value</code> by Navigating to <code>Action Outputs</code> and in the Available Options select the <code>getWhoFollowMeOutput</code> that we set from the <code>On Page Load</code> trigger and click confirm.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_generate_children.png" /></p>
+<ul>
+<li>Then click <code>Save</code>, this will promt that this action will generate its children dynamically and click <code>Ok</code>.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_generate_children_confirm.png" /></p>
+<ul>
+<li>Now we can use the <code>whoFollowMe</code> variable inside the UserAvatarComponent and UserDisplayNameComponent.</li>
+<li>
+<p>Select the <code>UserAvatarComponent</code> from the widget tree</p>
+</li>
+<li>
+<p>Set the variable for the <code>uid</code>, select the <code>whoFollowMe Item</code> from the source.</p>
+<p><img alt="alt text" src="../images/feed/feed_get_who_follow_me_item.png" /></p>
+</li>
+<li>
+<p>First Available Options select <code>JSON Path</code>.</p>
+</li>
+<li>For the JSON Path input <code>$.uid</code>.</li>
+<li>
+<p>Then on the next Available Options select <code>No Further Changes</code>.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_avatar.png" /></p>
+</li>
+<li>
+<p>Do the same with the <code>UserDisplayNameComponent</code>.</p>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_name.png" /></p>
+<ul>
+<li>Your canvas should look like this. Run the app and if you have followers, then it should display the avatar and display name of the followers.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_follow_me_canvas.png" /></p>
+<h2 id="how-to-display-users-who-i-follow">How to display users who I follow</h2>
+<ul>
+<li>Create another screen named <code>WhoIFollowScreen</code>.</li>
+<li>
+<p>Get the List of users who I follow using the <code>getWhoIFollow</code> custom action.</p>
+</li>
+<li>
+<p>Select the page then add an action <code>On Page Load</code> trigger, then add the <code>getWhoIFollow</code> custom action and set the <code>Action Output Variable Name</code> e.g <code>getWhoIFollowOutput</code>.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow.png" /></p>
+</li>
+<li>
+<p>Then rebuild the current page once the data is loaded. We add another action <code>Update Page State</code> no need to set any field, just change the <code>Update Type</code> to <code>Rebuild Current Page</code>.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_rebuild.png" /></p>
+</li>
+<li>
+<p>Sample Setup to display the users who I follow.</p>
+</li>
+<li>
+<p>This time we will use <code>Column Widget</code>, since newly created screen has <code>Column Widget</code> we dont need to add anymore.</p>
+</li>
+<li>Inside the <code>Column Widget</code>, add a <code>Row Widget</code>.</li>
+<li>Then inside the <code>Row Widget</code> add the <code>UserAvatarComponent</code> and <code>UserDisplayNameComponent</code>.</li>
+<li>
+<p>Your Widget Tree will look like below.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_tree.png" /></p>
+</li>
+<li>
+<p><strong>Important!</strong> To avoid null error, first we need to check if the <code>getWhoIFollowOutput</code> Action output has value. You can either hide the Column when the output is not set or you can wrap the Column with conditional widget and display empty message if the output is not set or empty.</p>
+</li>
+<li>
+<p>First Select the <code>Column Widget</code></p>
+</li>
+<li>
+<p>Under the widget properties, enable the visibility set the condition by navigating to action output, select <code>getWhoIFollowOutput</code> and from the available option select <code>Is Set and Not Empty</code> and confirm.</p>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_column_visibility.png" /></p>
+<ul>
+<li>Next to use the <code>getWhoIFollowOutput</code> action output, on the Property Panel click the 4th Tab (Generate Dynamic Children tab).</li>
+<li>Input Variable Name. e.g. <code>whoIFollow</code></li>
+<li>
+<p>Next set the <code>Value</code> by Navigating to <code>Action Outputs</code> and in the Available Options select the <code>getWhoIFollowOutput</code> that we set from the <code>On Page Load</code> trigger and click confirm.</p>
+</li>
+<li>
+<p>Then click <code>Save</code>, this will promt that this action will generate its children dynamically and click <code>Ok</code>.</p>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_generate_children_confirm.png" /></p>
+<ul>
+<li>
+<p>Now we can use the <code>whoIFollow</code> variable inside the UserAvatarComponent and UserDisplayNameComponent.</p>
+</li>
+<li>
+<p>Select the <code>UserAvatarComponent</code> from the widget tree</p>
+</li>
+<li>
+<p>Set the variable for the <code>uid</code>, select the <code>whoFollowMe Item</code> from the source.</p>
+<p><img alt="alt text" src="../images/feed/feed_get_who_i_follow_item.png" /></p>
+</li>
+<li>
+<p>First Available Options select <code>No Further Changes</code> then confirm.</p>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_avatar.png" /></p>
+</li>
+<li>
+<p>Do the same with the <code>UserDisplayNameComponent</code>.</p>
+</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_name.png" /></p>
+<ul>
+<li>Your canvas should look like this. Run the app and if you have followers, then it should display the avatar and display name of the followers.</li>
+</ul>
+<p><img alt="image.png" src="../images/feed/feed_get_who_i_follow_canvas.png" /></p>
+<h2 id="how-to-use-createfeed">How to use createFeed</h2>
+<p>Feed is often use after a data was created. e.g. A user post a data, then we create the feed of this user followers using the information from the data.</p>
+<p>Created feeds will have the following fields and will be added to followers feed of the current user:</p>
+<p>/follow/feed/$otherUid/$dataKey</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="err">/</span><span class="kc">f</span><span class="err">ollow</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="err">/</span><span class="kc">fee</span><span class="err">d</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="err">/$o</span><span class="kc">t</span><span class="err">herUid</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">            </span><span class="err">/$da</span><span class="kc">ta</span><span class="err">Key</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">                </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">                    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data content&quot;</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">                    </span><span class="nt">&quot;createdAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data createdAt&quot;</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">                    </span><span class="nt">&quot;displayName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Author display name&quot;</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">                    </span><span class="nt">&quot;photoUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Author photo url&quot;</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">                    </span><span class="nt">&quot;uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Author uid&quot;</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                    </span><span class="nt">&quot;urls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;data urls&quot;</span><span class="p">,],</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">                    </span><span class="nt">&quot;updatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data updatedAt&quot;</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">                </span><span class="p">}</span>
+</span></code></pre></div>
+<ul>
+<li>After a <code>Data</code> is created using <code>createData</code> Custom Action. It will call the <code>onCreate</code> callback that has the <code>key</code> of Data that was created. (To know more about <code>createData</code> refer to <a href="/super_library/data/#createdata">createData</a>)</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_create_data_callback.png" /></p>
+<ul>
+<li>Inside the <code>onCreate</code> callback we will read the Data first by adding the Custom Action <code>readData</code> and passing the <code>key</code> from the callback parameter into the key input parameter.</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_create_data_key.png" /></p>
+<ul>
+<li>Then we name the Action Output Variable Name e.g. <code>readDataOutput</code>. (To know more about <code>readData</code> refer to <a href="/super_library/data/#readdata">readData</a>)</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_create_read.png" /></p>
+<ul>
+<li>After reading the Data we can pass the Action Output <code>readDataOutput</code> to create feed to followers using the <code>createFeed</code> Custom Action.</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_create.png" /></p>
+<h2 id="how-to-use-updatefeed">How to use updateFeed</h2>
+<p>Feed is often use after a data was updated. e.g. A user edit a data, and we update the feed of this user followers.</p>
+<ul>
+<li>After a <code>Data</code> is updated using <code>updateData</code> Custom Action. It will call the <code>onUpdate</code> callback that has the <code>key</code> of Data that was updated. (To know more about <code>updateData</code> refer to <a href="/super_library/data/#updatedata">updateData</a>)</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_update_data_callback.png" /></p>
+<ul>
+<li>Inside the <code>onUpdate</code> callback we will read the Data first by adding the Custom Action <code>readData</code> and pass the same <code>dataKey</code> to the key input parameter. And named the Action Output Variable Name e.g. <code>readDataForFeedUpdate</code></li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_update_read.png" /></p>
+<ul>
+<li>After reading the Data we can pass the Action Output <code>readDataForFeedUpdate</code> to update the followers feed using the <code>updateFeed</code> Custom Action.</li>
+</ul>
+<p><img alt="alt text" src="../images/feed/feed_update.png" /></p>
+<h2 id="how-to-use-deletefeed">How to use deleteFeed</h2>
+<p>delete field requires $dataKey</p>
+<h2 id="how-to-list-feeds">How to list feeds</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Withcenter, Inc.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/thruthesky/test" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>

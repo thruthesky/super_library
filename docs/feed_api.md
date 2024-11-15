@@ -101,7 +101,7 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
     ![image.png](images/feed/feed_get_who_follow_me.png)
 
-  - Then rebuild the current page once the data is loaded. We can add another action `Update Page State` no need to set any field, just change the `Update Type` to `Rebuild Current Page`.
+  - Then rebuild the current page once the data is loaded. We add another action `Update Page State` no need to set any field, just change the `Update Type` to `Rebuild Current Page`.
 
     ![image.png](images/feed/feed_get_who_follow_me_rebuild.png)
 
@@ -132,7 +132,7 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
 - Then click `Save`, this will promt that this action will generate its children dynamically and click `Ok`.
 
-  ![image.png](images/feed/feed_get_who_follow_me_generate_children_confirm.png)
+  ![image.png](images/feed/feed_get_who_generate_children_confirm.png)
 
 - Now we can use the `whoFollowMe` variable inside the UserAvatarComponent and UserDisplayNameComponent.
 - Select the `UserAvatarComponent` from the widget tree
@@ -157,7 +157,61 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
 ## How to display users who I follow
 
-getWhoIFollow
+- Create another screen named `WhoIFollowScreen`.
+- Get the List of users who I follow using the `getWhoIFollow` custom action.
+
+  - Select the page then add an action `On Page Load` trigger, then add the `getWhoIFollow` custom action and set the `Action Output Variable Name` e.g `getWhoIFollowOutput`.
+
+    ![image.png](images/feed/feed_get_who_i_follow.png)
+
+  - Then rebuild the current page once the data is loaded. We add another action `Update Page State` no need to set any field, just change the `Update Type` to `Rebuild Current Page`.
+
+    ![image.png](images/feed/feed_get_who_i_follow_rebuild.png)
+
+- Sample Setup to display the users who I follow.
+
+  - This time we will use `Column Widget`, since newly created screen has `Column Widget` we dont need to add anymore.
+  - Inside the `Column Widget`, add a `Row Widget`.
+  - Then inside the `Row Widget` add the `UserAvatarComponent` and `UserDisplayNameComponent`.
+  - Your Widget Tree will look like below.
+
+    ![image.png](images/feed/feed_get_who_i_follow_tree.png)
+
+- **Important!** To avoid null error, first we need to check if the `getWhoIFollowOutput` Action output has value. You can either hide the Column when the output is not set or you can wrap the Column with conditional widget and display empty message if the output is not set or empty.
+
+- First Select the `Column Widget`
+
+- Under the widget properties, enable the visibility set the condition by navigating to action output, select `getWhoIFollowOutput` and from the available option select `Is Set and Not Empty` and confirm.
+
+  ![image.png](images/feed/feed_get_who_i_follow_column_visibility.png)
+
+- Next to use the `getWhoIFollowOutput` action output, on the Property Panel click the 4th Tab (Generate Dynamic Children tab).
+- Input Variable Name. e.g. `whoIFollow`
+- Next set the `Value` by Navigating to `Action Outputs` and in the Available Options select the `getWhoIFollowOutput` that we set from the `On Page Load` trigger and click confirm.
+
+- Then click `Save`, this will promt that this action will generate its children dynamically and click `Ok`.
+
+  ![image.png](images/feed/feed_get_who_generate_children_confirm.png)
+
+- Now we can use the `whoIFollow` variable inside the UserAvatarComponent and UserDisplayNameComponent.
+
+- Select the `UserAvatarComponent` from the widget tree
+
+  - Set the variable for the `uid`, select the `whoFollowMe Item` from the source.
+
+    ![alt text](images/feed/feed_get_who_i_follow_item.png)
+
+  - First Available Options select `No Further Changes` then confirm.
+
+    ![image.png](images/feed/feed_get_who_i_follow_avatar.png)
+
+- Do the same with the `UserDisplayNameComponent`.
+
+  ![image.png](images/feed/feed_get_who_i_follow_name.png)
+
+- Your canvas should look like this. Run the app and if you have followers, then it should display the avatar and display name of the followers.
+
+  ![image.png](images/feed/feed_get_who_i_follow_canvas.png)
 
 ## createFeed
 

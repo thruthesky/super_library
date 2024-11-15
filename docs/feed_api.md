@@ -4,12 +4,12 @@ In this document, the feed functionality for FlutterFlow is explained. If you wa
 
 ## Features
 
-Feed API allows you to follow and unfollow users.
-It also gives you an option to get who follow you and who you follow.
+Feed API allows you to follow and unfollow users. It also gives you an option to get who follow you and who you follow.
 
+- **isFollowing**: Custom action to check if you are following the other user.
 - **follow**: Custom action to follow other user.
 - **unfollow**: Custom action to unfollow other user you are following.
-- **isFollowing**: Custom action to check if you are following the other user.
+
 - **getWhoFollowMe**: Custom action to get a list of users who follow me.
 - **getWhoIFollow**: Custom action to get a list of users who I follow.
 - **createFeed**: Custom action to create a feed.
@@ -24,78 +24,169 @@ It also gives you an option to get who follow you and who you follow.
 
 ## How to use follow, unfollow and isFollowing custom actions
 
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
+- Create a screen named `PublicProfileScreen`.
+- Create a Local page state variable and named it as `isFollowing` with `Boolean` as type.
 
-1. Create a screen named `PublicProfileScreen`.
-2. Create a Local page state variable and named it as `isFollowing` with `Boolean` as type.
+  ![image.png](./images/feed/feed_is_following_page_state.png)
 
-   ![image.png](./images/feed/feed_is_following_page_state.png)
+- Under the page `On Page Load` trigger add the `isFollowing` custom action.
 
-3. Under the page `On Page Load` trigger add the `isFollowing` custom action.
+  - **otherUid**: Pass the uid of the other user.
+  - **callback**: This callback will return boolean if you follow or not the other user.
 
-   - **otherUid**: Pass the uid of the other user.
-   - **callback**: This callback will return boolean if you follow or not the other user.
+    ![image.png](./images/feed/feed_is_following_on_page_load.png)
 
-     ![image.png](./images/feed/feed_is_following_on_page_load.png)
+  - Inside the `callback` action, add an action that will update the local page state variable `isFollowing` with the return value.
 
-   - Inside the `callback` action, add an action that will update the local page state variable `isFollowing` with the return value.
+    ![image.png](./images/feed/feed_is_following_callback.png)
 
-     ![image.png](./images/feed/feed_is_following_callback.png)
+- Next, add a button on the screen and name it as `FollowButton` change the text to `Follow`.
 
-4. Next, add a button on the screen and name it as `FollowButton`.
+  - Select `FollowButton` widget and under the widget property panel add the custom action `follow` .
 
-   - Select `FollowButton` widget and under the widget property panel add the custom action `follow` .
+    - **otherUid**: Input the other user uid.
+    - **onFollow**: This callback will be called if no error on follow action.
+    - **onFailure**: This callback will trigger if theres any error on the action with an error message.
 
-     - **otherUid**: Input the other user uid.
-     - **onFollow**: This callback will be called if no error on follow action.
-     - **onFailure**: This callback will trigger if theres any error on the action with an error message.
+      ![image.png](./images/feed/feed_follow.png)
 
-       ![image.png](./images/feed/feed_follow.png)
+  e.g. **onFollow**
 
-   e.g. **onFollow**
+  - (Optional) Show a snack message success follow.
+  - Set the local page state variable `isFollowing` to true.
 
-   - (Optional) Show a snack message success follow.
-   - Set the local page state variable `isFollowing` to true.
+  ![image.png](images/feed/feed_follow_on_follow.png)
 
-   ![feed_follow_success.png](images/feed/feed_follow_on_follow.png)
+  e.g. **onFailure** Show a snack message with the error message..
 
-   e.g. **onFailure** Show a snack message with the error message..
+  ![image.png](images/feed/feed_follow_on_failure.png)
 
-   ![feed_follow_success.png](images/feed/feed_follow_on_failure.png)
+- Next, Add a button on the screen and name it `UnfollowButton` change the text to `Unfollow`.
 
-5. Next, Add a button on the screen and name it `UnfollowButton`.
+  - Select `UnfollowButton` widget and under the widget property panel add and action and select the custom action `unfollow`.
 
-   - Select `UnfollowButton` widget and under the widget property panel add and action and select the custom action `unfollow`.
+    - **otherUid**: Input the other user uid.
+    - **onUnfollow**: This callback will be called if no error on unfollow action.
+    - **onFailure**: This callback will trigger if theres any error on the action with an error message.
 
-     - **otherUid**: Input the other user uid.
-     - **onUnfollow**: This callback will be called if no error on unfollow action.
-     - **onFailure**: This callback will trigger if theres any error on the action with an error message.
+      ![image.png](./images/feed/feed_unfollow.png)
 
-       ![image.png](./images/feed/feed_unfollow.png)
+  e.g. **onUnfollow**
 
-   e.g. **onUnfollow**
+  - (Optional) Show a snack message success unfollow.
+  - Set the local page state variable `isFollowing` to false.
 
-   - (Optional) Show a snack message success unfollow.
-   - Set the local page state variable `isFollowing` to false.
+  ![image.png](images/feed/feed_unfollow_on_unfollow.png)
 
-   ![feed_follow_success.png](images/feed/feed_unfollow_on_unfollow.png)
+  e.g. **onFailure** Show a snack message with the error message.
 
-   e.g. **onFailure** Show a snack message with the error message.
+  ![image.png](images/feed/feed_unfollow_on_failure.png)
 
-   ![feed_follow_success.png](images/feed/feed_unfollow_on_failure.png)
+- Lastly, to show only the button that is needed. we will wrap this two button with contidinal widget. and the select the isFollowing local state for the condition.
 
-## getWhoFollowMe
+  ![image.png](images/feed/feed_follow_if.png)
 
-## getWhoIFollow
+- And the widget tree will look like below.
+
+  ![image.png](images/feed/feed_follow_if_tree.png)
+
+- Run the app and it should toggle from Follow to Unfollow when the button is clicked.
+
+## How to display users who follow me
+
+- Create a new screen named `WhoFollowMeScreen`.
+- Get the List of users who follow me using the `getWhoFollowMe` custom action.
+
+  - First select the page and add an action `On Page Load` trigger, then add the `getWhoFollowMe` custom action and set the `Action Output Variable Name` e.g `getWhoFollowMeOutput`.
+
+    ![image.png](images/feed/feed_get_who_follow_me.png)
+
+  - Then rebuild the current page once the data is loaded. We can add another action `Update Page State` no need to set any field, just change the `Update Type` to `Rebuild Current Page`.
+
+    ![image.png](images/feed/feed_get_who_follow_me_rebuild.png)
+
+- Sample Setup to display the users who follow me.
+
+  - On the widget tree add a `Row Widget` or `Column Widget`, in this case we will use a `Row Widget`.
+  - Inside the `Row widget` add a `Column Widget`.
+  - Inside the `Column Widget` add the `UserAvatarComponent` and `UserDisplayNameComponent`.
+  - Your Widget Tree will look like below.
+
+    ![image.png](images/feed/feed_get_who_follow_me_tree.png)
+
+- **Important!** To avoid null error, first we need to check if the `getWhoFollowMeOutput` Action output has value. You can either hide the row when the output is not set or you can wrap the row with conditional widget and display empty message if the output is not set or empty.
+
+  - In this example we will just hide the Row if the output is not set.
+
+  - First Select the `Row Widget`,
+
+  - Under the widget properties, enable the visibility set the condition by navigating to action output, select `getWhoFollowMeOutput` and from the available option select `Is Set and Not Empty` and confirm.
+
+    ![image.png](images/feed/feed_get_who_follow_me_row_visibility.png)
+
+- Next to use the `getWhoFollowMeOutput` action output, on the Property Panel click the 4th Tab (Generate Dynamic Children tab).
+- Enter Variable Name. e.g. `whoFollowMe`
+- Next Click the `Value` and Navigate to `Action Outputs` and in the Available Options select the `getWhoFollowMeOutput` that we set from the `On Page Load` trigger and click confirm.
+
+  ![image.png](images/feed/feed_get_who_follow_me_generate_children.png)
+
+- Then click `Save`, this will promt that this action will generate its children dynamically and click `Ok`.
+
+  ![image.png](images/feed/feed_get_who_follow_me_generate_children_confirm.png)
+
+- Now we can use the `whoFollowMe` variable inside the UserAvatarComponent and UserDisplayNameComponent.
+- Click the `UserAvatarComponent` set the variable for the `uid`, select the `whoFollowMeItem`, for the first Available Options select `JSON Path`, on the JSON Path input `$.uid` then on the next Available Options select no further changes.
+
+  ![image.png](images/feed/feed_get_who_follow_me_avatar.png)
+
+- Do the same with the `UserDisplayNameComponent`.
+
+  ![image.png](images/feed/feed_get_who_follow_me_name.png)
+
+- Your canvas should look like this. Run the app and if you have followers, then it should display the avatar and display name of the followers.
+
+  ![image.png](images/feed/feed_get_who_follow_me_canvas.png)
+
+## How to display users who I follow
+
+getWhoIFollow
 
 ## createFeed
 
+Feed often use after a data was created or updated.
+
+Required a json input with the following fields:
+
+```json
+{
+  "key": "$data key",
+  "content": "...",
+  "createdAt": "...",
+  "displayName": "...",
+  "photoUrl": "...",
+  "uid": "...",
+  "urls": [],
+  "updatedAt": "..."
+}
+```
+
 ## updateFeed
 
+Required a json input with the following fields:
+
+```json
+{
+  "key": "$data key",
+  "content": "...",
+  "createdAt": "...",
+  "displayName": "...",
+  "photoUrl": "...",
+  "uid": "...",
+  "urls": [],
+  "updatedAt": "..."
+}
+```
+
 ## deleteFeed
+
+delete field requires $dataKey

@@ -218,9 +218,27 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
 ## How to use createFeed
 
-Feed is often use after a data was created. e.g. A user post a data, and we update the feed of this user followers.
+Feed is often use after a data was created. e.g. A user post a data, then we create the feed of this user followers using the information from the data.
 
-- After a `Data` is created using `createData` Custom Action. It will call the `onCreate` callback that has the `key` of Data that was created. (To know more about createData refer to [createData](/super_library/data/#createdata))
+Created feeds will have the following fields and will be added to other user's feed: /follow/feed/$otherUid/$dataKey
+
+```json
+/follow
+    /feed
+        /$otherUid
+            /$dataKey
+                {
+                    "content": "data content",
+                    "createdAt": "data createdAt",
+                    "displayName": "Author display name",
+                    "photoUrl": "Author photo url",
+                    "uid": "Author uid",
+                    "urls": ["data urls",],
+                    "updatedAt": "data updatedAt"
+                }
+```
+
+- After a `Data` is created using `createData` Custom Action. It will call the `onCreate` callback that has the `key` of Data that was created. (To know more about `createData` refer to [createData](/super_library/data/#createdata))
 
   ![alt text](images/feed/feed_create_data_callback.png)
 
@@ -228,47 +246,29 @@ Feed is often use after a data was created. e.g. A user post a data, and we upda
 
   ![alt text](images/feed/feed_create_data_key.png)
 
-- Then we name the Action Output Variable Name e.g. `readDataOutput`. (To know more about readData refer to [readData](/super_library/data/#readdata))
+- Then we name the Action Output Variable Name e.g. `readDataOutput`. (To know more about `readData` refer to [readData](/super_library/data/#readdata))
 
   ![alt text](images/feed/feed_create_read.png)
 
-- After reading the Data we can pass the Action Output `readDataOutput` to create feed using the `createFeed` Custom Action.
+- After reading the Data we can pass the Action Output `readDataOutput` to create feed to followers using the `createFeed` Custom Action.
 
   ![alt text](images/feed/feed_create.png)
 
-Required a json input with the following fields:
-
-```json
-{
-  "key": "$data key",
-  "content": "...",
-  "createdAt": "...",
-  "displayName": "...",
-  "photoUrl": "...",
-  "uid": "...",
-  "urls": [],
-  "updatedAt": "..."
-}
-```
-
 ## How to use updateFeed
 
-Feed often use after a data was updated. e.g. A user edit a data, and we update the feed of this user followers.
+Feed is often use after a data was updated. e.g. A user edit a data, and we update the feed of this user followers.
 
-Required a json input with the following fields:
+- After a `Data` is updated using `updateData` Custom Action. It will call the `onUpdate` callback that has the `key` of Data that was updated. (To know more about `updateData` refer to [updateData](/super_library/data/#updatedata))
 
-```json
-{
-  "key": "$data key",
-  "content": "...",
-  "createdAt": "...",
-  "displayName": "...",
-  "photoUrl": "...",
-  "uid": "...",
-  "urls": [],
-  "updatedAt": "..."
-}
-```
+  ![alt text](images/feed/feed_update_data_callback.png)
+
+- Inside the `onUpdate` callback we will read the Data first by adding the Custom Action `readData` and pass the same `dataKey` to the key input parameter. And named the Action Output Variable Name e.g. `readDataForFeedUpdate`
+
+  ![alt text](images/feed/feed_update_read.png)
+
+- After reading the Data we can pass the Action Output `readDataForFeedUpdate` to update the followers feed using the `updateFeed` Custom Action.
+
+  ![alt text](images/feed/feed_update.png)
 
 ## How to use deleteFeed
 

@@ -29,7 +29,8 @@
 - [Widgets](#widgets)
   - [ChatMessageListView](#chatmessagelistview)
     - [Callback functions on ChatMessageListView](#callback-functions-on-chatmessagelistview)
-  - [Display no of new messages](#display-no-of-new-messages)
+  - [Displaying no of new messages](#displaying-no-of-new-messages)
+    - [Dsiplaying all the no of new messages](#dsiplaying-all-the-no-of-new-messages)
 - [Developer's guide](#developers-guide)
   - [Testing chat room icon](#testing-chat-room-icon)
 - [Known Issues](#known-issues)
@@ -388,10 +389,19 @@ Component.openChatRoomListTile = (room) => OpenChatRoomListTileWidget(
 
 
 
-## Display no of new messages
+## Displaying no of new messages
 
 
 
+
+
+### Dsiplaying all the no of new messages
+
+Use the following widget to display all the unread no of new messages.
+
+```dart
+const ChatAllNewMessageCounter(),
+```
 
 
 

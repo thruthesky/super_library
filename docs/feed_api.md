@@ -21,6 +21,9 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 - Showing the feeds of the other users that the current user is following.
 - Showing a button to follow/unfollow the other user.
 - Display who follow the user and who the user follows.
+- Create Feed after a Data is created.
+- Update Feed after a Data is updated.
+- Delete Feed after a Data is deleted.
 
 ## How to use follow, unfollow and isFollowing custom actions
 
@@ -213,9 +216,25 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
 
   ![image.png](images/feed/feed_get_who_i_follow_canvas.png)
 
-## createFeed
+## How to use createFeed
 
-Feed often use after a data was created or updated.
+Feed is often use after a data was created. e.g. A user post a data, and we update the feed of this user followers.
+
+- After a `Data` is created using `createData` Custom Action. It will call the `onCreate` callback that has the `key` of Data that was created. (To know more about createData refer to\*\*)
+
+  ![alt text](images/feed/feed_create_data_callback.png)
+
+- Inside the `onCreate` callback we will read the Data first by adding the Custom Action `readData` and passing the `key` from the callback parameter into the key input parameter.
+
+  ![alt text](images/feed/feed_create_data_key.png)
+
+- Then we name the Action Output Variable Name e.g. `readDataOutput`. (To know more about readData refer to\*\*)
+
+  ![alt text](images/feed/feed_create_read.png)
+
+- After reading the Data we can pass the Action Output `readDataOutput` to create feed using the `createFeed` Custom Action.
+
+  ![alt text](images/feed/feed_create.png)
 
 Required a json input with the following fields:
 
@@ -232,7 +251,9 @@ Required a json input with the following fields:
 }
 ```
 
-## updateFeed
+## How to use updateFeed
+
+Feed often use after a data was updated. e.g. A user edit a data, and we update the feed of this user followers.
 
 Required a json input with the following fields:
 
@@ -249,6 +270,8 @@ Required a json input with the following fields:
 }
 ```
 
-## deleteFeed
+## How to use deleteFeed
 
 delete field requires $dataKey
+
+## How to list feeds

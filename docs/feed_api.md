@@ -55,7 +55,7 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
   - (Optional) Show a snack message success follow.
   - Set the local page state variable `isFollowing` to true.
 
-  ![image.png](images/feed/feed_follow_on_follow.png)
+    ![image.png](images/feed/feed_follow_on_follow.png)
 
   e.g. **onFailure** Show a snack message with the error message..
 
@@ -125,8 +125,8 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
     ![image.png](images/feed/feed_get_who_follow_me_row_visibility.png)
 
 - Next to use the `getWhoFollowMeOutput` action output, on the Property Panel click the 4th Tab (Generate Dynamic Children tab).
-- Enter Variable Name. e.g. `whoFollowMe`
-- Next Click the `Value` and Navigate to `Action Outputs` and in the Available Options select the `getWhoFollowMeOutput` that we set from the `On Page Load` trigger and click confirm.
+- Input Variable Name. e.g. `whoFollowMe`
+- Next set the `Value` by Navigating to `Action Outputs` and in the Available Options select the `getWhoFollowMeOutput` that we set from the `On Page Load` trigger and click confirm.
 
   ![image.png](images/feed/feed_get_who_follow_me_generate_children.png)
 
@@ -135,9 +135,17 @@ Feed API allows you to follow and unfollow users. It also gives you an option to
   ![image.png](images/feed/feed_get_who_follow_me_generate_children_confirm.png)
 
 - Now we can use the `whoFollowMe` variable inside the UserAvatarComponent and UserDisplayNameComponent.
-- Click the `UserAvatarComponent` set the variable for the `uid`, select the `whoFollowMeItem`, for the first Available Options select `JSON Path`, on the JSON Path input `$.uid` then on the next Available Options select no further changes.
+- Select the `UserAvatarComponent` from the widget tree
 
-  ![image.png](images/feed/feed_get_who_follow_me_avatar.png)
+  - Set the variable for the `uid`, select the `whoFollowMe Item` from the source.
+
+    ![alt text](images/feed/feed_get_who_follow_me_item.png)
+
+  - First Available Options select `JSON Path`.
+  - For the JSON Path input `$.uid`.
+  - Then on the next Available Options select `No Further Changes`.
+
+    ![image.png](images/feed/feed_get_who_follow_me_avatar.png)
 
 - Do the same with the `UserDisplayNameComponent`.
 
